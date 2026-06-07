@@ -1,0 +1,171 @@
+/* ─── RESET & BASE ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #ECEAE5;
+  --surface:   #FFFFFF;
+  --border:    #E0DDD8;
+  --text:      #1a1a1a;
+  --text-muted:#888;
+  --accent:    #1a1a1a;
+  --accent-fg: #FFFFFF;
+  --danger:    #c0392b;
+  --radius:    16px;
+  --shadow:    0 1px 4px rgba(0,0,0,0.07);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+/* ─── HERO ──────────────────────────────────────────────── */
+.hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+  padding: 44px 28px 36px;
+  margin-bottom: 24px;
+}
+
+.hero__icon { font-size: 56px; line-height: 1; margin-bottom: 16px; }
+
+.hero__title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+
+.hero__sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+/* ─── BUTTON ────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 99px;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: 14px 48px;
+  font-size: 16px;
+  letter-spacing: 0.2px;
+}
+.btn--primary:hover { opacity: .82; }
+
+.btn--danger {
+  background: transparent;
+  color: var(--danger);
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.btn--danger:hover { background: #fdf0ee; border-radius: 8px; }
+
+/* ─── SECTION TITLE ─────────────────────────────────────── */
+.section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── EMPTY ─────────────────────────────────────────────── */
+.list-empty {
+  text-align: center;
+  padding: 48px 0 32px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 2;
+}
+.list-empty__sub { font-size: 13px; color: #bbb; }
+
+/* ─── RIFA CARDS ────────────────────────────────────────── */
+.rifa-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rifa-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: box-shadow .15s, transform .12s;
+}
+.rifa-card:hover {
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.rifa-card__info { flex: 1; min-width: 0; }
+
+.rifa-card__name {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rifa-card__meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.rifa-card__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.rifa-card__pct {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ─── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .app { padding: 24px 14px 60px; }
+  .hero { padding: 36px 20px 28px; }
+}

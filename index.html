@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rifa App</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero__icon">🎟️</div>
+      <h1 class="hero__title">Rifa App</h1>
+      <p class="hero__sub">Gestiona tus rifas de forma 100% digital.<br>Sin papeles, sin fotos editadas.</p>
+      <button class="btn btn--primary" id="btn-nueva">+ Nueva rifa</button>
+    </section>
+
+    <!-- MIS RIFAS -->
+    <section class="list-section">
+      <h2 class="section-title">Mis rifas</h2>
+
+      <div class="list-empty" id="list-empty">
+        <p>No tienes rifas todavía.</p>
+        <p class="list-empty__sub">Crea una con el botón de arriba.</p>
+      </div>
+
+      <ul class="rifa-list" id="rifa-list"></ul>
+    </section>
+
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
