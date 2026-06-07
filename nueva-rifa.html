@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nueva Rifa</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="/css/nueva-rifa.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="page-header">
+      <a href="index.html" class="btn-back">← Volver</a>
+      <h1 class="page-title">Nueva rifa</h1>
+    </header>
+
+    <!-- FORM -->
+    <div class="form-card">
+
+      <div class="form-group">
+        <label class="form-label" for="f-prize">¿Qué se rifa?</label>
+        <input class="form-input" id="f-prize" type="text" placeholder="Ej: Smart TV Samsung 55'" maxlength="60" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="f-price">Precio de la boleta</label>
+        <input class="form-input" id="f-price" type="text" placeholder="Ej: $10.000" maxlength="20" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Números disponibles</label>
+        <div class="range-grid">
+          <label class="range-opt">
+            <input type="radio" name="rango" value="10" />
+            <span>00 – 09<br><small>10 números</small></span>
+          </label>
+          <label class="range-opt">
+            <input type="radio" name="rango" value="50" checked />
+            <span>00 – 49<br><small>50 números</small></span>
+          </label>
+          <label class="range-opt">
+            <input type="radio" name="rango" value="100" />
+            <span>00 – 99<br><small>100 números</small></span>
+          </label>
+          <label class="range-opt">
+            <input type="radio" name="rango" value="200" />
+            <span>00 – 199<br><small>200 números</small></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="f-date">Fecha del sorteo</label>
+          <input class="form-input" id="f-date" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-lottery">Lotería</label>
+          <select class="form-input" id="f-lottery">
+            <option value="">Seleccionar...</option>
+            <option>Lotería de Bogotá</option>
+            <option>Lotería de Medellín</option>
+            <option>Lotería del Cauca</option>
+            <option>Lotería del Tolima</option>
+            <option>Lotería de Boyacá</option>
+            <option>Lotería del Huila</option>
+            <option>Lotería del Valle</option>
+            <option>Lotería de Santander</option>
+            <option>Baloto</option>
+            <option>Chance</option>
+            <option>Otra</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn--primary btn--full" id="btn-crear">Generar rifa ✨</button>
+
+    </div>
+  </div>
+
+  <script src="js/nueva-rifa.js"></script>
+</body>
+</html>
