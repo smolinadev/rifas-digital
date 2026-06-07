@@ -1,11 +1,9 @@
-// ─── UTILS ────────────────────────────────────────────────
 function getRifas() {
   try { return JSON.parse(localStorage.getItem('rifas') || '[]'); }
   catch { return []; }
 }
 function saveRifas(r) { localStorage.setItem('rifas', JSON.stringify(r)); }
 
-// ─── CREAR RIFA ───────────────────────────────────────────
 document.getElementById('btn-crear').addEventListener('click', () => {
   const prize   = document.getElementById('f-prize').value.trim();
   const price   = document.getElementById('f-price').value.trim();
@@ -13,41 +11,29 @@ document.getElementById('btn-crear').addEventListener('click', () => {
   const date    = document.getElementById('f-date').value;
   const lottery = document.getElementById('f-lottery').value;
 
-  // Validación
-  if (!prize)   return shake('f-prize',   'Escribe qué se rifa');
-  if (!price)   return shake('f-price',   'Escribe el precio');
-  if (!date)    return shake('f-date',    'Elige la fecha');
-  if (!lottery) return shake('f-lottery', 'Elige la lotería');
+  if (!prize)   return shake('f-prize');
+  if (!price)   return shake('f-price');
+  if (!date)    return shake('f-date');
+  if (!lottery) return shake('f-lottery');
 
-  // Generar números
+  // Padding: 2 dígitos para <=100, 3 para 200
+  const pad = count <= 100 ? 2 : 3;
+
   const nums = {};
-  const pad  = count >= 100 ? 3 : 2;
   for (let i = 0; i < count; i++) {
     const key = String(i).padStart(pad, '0');
     nums[key] = { sold: false, buyer: '' };
   }
 
-  const rifa = {
-    id: Date.now(),
-    prize,
-    price,
-    count,
-    date,
-    lottery,
-    nums,
-    done: false
-  };
-
+  const rifa = { id: Date.now(), prize, price, count, date, lottery, nums, done: false };
   const rifas = getRifas();
   rifas.push(rifa);
   saveRifas(rifas);
 
-  // Ir a la rifa recién creada
   window.location.href = `rifa.html?id=${rifa.id}`;
 });
 
-// ─── SHAKE de error ───────────────────────────────────────
-function shake(fieldId, msg) {
+function shake(fieldId) {
   const el = document.getElementById(fieldId);
   el.style.borderColor = '#c0392b';
   el.focus();

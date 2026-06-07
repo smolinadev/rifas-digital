@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rifa</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/rifa.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="page-header">
+      <a href="index.html" class="btn-back">← Volver</a>
+      <h1 class="page-title" id="rifa-title">Cargando...</h1>
+    </header>
+
+    <!-- INFO CARD -->
+    <div class="info-card">
+      <div class="info-item">
+        <span class="info-item__label">Precio</span>
+        <span class="info-item__value" id="info-price">—</span>
+      </div>
+      <div class="info-item">
+        <span class="info-item__label">Sorteo</span>
+        <span class="info-item__value" id="info-date">—</span>
+      </div>
+      <div class="info-item">
+        <span class="info-item__label">Lotería</span>
+        <span class="info-item__value" id="info-lottery">—</span>
+      </div>
+    </div>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="stats-bar__item">
+        <span class="stats-bar__num" id="stat-sold">0</span>
+        <span class="stats-bar__label">Vendidos</span>
+      </div>
+      <div class="stats-bar__divider"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__num" id="stat-free">0</span>
+        <span class="stats-bar__label">Libres</span>
+      </div>
+      <div class="stats-bar__divider"></div>
+      <div class="stats-bar__item">
+        <span class="stats-bar__num" id="stat-total">0</span>
+        <span class="stats-bar__label">Total</span>
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="num-grid" id="num-grid"></div>
+
+    <!-- SHARE BTN -->
+    <button class="btn btn--primary btn--full" id="btn-share">Compartir ticket 📤</button>
+
+  </div>
+
+  <!-- MODAL: registrar comprador -->
+  <div class="modal-overlay hidden" id="modal">
+    <div class="modal">
+      <p class="modal__num" id="modal-num">00</p>
+      <h3 class="modal__title" id="modal-title">¿Quién compró este número?</h3>
+      <input class="form-input" id="modal-input" type="text" placeholder="Nombre del cliente" maxlength="40" />
+      <p class="modal__buyer" id="modal-buyer" style="display:none"></p>
+      <div class="modal__actions">
+        <button class="btn btn--primary" id="modal-confirm">Confirmar venta</button>
+        <button class="btn btn--ghost" id="modal-cancel">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/rifa.js"></script>
+</body>
+</html>

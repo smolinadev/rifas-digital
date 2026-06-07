@@ -1,0 +1,238 @@
+/* ─── INFO CARD ─────────────────────────────────────────── */
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.info-item__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item__value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ─── STATS BAR ─────────────────────────────────────────── */
+.stats-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.stats-bar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stats-bar__num {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--text);
+  line-height: 1;
+}
+
+.stats-bar__label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.stats-bar__divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+}
+
+/* ─── NUMBER GRID ───────────────────────────────────────── */
+.num-grid {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-items: center;
+}
+
+.num-btn {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: background .12s, border-color .12s, transform .1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.num-btn:hover {
+  background: var(--bg);
+  border-color: var(--accent);
+  transform: scale(1.06);
+}
+
+.num-btn.sold {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+  cursor: default;
+  transform: none;
+  position: relative;
+}
+
+.num-btn.sold:hover {
+  transform: none;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.num-btn.sold::after {
+  content: '✕';
+  position: absolute;
+  font-size: 10px;
+  top: 3px;
+  right: 4px;
+  opacity: 0.4;
+}
+
+/* ─── BTN FULL ──────────────────────────────────────────── */
+.btn--full {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+/* ─── MODAL ─────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 100;
+  padding: 0 0 0 0;
+  backdrop-filter: blur(2px);
+}
+
+.modal-overlay.hidden { display: none; }
+
+.modal {
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  padding: 28px 24px 36px;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: slideUp .2s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal__num {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modal__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: -4px;
+}
+
+.modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn--ghost {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text-muted);
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  width: 100%;
+  border-radius: 12px;
+}
+
+.btn--ghost:hover { background: var(--bg); }
+
+/* ─── FORM INPUT (compartido) ───────────────────────────── */
+.form-input {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color .15s;
+  width: 100%;
+}
+.form-input:focus { border-color: var(--accent); }
+.form-input::placeholder { color: #bbb; }
+
+/* ─── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .info-card { flex-wrap: wrap; gap: 12px; }
+  .num-btn { font-size: 12px; border-radius: 8px; }
+}
+
+/* ─── MODAL BUYER ───────────────────────────────────────── */
+.modal__buyer {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: center;
+}
