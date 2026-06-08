@@ -44,7 +44,7 @@ function renderHome() {
     `;
 
     li.querySelector('.rifa-card__info').addEventListener('click', () => {
-      // conectar a rifa-detalle.html en el próximo paso
+  window.location.href = `rifa.html?id=${rifa.id}`;
     });
 
     li.querySelector('.btn--danger').addEventListener('click', e => {
