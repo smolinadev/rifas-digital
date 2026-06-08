@@ -154,7 +154,7 @@ document.getElementById('btn-share').addEventListener('click', async () => {
 
 function buildShareTicket() {
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
-  const cols = rifa.count <= 100 ? 7 : 10;
+  const cols = rifa.count <= 10 ? 5 : 10;
   const sold = nums.filter(n => rifa.nums[n].sold).length;
 
   document.getElementById('ts-prize').textContent   = rifa.prize;
