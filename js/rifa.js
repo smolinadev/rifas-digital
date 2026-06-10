@@ -98,14 +98,27 @@ function openModalBuy(num) {
 
 // ─── MODAL YA VENDIDO ─────────────────────────────────────
 function openModalSold(num, buyer) {
+  selectedNum = num;
   document.getElementById('modal-num').textContent = `Número ${num}`;
   document.getElementById('modal-title').textContent = 'Ya vendido';
-  document.getElementById('modal-input').style.display   = 'none';
-  document.getElementById('modal-confirm').style.display = 'none';
   document.getElementById('modal-buyer').textContent = `👤 ${buyer}`;
-  document.getElementById('modal-buyer').style.display   = 'block';
+  document.getElementById('modal-buyer').style.display = 'block';
+  document.getElementById('modal-edit').style.display = 'block';
+  document.getElementById('modal-input').style.display = 'none';
+  document.getElementById('modal-confirm').style.display = 'none';
   document.getElementById('modal').classList.remove('hidden');
 }
+
+document.getElementById('modal-edit').addEventListener('click', () => {
+  const buyer = rifa.nums[selectedNum].buyer;
+  document.getElementById('modal-input').value = buyer;
+  document.getElementById('modal-input').style.display = 'block';
+  document.getElementById('modal-confirm').textContent = 'Guardar cambios';
+  document.getElementById('modal-confirm').style.display = 'block';
+  document.getElementById('modal-buyer').style.display = 'none';
+  document.getElementById('modal-edit').style.display = 'none';
+  setTimeout(() => document.getElementById('modal-input').focus(), 100);
+});
 
 function closeModal() {
   document.getElementById('modal').classList.add('hidden');
@@ -114,17 +127,11 @@ function closeModal() {
 
 document.getElementById('modal-confirm').addEventListener('click', () => {
   const buyer = document.getElementById('modal-input').value.trim();
-  if (!buyer) {
-    document.getElementById('modal-input').style.borderColor = '#c0392b';
-    document.getElementById('modal-input').focus();
-    return;
-  }
-  rifa.nums[selectedNum] = { sold: true, buyer };
+  rifa.nums[selectedNum] = buyer ? { sold: true, buyer } : { sold: false, buyer: '' };
   saveRifas(getRifas().map(r => r.id === rifa.id ? rifa : r));
   closeModal();
   renderGrid();
 });
-
 document.getElementById('modal-cancel').addEventListener('click', closeModal);
 document.getElementById('modal').addEventListener('click', e => {
   if (e.target === document.getElementById('modal')) closeModal();
