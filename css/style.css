@@ -29,22 +29,30 @@ body {
 
 /* ─── HERO ──────────────────────────────────────────────── */
 .hero {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  text-align: center;
-  padding: 44px 28px 36px;
-  margin-bottom: 24px;
+  padding: 40px 0 36px;
+  margin-bottom: 32px;
 }
 
-.hero__icon { font-size: 56px; line-height: 1; margin-bottom: 16px; }
+.hero__badge {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 99px;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
 
 .hero__title {
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: var(--text);
   margin-bottom: 10px;
+  line-height: 1.2;
+  text-align: center;
 }
 
 .hero__sub {
@@ -52,8 +60,21 @@ body {
   color: var(--text-muted);
   line-height: 1.7;
   margin-bottom: 28px;
+  text-align: center;
 }
-
+.corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: #c8c4be;
+  border-style: solid;
+  border-radius: 6px;
+  opacity: 0.6;
+}
+.corner.tl { top: -8px;    left: -8px;   border-width: 2px 0 0 2px; }
+.corner.tr { top: -8px;    right: -8px;  border-width: 2px 2px 0 0; }
+.corner.bl { bottom: -8px; left: -8px;   border-width: 0 0 2px 2px; }
+.corner.br { bottom: -8px; right: -8px;  border-width: 0 2px 2px 0; }
 /* ─── BUTTON ────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
@@ -75,7 +96,12 @@ body {
   padding: 14px 48px;
   font-size: 16px;
   letter-spacing: 0.2px;
+  display: block;
+  margin: 0 auto;
+  width: fit-content;
+  text-align: center;
 }
+
 .btn--primary:hover { opacity: .82; }
 
 .btn--danger {
