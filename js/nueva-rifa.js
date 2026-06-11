@@ -3,7 +3,10 @@ function getRifas() {
   catch { return []; }
 }
 function saveRifas(r) { localStorage.setItem('rifas', JSON.stringify(r)); }
-
+document.getElementById('f-lottery').addEventListener('change', function() {
+  const custom = document.getElementById('f-lottery-custom');
+  custom.style.display = this.value === 'Otra' ? 'block' : 'none';
+});
 document.getElementById('btn-crear').addEventListener('click', () => {
  const prize = document.getElementById('f-prize').value.trim().toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   const price   = document.getElementById('f-price').value.trim();
@@ -13,10 +16,6 @@ document.getElementById('btn-crear').addEventListener('click', () => {
 const lottery = lotterySelect === 'Otra' 
   ? document.getElementById('f-lottery-custom').value.trim() 
   : lotterySelect;
-  document.getElementById('f-lottery').addEventListener('change', function() {
-  const custom = document.getElementById('f-lottery-custom');
-  custom.style.display = this.value === 'Otra' ? 'block' : 'none';
-});
 
   if (!prize)   return shake('f-prize');
   if (!price)   return shake('f-price');
