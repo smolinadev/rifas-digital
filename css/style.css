@@ -210,6 +210,9 @@ body {
   .app { padding: 24px 14px 60px; }
   .hero { padding: 36px 20px 28px; }
 }
+@media (max-width: 480px) {
+  .hero__title { font-size: 28px; }
+}
 
 /* ─── PAGE HEADER (compartido) ──────────────────────────── */
 .page-header {

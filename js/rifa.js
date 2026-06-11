@@ -92,6 +92,7 @@ function openModalBuy(num) {
   document.getElementById('modal-input').style.display  = 'block';
   document.getElementById('modal-confirm').style.display = 'block';
   document.getElementById('modal-buyer').style.display  = 'none';
+  document.getElementById('modal-edit').style.display = 'none';
   document.getElementById('modal').classList.remove('hidden');
   setTimeout(() => document.getElementById('modal-input').focus(), 100);
 }
@@ -162,22 +163,23 @@ document.getElementById('btn-share').addEventListener('click', async () => {
 function buildShareTicket() {
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
   const cols = rifa.count <= 10 ? 5 : 10;
-  const sold = nums.filter(n => rifa.nums[n].sold).length;
+  const soldCount = nums.filter(n => rifa.nums[n].sold).length;
 
-  document.getElementById('ts-prize').textContent   = rifa.prize;
-  document.getElementById('ts-price').textContent   = rifa.price;
-  document.getElementById('ts-date').textContent    = formatDate(rifa.date);
-  document.getElementById('ts-lottery').textContent = rifa.lottery;
-  document.getElementById('ts-count').textContent   = `${sold} / ${nums.length} vendidos`;
+  document.getElementById('ts-prize').textContent    = rifa.prize;
+  document.getElementById('ts-price').textContent    = rifa.price;
+  document.getElementById('ts-date').textContent     = formatDate(rifa.date);
+  document.getElementById('ts-lottery').textContent  = rifa.lottery;
+  document.getElementById('ts-count').textContent    = `${soldCount} / ${nums.length}`;
+  document.getElementById('ts-whatsapp').textContent = rifa.whatsapp ? `WS: ${rifa.whatsapp}` : 'Rifa App';
 
   const grid = document.getElementById('ts-grid');
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   grid.innerHTML = '';
 
   nums.forEach(n => {
-    const div = document.createElement('div');
     const sold = rifa.nums[n].sold;
-    div.style.cssText = `height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;${sold ? 'background:#1a1a1a;color:#fff;' : 'background:#fff;border:1.5px solid #ddd;color:#1a1a1a;'}`;
+    const div = document.createElement('div');
+    div.style.cssText = `height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;${sold ? 'background:#F5C842;color:#0f2744;' : 'background:#1a3a5c;color:#4a7aaa;'}`;
     div.textContent = n;
     grid.appendChild(div);
   });

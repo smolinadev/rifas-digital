@@ -13,6 +13,7 @@ document.getElementById('btn-crear').addEventListener('click', () => {
   const count   = parseInt(document.querySelector('input[name=rango]:checked').value);
   const date    = document.getElementById('f-date').value;
   const lotterySelect = document.getElementById('f-lottery').value;
+  const whatsapp = document.getElementById('f-whatsapp').value.trim();
 const lottery = lotterySelect === 'Otra' 
   ? document.getElementById('f-lottery-custom').value.trim() 
   : lotterySelect;
@@ -31,7 +32,7 @@ const lottery = lotterySelect === 'Otra'
     nums[key] = { sold: false, buyer: '' };
   }
 
-  const rifa = { id: Date.now(), prize, price, count, date, lottery, nums, done: false };
+  const rifa = { id: Date.now(), prize, price, count, date, lottery, nums, done: false, whatsapp };
   const rifas = getRifas();
   rifas.push(rifa);
   saveRifas(rifas);
