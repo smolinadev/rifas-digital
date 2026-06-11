@@ -9,12 +9,19 @@ document.getElementById('btn-crear').addEventListener('click', () => {
   const price   = document.getElementById('f-price').value.trim();
   const count   = parseInt(document.querySelector('input[name=rango]:checked').value);
   const date    = document.getElementById('f-date').value;
-  const lottery = document.getElementById('f-lottery').value;
+  const lotterySelect = document.getElementById('f-lottery').value;
+const lottery = lotterySelect === 'Otra' 
+  ? document.getElementById('f-lottery-custom').value.trim() 
+  : lotterySelect;
+  document.getElementById('f-lottery').addEventListener('change', function() {
+  const custom = document.getElementById('f-lottery-custom');
+  custom.style.display = this.value === 'Otra' ? 'block' : 'none';
+});
 
   if (!prize)   return shake('f-prize');
   if (!price)   return shake('f-price');
   if (!date)    return shake('f-date');
-  if (!lottery) return shake('f-lottery');
+  if (!lottery) return shake(lotterySelect === 'Otra' ? 'f-lottery-custom' : 'f-lottery');
 
   // Padding: 2 dígitos para <=100, 3 para 200
   const pad = count <= 100 ? 2 : 3;
