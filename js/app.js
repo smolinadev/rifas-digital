@@ -33,16 +33,18 @@ function renderHome() {
     const li = document.createElement('li');
     li.className = 'rifa-card';
     li.innerHTML = `
-      <div class="rifa-card__info">
-        <div class="rifa-card__name">${rifa.prize}</div>
-        <div class="rifa-card__meta">${rifa.price} · ${formatDate(rifa.date)} · ${rifa.lottery}</div>
-      </div>
-      <div class="rifa-card__right">
-        <span class="rifa-card__pct">${sold}/${total}</span>
-        <button class="btn btn--danger" data-id="${rifa.id}">✕</button>
-      </div>
-    `;
-
+  <div class="rifa-card__info">
+    <div class="rifa-card__name">${rifa.prize}</div>
+    <div class="rifa-card__meta">${rifa.price} · ${formatDate(rifa.date)} · ${rifa.lottery}</div>
+    <div class="rifa-card__bar">
+      <div class="rifa-card__fill" style="width:${pct}%"></div>
+    </div>
+  </div>
+  <div class="rifa-card__right">
+    <span class="rifa-card__pct">${sold}/${total}</span>
+    <button class="btn btn--danger" data-id="${rifa.id}">✕</button>
+  </div>
+`;
     li.querySelector('.rifa-card__info').addEventListener('click', () => {
   window.location.href = `rifa.html?id=${rifa.id}`;
     });
