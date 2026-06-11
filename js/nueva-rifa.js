@@ -5,7 +5,7 @@ function getRifas() {
 function saveRifas(r) { localStorage.setItem('rifas', JSON.stringify(r)); }
 
 document.getElementById('btn-crear').addEventListener('click', () => {
-  const prize   = document.getElementById('f-prize').value.trim();
+ const prize = document.getElementById('f-prize').value.trim().toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   const price   = document.getElementById('f-price').value.trim();
   const count   = parseInt(document.querySelector('input[name=rango]:checked').value);
   const date    = document.getElementById('f-date').value;
