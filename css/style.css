@@ -62,19 +62,7 @@ body {
   margin-bottom: 28px;
   text-align: center;
 }
-.corner {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  border-color: #c8c4be;
-  border-style: solid;
-  border-radius: 6px;
-  opacity: 0.6;
-}
-.corner.tl { top: -8px;    left: -8px;   border-width: 2px 0 0 2px; }
-.corner.tr { top: -8px;    right: -8px;  border-width: 2px 2px 0 0; }
-.corner.bl { bottom: -8px; left: -8px;   border-width: 0 0 2px 2px; }
-.corner.br { bottom: -8px; right: -8px;  border-width: 0 2px 2px 0; }
+
 /* ─── BUTTON ────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
