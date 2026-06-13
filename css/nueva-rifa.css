@@ -1,9 +1,14 @@
 /* ─── PAGE HEADER ───────────────────────────────────────── */
 .page-header {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
   margin-bottom: 28px;
+}
+.page-title {
+  width: 100%;
+  text-align: center;
 }
 
 .btn-back {
@@ -134,5 +139,5 @@ select.form-input { cursor: pointer; }
 @media (max-width: 480px) {
   .form-row { grid-template-columns: 1fr; }
   .range-grid { grid-template-columns: repeat(2, 1fr); }
-  .form-card { padding: 22px 16px; }
+  .form-card { padding: 20px 18px; }
 }

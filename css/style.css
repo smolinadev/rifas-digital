@@ -15,7 +15,7 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -205,31 +205,30 @@ body {
 /* ─── PAGE HEADER (compartido) ──────────────────────────── */
 .page-header {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 28px;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+align-items: flex-start;
 }
 
 .btn-back {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-muted);
   text-decoration: none;
-  padding: 6px 0;
+  width: fit-content;
   transition: color .15s;
-  white-space: nowrap;
 }
 .btn-back:hover { color: var(--text); }
 
 .page-title {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  line-height: 1.2;
+  text-align: center;
 }
-
 /* ─── FORM INPUT (compartido) ───────────────────────────── */
 .form-input {
   font-family: inherit;
