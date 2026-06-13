@@ -377,3 +377,15 @@ align-items: flex-start;
   margin-top: 16px;
   z-index: 50;
 }
+/* ─── ANIMACIONES DE ENTRADA ────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero        { animation: fadeUp .4s ease both; }
+.list-section { animation: fadeUp .5s .1s ease both; }
+.rifa-card   { animation: fadeUp .4s ease both; }
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-10px); }
+}

@@ -259,3 +259,6 @@
   padding: 14px 16px;
   text-align: center;
 }
+.info-card   { animation: fadeUp .3s ease both; }
+.stats-bar   { animation: fadeUp .4s .05s ease both; }
+.num-grid    { animation: fadeUp .4s .1s ease both; }
