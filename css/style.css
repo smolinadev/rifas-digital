@@ -228,6 +228,7 @@ align-items: flex-start;
   color: var(--text);
   line-height: 1.2;
   text-align: center;
+  width: 100%;
 }
 /* ─── FORM INPUT (compartido) ───────────────────────────── */
 .form-input {
