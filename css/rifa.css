@@ -37,39 +37,60 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 16px;
+  padding: 16px 20px;
   margin-bottom: 16px;
+}
+
+.stats-bar__nums {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 14px;
 }
 
 .stats-bar__item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
 }
 
 .stats-bar__num {
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -1px;
   color: var(--text);
   line-height: 1;
 }
 
 .stats-bar__label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.6px;
 }
 
-.stats-bar__divider {
-  width: 1px;
-  height: 36px;
+.stats-bar__divider { display: none; }
+
+.stats-bar__bar {
+  height: 6px;
   background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.stats-bar__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width .4s;
+  width:0%;
+}
+
+.stats-bar__pct {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: right;
+  margin-top: 5px;
 }
 
 /* ─── NUMBER GRID ───────────────────────────────────────── */

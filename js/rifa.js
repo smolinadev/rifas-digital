@@ -79,6 +79,9 @@ function renderGrid() {
   document.getElementById('stat-sold').textContent  = sold;
   document.getElementById('stat-free').textContent  = nums.length - sold;
   document.getElementById('stat-total').textContent = nums.length;
+const pct = Math.round(sold / nums.length * 100);
+document.getElementById('stat-bar').style.width = pct + '%';
+document.getElementById('stat-pct').textContent = pct + '% vendido';
 }
 
 // ─── MODAL COMPRA ──────────────────────────────────────────
