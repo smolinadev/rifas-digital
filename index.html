@@ -7,6 +7,7 @@
   
   <title>Rifa App</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/rifa.css" />
 </head>
 <body>
 
@@ -44,6 +45,18 @@
   </div>
   <p class="empty-title">¡Crea tu primera rifa!</p>
   <p class="empty-sub">Gestiona tus números y comparte<br>el ticket actualizado al instante.</p>
+</div>
+<div class="modal-overlay hidden" id="modal-winner">
+  <div class="modal">
+    <p class="modal__num" id="winner-num">🏆 Sorteo</p>
+    <h3 class="modal__title" id="winner-title">¿Cuál fue el número ganador?</h3>
+    <input class="form-input" id="winner-input" type="number" placeholder="Ej: 42" />
+    <div id="winner-result" class="modal__buyer" style="display:none;"></div>
+    <div class="modal__actions">
+      <button class="btn btn--primary btn--full" id="winner-confirm">Buscar ganador</button>
+      <button class="btn btn--ghost" id="winner-cancel">Cancelar</button>
+    </div>
+  </div>
 </div>
 
       <ul class="rifa-list" id="rifa-list"></ul>

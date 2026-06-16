@@ -10,7 +10,16 @@ function formatDate(d) {
   const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   return `${parseInt(dd)} ${months[parseInt(m)-1]} ${y}`;
 }
-
+function isToday(dateStr) {
+  if (!dateStr) return false;
+  const today = new Date();
+  const [y, m, d] = dateStr.split('-');
+  return (
+    today.getFullYear() === parseInt(y) &&
+    today.getMonth() + 1 === parseInt(m) &&
+    today.getDate() === parseInt(d)
+  );
+}
 function renderHome() {
   const rifas = getRifas();
   const list  = document.getElementById('rifa-list');
@@ -31,10 +40,11 @@ function renderHome() {
     const pct   = total > 0 ? Math.round(sold / total * 100) : 0;
 
     const li = document.createElement('li');
-    li.className = 'rifa-card';
+   li.className = `rifa-card${isToday(rifa.date) ? ' sorteo-hoy' : ''}`;
     li.innerHTML = `
   <div class="rifa-card__info">
     <div class="rifa-card__name">${rifa.prize}</div>
+${isToday(rifa.date) ? '<span class="badge-sorteo">Hoy es el sorteo</span>' : ''}
     <div class="rifa-card__meta">${rifa.price} · ${formatDate(rifa.date)} · ${rifa.lottery}</div>
     <div class="rifa-card__bar">
       <div class="rifa-card__fill" style="width:${pct}%"></div>
@@ -42,19 +52,26 @@ function renderHome() {
   </div>
   <div class="rifa-card__right">
     <span class="rifa-card__pct">${sold}/${total}</span>
-    <button class="btn btn--danger" data-id="${rifa.id}">✕</button>
+    ${isToday(rifa.date) ? `<button class="btn-ganador" data-id="${rifa.id}">¿Quién ganó?</button>` : `<button class="btn btn--danger" data-id="${rifa.id}">✕</button>`}
   </div>
 `;
     li.querySelector('.rifa-card__info').addEventListener('click', () => {
   window.location.href = `rifa.html?id=${rifa.id}`;
     });
-
+if (isToday(rifa.date)) {
+  li.querySelector('.btn-ganador').addEventListener('click', e => {
+    e.stopPropagation();
+    openWinnerModal(rifa);
+  });
+} else {
     li.querySelector('.btn--danger').addEventListener('click', e => {
       e.stopPropagation();
       if (!confirm(`¿Eliminar "${rifa.prize}"?`)) return;
       saveRifas(getRifas().filter(r => r.id !== rifa.id));
       renderHome();
     });
+  }
+    
 
     list.appendChild(li);
   });
@@ -65,3 +82,38 @@ document.getElementById('btn-nueva').addEventListener('click', () => {
 });
 
 renderHome();
+function openWinnerModal(rifa) {
+  document.getElementById('winner-num').textContent = `🏆 ${rifa.prize}`;
+  document.getElementById('winner-title').textContent = '¿Cuál fue el número ganador?';
+  document.getElementById('winner-input').value = '';
+  document.getElementById('winner-result').style.display = 'none';
+  document.getElementById('winner-confirm').style.display = 'block';
+  document.getElementById('modal-winner').classList.remove('hidden');
+  setTimeout(() => document.getElementById('winner-input').focus(), 100);
+
+  document.getElementById('winner-confirm').onclick = () => {
+    const num = document.getElementById('winner-input').value.trim();
+    if (!num) return;
+    const pad = rifa.count <= 100 ? 2 : 3;
+    const key = String(parseInt(num)).padStart(pad, '0');
+    const winner = rifa.nums[key];
+    if (!winner) {
+      document.getElementById('winner-result').textContent = `El número ${key} no existe.`;
+      document.getElementById('winner-result').style.display = 'block';
+      return;
+    }
+    if (!winner.sold) {
+      document.getElementById('winner-result').textContent = `El número ${key} no fue vendido.`;
+      document.getElementById('winner-result').style.display = 'block';
+      return;
+    }
+    document.getElementById('winner-title').textContent = '¡Tenemos ganador!';
+    document.getElementById('winner-result').textContent = `🏆 ${winner.buyer} — Número ${key}`;
+    document.getElementById('winner-result').style.display = 'block';
+    document.getElementById('winner-confirm').style.display = 'none';
+  };
+
+  document.getElementById('winner-cancel').onclick = () => {
+    document.getElementById('modal-winner').classList.add('hidden');
+  };
+}
