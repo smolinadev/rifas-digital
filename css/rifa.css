@@ -169,14 +169,17 @@
   justify-content: center;
   z-index: 100;
   padding: 0 0 0 0;
-  backdrop-filter: blur(2px);
+  
 }
-
+.modal-overlay--winner{
+  align-items: center;
+  backdrop-filter: blur(6px);
+}
 .modal-overlay.hidden { display: none; }
 
 .modal {
   background: var(--surface);
-  border-radius: 20px 20px 0 0;
+  border-radius: 20px 20px 20px 0;
   padding: 28px 24px 36px;
   width: 100%;
   max-width: 480px;
