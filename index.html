@@ -50,14 +50,19 @@
     </section>
   </div>
 <div class="modal-overlay modal-overlay--winner hidden" id="modal-winner">
-  <div class="modal">
-    <p class="modal__num" id="winner-num">🏆 Sorteo</p>
-    <h3 class="modal__title" id="winner-title">¿Cuál fue el número ganador?</h3>
-    <input class="form-input" id="winner-input" type="number" placeholder="Ej: 42" />
-    <div id="winner-result" class="modal__buyer" style="display:none;"></div>
-    <div class="modal__actions">
-      <button class="btn btn--primary btn--full" id="winner-confirm">Buscar ganador</button>
-      <button class="btn btn--ghost" id="winner-cancel">Cancelar</button>
+  <div class="modal modal--winner">
+    <div class="winner-header">
+      <div class="winner-trophy">🏆</div>
+      <div class="winner-prize" id="winner-num">Sorteo</div>
+    </div>
+    <div class="winner-body">
+      <h3 class="modal__title" id="winner-title" style="text-align:center;">¿Cuál fue el número ganador?</h3>
+      <input class="form-input winner-input" id="winner-input" type="number" placeholder="00" />
+      <div id="winner-result" class="modal__buyer" style="display:none;"></div>
+      <div class="modal__actions">
+        <button class="btn winner-btn" id="winner-confirm">Buscar ganador</button>
+        <button class="btn btn--ghost" id="winner-cancel">Cancelar</button>
+      </div>
     </div>
   </div>
 </div>

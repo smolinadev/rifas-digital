@@ -188,6 +188,11 @@
   gap: 14px;
   animation: slideUp .2s ease;
 }
+.modal--winner {
+  padding: 0 ;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
 
 @keyframes slideUp {
   from { transform: translateY(40px); opacity: 0; }

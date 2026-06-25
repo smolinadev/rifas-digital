@@ -84,7 +84,6 @@ document.getElementById('btn-nueva').addEventListener('click', () => {
 renderHome();
 function openWinnerModal(rifa) {
   document.getElementById('winner-num').textContent = `🏆 ${rifa.prize}`;
-  document.getElementById('winner-title').textContent = '¿Cuál fue el número ganador?';
   document.getElementById('winner-input').value = '';
   document.getElementById('winner-result').style.display = 'none';
   document.getElementById('winner-confirm').style.display = 'block';
