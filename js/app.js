@@ -63,14 +63,18 @@ if (isToday(rifa.date)) {
     e.stopPropagation();
     openWinnerModal(rifa);
   });
-} else {
+} else
     li.querySelector('.btn--danger').addEventListener('click', e => {
-      e.stopPropagation();
-      if (!confirm(`¿Eliminar "${rifa.prize}"?`)) return;
-      saveRifas(getRifas().filter(r => r.id !== rifa.id));
-      renderHome();
-    });
-  }
+  e.stopPropagation();
+  document.getElementById('delete-title').textContent = `¿Eliminar "${rifa.prize}"?`;
+  document.getElementById('modal-delete').classList.remove('hidden');
+
+  document.getElementById('delete-confirm').onclick = () => {
+    saveRifas(getRifas().filter(r => r.id !== rifa.id));
+    document.getElementById('modal-delete').classList.add('hidden');
+    renderHome();
+  };
+});
     
 
     list.appendChild(li);
@@ -116,3 +120,6 @@ function openWinnerModal(rifa) {
     document.getElementById('modal-winner').classList.add('hidden');
   };
 }
+document.getElementById('delete-cancel').addEventListener('click', () => {
+  document.getElementById('modal-delete').classList.add('hidden');
+});

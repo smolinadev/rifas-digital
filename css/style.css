@@ -423,6 +423,18 @@ align-items: flex-start;
   overflow: hidden;
   border-radius: 20px 20px 0 0;
 }
+#delete-confirm {
+  background: #c0392b;
+  color: #fff;
+  height: 52px;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#delete-confirm:hover {
+  background: #a93226;
+}
 
 .winner-header {
   background: #1a1a1a;
