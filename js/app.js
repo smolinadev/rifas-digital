@@ -141,3 +141,10 @@ document.getElementById('drawer-overlay').addEventListener('click', e => {
     document.getElementById('drawer-overlay').classList.add('hidden');
   }
 });
+document.getElementById('drawer-templates').addEventListener('click', () => {
+  window.location.href = 'plantillas.html';
+});
+
+document.getElementById('drawer-finished').addEventListener('click', () => {
+  window.location.href = 'finalizadas.html';
+});

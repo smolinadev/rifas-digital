@@ -1,0 +1,140 @@
+/* ─── PLANTILLAS PAGE ───────────────────────────────────── */
+.plantillas-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.plantillas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.plantilla-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color .15s;
+}
+
+.plantilla-card input {
+  display: none;
+}
+
+.plantilla-card.selected {
+  border-color: #1a1a1a;
+}
+
+.plantilla-preview {
+  width: 60px;
+  height: 90px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.plantilla-info {
+  flex: 1;
+}
+
+.plantilla-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.plantilla-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.plantilla-check {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: transparent;
+  transition: all .15s;
+}
+
+.plantilla-card.selected .plantilla-check {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #F5C842;
+}
+
+/* ─── PREVIEW: AZUL MARINO ──────────────────────────────── */
+.plantilla-preview--azul {
+  background: #0f2744;
+}
+.plantilla-preview--azul .pp-badge {
+  font-size: 6px;
+  color: #F5C842;
+  border: 1px solid #F5C842;
+  padding: 1px 5px;
+  border-radius: 99px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.plantilla-preview--azul .pp-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+}
+
+/* ─── PREVIEW: RETRO ROSA ───────────────────────────────── */
+.plantilla-preview--retro {
+  background: linear-gradient(160deg,#f9e4e7,#f3d4da);
+}
+.plantilla-preview--retro .pp-sun {
+  font-size: 14px;
+  color: #5a4a4f;
+  margin-bottom: 2px;
+}
+.plantilla-preview--retro .pp-title-retro {
+  font-family: 'Bungee', sans-serif;
+  font-size: 14px;
+  color: #4a3d42;
+  letter-spacing: 0.5px;
+}
+
+/* ─── PREVIEW: VERDE ESMERALDA ──────────────────────────── */
+.plantilla-preview--esmeralda {
+  background: #0d2b1f;
+}
+.plantilla-preview--esmeralda .pp-badge-esm {
+  font-size: 6px;
+  color: #6ee7a8;
+  border: 1px solid #6ee7a8;
+  padding: 1px 5px;
+  border-radius: 99px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.plantilla-preview--esmeralda .pp-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+}

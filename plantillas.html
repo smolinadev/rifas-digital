@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bungee&display=swap" rel="stylesheet">
+  <title>Plantillas de ticket</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/rifa.css" />
+  <link rel="stylesheet" href="css/plantillas.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <header class="page-header">
+      <a href="index.html" class="btn-back">← Volver</a>
+      <h1 class="page-title">Plantillas de ticket</h1>
+    </header>
+
+    <p class="plantillas-sub">Elige el diseño que se usará al compartir tus rifas</p>
+
+    <div class="plantillas-list">
+
+      <label class="plantilla-card" data-template="azul">
+        <input type="radio" name="plantilla" value="azul" />
+        <div class="plantilla-preview plantilla-preview--azul">
+          <div class="pp-badge">Rifa Oficial</div>
+          <div class="pp-title">Smart TV</div>
+        </div>
+        <div class="plantilla-info">
+          <div class="plantilla-name">Azul Marino</div>
+          <div class="plantilla-desc">Elegante y clásico</div>
+        </div>
+        <div class="plantilla-check">✓</div>
+      </label>
+
+      <label class="plantilla-card" data-template="retro">
+        <input type="radio" name="plantilla" value="retro" />
+        <div class="plantilla-preview plantilla-preview--retro">
+          <div class="pp-sun">☀</div>
+          <div class="pp-title-retro">RIFA</div>
+        </div>
+        <div class="plantilla-info">
+          <div class="plantilla-name">Retro Rosa</div>
+          <div class="plantilla-desc">Estilo vintage groovy</div>
+        </div>
+        <div class="plantilla-check">✓</div>
+      </label>
+
+      <label class="plantilla-card" data-template="esmeralda">
+        <input type="radio" name="plantilla" value="esmeralda" />
+        <div class="plantilla-preview plantilla-preview--esmeralda">
+          <div class="pp-badge-esm">Rifa Oficial</div>
+          <div class="pp-title">Smart TV</div>
+        </div>
+        <div class="plantilla-info">
+          <div class="plantilla-name">Verde Esmeralda</div>
+          <div class="plantilla-desc">Fresco y moderno</div>
+        </div>
+        <div class="plantilla-check">✓</div>
+      </label>
+
+    </div>
+
+  </div>
+
+  <script src="js/plantillas.js"></script>
+</body>
+</html>
