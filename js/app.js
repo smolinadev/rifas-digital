@@ -135,3 +135,9 @@ document.getElementById('btn-menu').addEventListener('click', () => {
     overlay.classList.add('hidden');
   }
 });
+document.getElementById('drawer-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('drawer-overlay')) {
+    document.getElementById('btn-menu').classList.remove('open');
+    document.getElementById('drawer-overlay').classList.add('hidden');
+  }
+});
