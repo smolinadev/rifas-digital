@@ -479,3 +479,81 @@ align-items: flex-start;
   font-weight: 800;
   cursor: pointer;
 }
+/* ─── MENU BUTTON (ticket animado) ─────────────────────── */
+.menu-btn {
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 0;
+}
+
+.stub {
+  fill: #1a1a1a;
+  transition: transform 0.44s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.22s ease;
+}
+
+.stub-top { transform-origin: 24px 13px; }
+.stub-mid { transform-origin: 24px 24px; }
+.stub-bot { transform-origin: 24px 35px; }
+
+.menu-btn.open .stub-top { transform: translateY(11px) rotate(45deg); }
+.menu-btn.open .stub-mid { transform: scaleX(0.2); opacity: 0; }
+.menu-btn.open .stub-bot { transform: translateY(-11px) rotate(-45deg); }
+.menu-btn.open .ticket-dot { opacity: 0; }
+
+/* ─── DRAWER ────────────────────────────────────────────── */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 80;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.drawer-overlay.hidden { display: none; }
+
+.drawer {
+  background: var(--surface);
+  width: 260px;
+  height: 100%;
+  padding: 80px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: slideInRight 0.25s ease;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.drawer-item:hover { background: #fff; }

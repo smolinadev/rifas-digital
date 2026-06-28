@@ -11,6 +11,16 @@
 </head>
 <body>
 
+  <<button class="menu-btn" id="btn-menu">
+  <svg class="menu-icon" viewBox="0 0 48 48" width="44" height="44">
+    <path class="stub stub-top"
+      d="M 12 9.6  L 40 9.6  Q 43.5 9.6  43.5 13  Q 43.5 16.4 40 16.4  L 12 16.4 L 7.5 13  Z"/>
+    <path class="stub stub-mid"
+      d="M 12 20.6 L 40 20.6 Q 43.5 20.6 43.5 24  Q 43.5 27.4 40 27.4  L 12 27.4 L 7.5 24  Z"/>
+    <path class="stub stub-bot"
+      d="M 12 31.6 L 40 31.6 Q 43.5 31.6 43.5 35  Q 43.5 38.4 40 38.4  L 12 38.4 L 7.5 35  Z"/>
+  </svg>
+</button>
   <div class="app">
 
   <section class="hero">
@@ -76,6 +86,16 @@
     <button class="btn" id="delete-confirm" >Eliminar</button>
 
     </div>
+  </div>
+</div>
+<div class="drawer-overlay hidden" id="drawer-overlay">
+  <div class="drawer">
+    <button class="drawer-item" id="drawer-templates">
+      <span>🎫</span> Plantillas de ticket
+    </button>
+    <button class="drawer-item" id="drawer-finished">
+      <span>🏆</span> Rifas finalizadas
+    </button>
   </div>
 </div>
   <script src="js/app.js"></script>

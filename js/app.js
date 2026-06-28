@@ -123,3 +123,15 @@ function openWinnerModal(rifa) {
 document.getElementById('delete-cancel').addEventListener('click', () => {
   document.getElementById('modal-delete').classList.add('hidden');
 });
+document.getElementById('btn-menu').addEventListener('click', () => {
+  const btn = document.getElementById('btn-menu');
+  const overlay = document.getElementById('drawer-overlay');
+  
+  if (overlay.classList.contains('hidden')) {
+    btn.classList.add('open');
+    overlay.classList.remove('hidden');
+  } else {
+    btn.classList.remove('open');
+    overlay.classList.add('hidden');
+  }
+});
