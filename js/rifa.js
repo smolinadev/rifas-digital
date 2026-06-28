@@ -143,12 +143,20 @@ document.getElementById('modal').addEventListener('click', e => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 document.getElementById('btn-share').addEventListener('click', async () => {
-  buildShareTicket();
+  const plantilla = localStorage.getItem('plantilla_seleccionada') || 'azul';
+  const targetId = plantilla === 'retro' ? 'ticket-share-retro'
+                  : plantilla === 'esmeralda' ? 'ticket-share-esmeralda'
+                  : 'ticket-share';
+
+  if (plantilla === 'azul') buildShareTicket();
+  else if (plantilla === 'retro') buildShareTicketRetro();
+  else if (plantilla === 'esmeralda') buildShareTicketEsmeralda();
+
   await new Promise(r => setTimeout(r, 100));
-  const canvas = await html2canvas(document.getElementById('ticket-share'), {
+  const canvas = await html2canvas(document.getElementById(targetId), {
     scale: 2,
     useCORS: true,
-    backgroundColor: '#ECEAE5'
+    backgroundColor: null
   });
   canvas.toBlob(async blob => {
     const file = new File([blob], 'rifa.png', { type: 'image/png' });
@@ -183,6 +191,52 @@ function buildShareTicket() {
     const sold = rifa.nums[n].sold;
     const div = document.createElement('div');
     div.style.cssText = `height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;${sold ? 'background:#F5C842;color:#0f2744;' : 'background:#1a3a5c;color:#4a7aaa;'}`;
+    div.textContent = n;
+    grid.appendChild(div);
+  });
+}
+function buildShareTicketRetro() {
+  const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
+  const cols = rifa.count <= 10 ? 5 : 10;
+  const soldCount = nums.filter(n => rifa.nums[n].sold).length;
+
+  document.getElementById('tsr-prize').textContent  = rifa.prize;
+  document.getElementById('tsr-info').textContent   = `${rifa.price} · ${formatDate(rifa.date)}`;
+  document.getElementById('tsr-footer').textContent = `RIFA APP${rifa.whatsapp ? ' · WS: ' + rifa.whatsapp : ''}`;
+
+  const grid = document.getElementById('tsr-grid');
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  grid.innerHTML = '';
+
+  nums.forEach(n => {
+    const sold = rifa.nums[n].sold;
+    const div = document.createElement('div');
+    div.style.cssText = `font-size:11px;font-weight:700;color:${sold ? '#c08a93' : '#4a3d42'};${sold ? 'text-decoration:line-through;' : ''}`;
+    div.textContent = n;
+    grid.appendChild(div);
+  });
+}
+
+function buildShareTicketEsmeralda() {
+  const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
+  const cols = rifa.count <= 10 ? 5 : 10;
+  const soldCount = nums.filter(n => rifa.nums[n].sold).length;
+
+  document.getElementById('tse-prize').textContent    = rifa.prize;
+  document.getElementById('tse-price').textContent    = rifa.price;
+  document.getElementById('tse-date').textContent     = formatDate(rifa.date);
+  document.getElementById('tse-lottery').textContent   = rifa.lottery;
+  document.getElementById('tse-count').textContent     = `${soldCount} / ${nums.length}`;
+  document.getElementById('tse-whatsapp').textContent  = rifa.whatsapp ? `WS: ${rifa.whatsapp}` : 'Rifa App';
+
+  const grid = document.getElementById('tse-grid');
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  grid.innerHTML = '';
+
+  nums.forEach(n => {
+    const sold = rifa.nums[n].sold;
+    const div = document.createElement('div');
+    div.style.cssText = `height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;${sold ? 'background:#6ee7a8;color:#0d2b1f;' : 'background:#1e4a35;color:#4d8068;'}`;
     div.textContent = n;
     grid.appendChild(div);
   });
