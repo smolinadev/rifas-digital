@@ -114,8 +114,12 @@ function openWinnerModal(rifa) {
     document.getElementById('winner-result').textContent = `🏆 ${winner.buyer} — Número ${key}`;
     document.getElementById('winner-result').style.display = 'block';
     document.getElementById('winner-confirm').style.display = 'none';
-  };
+const rifas = getRifas().map(r => r.id === rifa.id ? { ...r, done: true, winner: { num: key, buyer: winner.buyer } } : r);
+saveRifas(rifas);
+renderHome();
 
+  };
+cls
   document.getElementById('winner-cancel').onclick = () => {
     document.getElementById('modal-winner').classList.add('hidden');
   };
