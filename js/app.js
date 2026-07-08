@@ -119,12 +119,11 @@ saveRifas(rifas);
 renderHome();
 
   };
-cls
   document.getElementById('winner-cancel').onclick = () => {
     document.getElementById('modal-winner').classList.add('hidden');
   };
 }
-document.getElementById('delete-cancel').addEventListener('click', () => {
+document.getElementById('delete-cancel3').addEventListener('click', () => {
   document.getElementById('modal-delete').classList.add('hidden');
 });
 document.getElementById('btn-menu').addEventListener('click', () => {

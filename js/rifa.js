@@ -1,9 +1,11 @@
+// ─── STORAGE ──────────────────────────────────────────────
 function getRifas() {
   try { return JSON.parse(localStorage.getItem('rifas') || '[]'); }
   catch { return []; }
 }
 function saveRifas(r) { localStorage.setItem('rifas', JSON.stringify(r)); }
 
+// ─── UTILS ────────────────────────────────────────────────
 function formatDate(d) {
   if (!d) return '—';
   const [y,m,dd] = d.split('-');
@@ -17,6 +19,7 @@ function getIdFromURL() {
 
 let rifa = null;
 
+// ─── INIT: carga la rifa desde la URL ─────────────────────
 function init() {
   const id = getIdFromURL();
   rifa = getRifas().find(r => r.id === id);
@@ -30,19 +33,17 @@ function init() {
   renderGrid();
 }
 
+// ─── GRID: renderiza los números con su estado ────────────
 function renderGrid() {
   const grid = document.getElementById('num-grid');
-
-  // Ordenar numéricamente siempre
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
 
-  // Columnas según rango
- const cols = rifa.count <= 10 ? 5
-           : rifa.count <= 50 ? 7
-           : rifa.count <= 100 ? 7
-           : 10;
+  // Columnas y tamaño según rango de números
+  const cols = rifa.count <= 10 ? 5
+             : rifa.count <= 50 ? 7
+             : rifa.count <= 100 ? 7
+             : 10;
 
-  // Tamaño de botón según rango
   const btnSize = rifa.count <= 10  ? '90px'
                 : rifa.count <= 50  ? '72px'
                 : rifa.count <= 100 ? '64px'
@@ -76,12 +77,13 @@ function renderGrid() {
     grid.appendChild(btn);
   });
 
+  // Actualizar stats y barra de progreso
   document.getElementById('stat-sold').textContent  = sold;
   document.getElementById('stat-free').textContent  = nums.length - sold;
   document.getElementById('stat-total').textContent = nums.length;
-const pct = Math.round(sold / nums.length * 100);
-document.getElementById('stat-bar').style.width = pct + '%';
-document.getElementById('stat-pct').textContent = pct + '% vendido';
+  const pct = Math.round(sold / nums.length * 100);
+  document.getElementById('stat-bar').style.width = pct + '%';
+  document.getElementById('stat-pct').textContent = pct + '% vendido';
 }
 
 // ─── MODAL COMPRA ──────────────────────────────────────────
@@ -129,6 +131,7 @@ function closeModal() {
   selectedNum = null;
 }
 
+// Confirmar venta — si el nombre queda vacío, libera el número
 document.getElementById('modal-confirm').addEventListener('click', () => {
   const buyer = document.getElementById('modal-input').value.trim();
   rifa.nums[selectedNum] = buyer ? { sold: true, buyer } : { sold: false, buyer: '' };
@@ -142,11 +145,12 @@ document.getElementById('modal').addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+// ─── COMPARTIR: detecta plantilla y genera imagen ─────────
 document.getElementById('btn-share').addEventListener('click', async () => {
   const plantilla = localStorage.getItem('plantilla_seleccionada') || 'azul';
   const targetId = plantilla === 'retro' ? 'ticket-share-retro'
-                  : plantilla === 'esmeralda' ? 'ticket-share-esmeralda'
-                  : 'ticket-share';
+                 : plantilla === 'esmeralda' ? 'ticket-share-esmeralda'
+                 : 'ticket-share';
 
   if (plantilla === 'azul') buildShareTicket();
   else if (plantilla === 'retro') buildShareTicketRetro();
@@ -171,6 +175,7 @@ document.getElementById('btn-share').addEventListener('click', async () => {
   }, 'image/png');
 });
 
+// ─── PLANTILLA: Azul Marino ───────────────────────────────
 function buildShareTicket() {
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
   const cols = rifa.count <= 10 ? 5 : 10;
@@ -195,10 +200,11 @@ function buildShareTicket() {
     grid.appendChild(div);
   });
 }
+
+// ─── PLANTILLA: Retro Rosa ────────────────────────────────
 function buildShareTicketRetro() {
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
   const cols = rifa.count <= 10 ? 5 : 10;
-  const soldCount = nums.filter(n => rifa.nums[n].sold).length;
 
   document.getElementById('tsr-prize').textContent  = rifa.prize;
   document.getElementById('tsr-info').textContent   = `${rifa.price} · ${formatDate(rifa.date)}`;
@@ -217,17 +223,17 @@ function buildShareTicketRetro() {
   });
 }
 
+// ─── PLANTILLA: Verde Esmeralda ───────────────────────────
 function buildShareTicketEsmeralda() {
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
   const cols = rifa.count <= 10 ? 5 : 10;
-  const soldCount = nums.filter(n => rifa.nums[n].sold).length;
 
   document.getElementById('tse-prize').textContent    = rifa.prize;
   document.getElementById('tse-price').textContent    = rifa.price;
   document.getElementById('tse-date').textContent     = formatDate(rifa.date);
-  document.getElementById('tse-lottery').textContent   = rifa.lottery;
-  document.getElementById('tse-count').textContent     = `${soldCount} / ${nums.length}`;
-  document.getElementById('tse-whatsapp').textContent  = rifa.whatsapp ? `WS: ${rifa.whatsapp}` : 'Rifa App';
+  document.getElementById('tse-lottery').textContent  = rifa.lottery;
+  document.getElementById('tse-count').textContent    = `${nums.filter(n => rifa.nums[n].sold).length} / ${nums.length}`;
+  document.getElementById('tse-whatsapp').textContent = rifa.whatsapp ? `WS: ${rifa.whatsapp}` : 'Rifa App';
 
   const grid = document.getElementById('tse-grid');
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
