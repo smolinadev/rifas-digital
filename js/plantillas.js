@@ -20,13 +20,18 @@ function initPlantillas() {
       card.classList.add('selected');
     }
 
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.plantilla-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      input.checked = true;
-      setPlantilla(value);
-    });
+card.addEventListener('click', () => {
+  document.querySelectorAll('.plantilla-card').forEach(c => {
+    c.classList.remove('selected');
+    c.querySelector('.check-btn').classList.remove('is-checked');
+    c.querySelector('.check-btn').setAttribute('aria-pressed', 'false');
   });
+  card.classList.add('selected');
+  card.querySelector('.check-btn').classList.add('is-checked');
+  card.querySelector('.check-btn').setAttribute('aria-pressed', 'true');
+  input.checked = true;
+  setPlantilla(value);
+});
+});
 }
-
 initPlantillas();

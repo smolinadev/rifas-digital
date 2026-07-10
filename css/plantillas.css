@@ -61,24 +61,39 @@
   margin-top: 2px;
 }
 
-.plantilla-check {
-  width: 22px;
-  height: 22px;
-  border: 1.5px solid var(--border);
-  border-radius: 50%;
+.check-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
   flex-shrink: 0;
+}
+
+.check-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2.5px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  color: transparent;
-  transition: all .15s;
+  transition: background 0.25s ease, border-color 0.25s ease;
 }
 
-.plantilla-card.selected .plantilla-check {
+.check-path {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  transition: stroke-dashoffset 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.check-btn.is-checked .check-circle {
   background: #1a1a1a;
   border-color: #1a1a1a;
-  color: #F5C842;
+}
+
+.check-btn.is-checked .check-path {
+  stroke-dashoffset: 0;
 }
 
 /* ─── PREVIEW: AZUL MARINO ──────────────────────────────── */
