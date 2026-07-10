@@ -14,7 +14,15 @@
   <div class="app">
 
     <header class="page-header">
-      <a href="index.html" class="btn-back">← Volver</a>
+            <a href="index.html" class="back-btn">
+  <svg viewBox="0 0 20 20" width="15" height="15" class="back-arrow">
+    <path d="M 14 10 L 5 10 M 5 10 L 9 6 M 5 10 L 9 14"
+      stroke="#1a1a1a" stroke-width="1.8"
+      stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+  <span class="back-label">Volver</span>
+  <div class="back-line"></div>
+</a>
       <h1 class="page-title">Plantillas de ticket</h1>
     </header>
 
@@ -46,7 +54,7 @@
         </div>
         <div class="plantilla-check">✓</div>
       </label>
-      
+
       <label class="plantilla-card" data-template="retro">
         <input type="radio" name="plantilla" value="retro" />
         <div class="plantilla-preview plantilla-preview--retro">

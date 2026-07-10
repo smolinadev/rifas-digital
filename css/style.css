@@ -228,15 +228,56 @@ body {
 align-items: flex-start;
 }
 
-.btn-back {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-decoration: none;
+/* ─── BOTÓN VOLVER ──────────────────────────────────────── */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   width: fit-content;
-  transition: color .15s;
+  padding: 5px 12px 5px 6px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  transition: background 0.2s ease;
+  text-decoration: none;
 }
-.btn-back:hover { color: var(--text); }
+
+.back-btn:hover { background: #f5f3ef; }
+
+.back-arrow {
+  flex-shrink: 0;
+  transform: translateX(0);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.back-btn:hover .back-arrow { transform: translateX(-4px); }
+
+.back-label {
+  font-family: 'Space Grotesk', 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.back-line {
+  position: absolute;
+  bottom: 4px;
+  left: 28px;
+  right: 10px;
+  height: 2px;
+  background: #F5C842;
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.back-btn:hover .back-line { transform: scaleX(1); }
 
 .page-title {
   font-size: 26px;
