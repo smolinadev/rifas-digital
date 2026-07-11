@@ -21,7 +21,7 @@ function isToday(dateStr) {
   );
 }
 function renderHome() {
-  const rifas = getRifas();
+  const rifas = getRifas().filter(r => !r.done);
   const list  = document.getElementById('rifa-list');
   const empty = document.getElementById('list-empty');
 
