@@ -32,8 +32,44 @@ function renderFinalizadas() {
         ${rifa.winner ? `<div style="margin-top:6px;font-size:13px;font-weight:700;color:#1a1a1a;">🏆 ${rifa.winner.buyer} — Número ${rifa.winner.num}</div>` : ''}
       </div>
     `;
+    li.addEventListener('click', () => openResumen(rifa));
     list.appendChild(li);
   });
 }
 
 renderFinalizadas();
+function formatPrice(price) {
+  const num = parseInt(price.replace(/[^0-9]/g, ''));
+  return isNaN(num) ? 0 : num;
+}
+
+function formatMoney(num) {
+  return '$' + num.toLocaleString('es-CO');
+}
+
+function openResumen(rifa) {
+  const nums   = Object.values(rifa.nums);
+  const sold   = nums.filter(n => n.sold).length;
+  const total  = nums.length;
+  const precio = formatPrice(rifa.price);
+
+  document.getElementById('pr-prize').textContent    = rifa.prize;
+  document.getElementById('pr-winner').textContent   = rifa.winner ? `👤 ${rifa.winner.buyer} — Número ${rifa.winner.num}` : '—';
+  document.getElementById('pr-price').textContent    = rifa.price;
+  document.getElementById('pr-lottery').textContent  = rifa.lottery;
+  document.getElementById('pr-sold').textContent     = `${sold} / ${total}`;
+  document.getElementById('pr-possible').textContent = formatMoney(precio * total);
+  document.getElementById('pr-total').textContent    = formatMoney(precio * sold);
+
+  document.getElementById('modal-resumen').classList.remove('hidden');
+}
+
+document.getElementById('pr-close').addEventListener('click', () => {
+  document.getElementById('modal-resumen').classList.add('hidden');
+});
+
+document.getElementById('modal-resumen').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-resumen')) {
+    document.getElementById('modal-resumen').classList.add('hidden');
+  }
+});

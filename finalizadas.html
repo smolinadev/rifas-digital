@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600&display=swap" rel="stylesheet">
   <title>Rifas Finalizadas</title>
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="/css/rifa.css"/>
 </head>
 <body>
 
@@ -33,7 +34,38 @@
     <ul class="rifa-list" id="rifa-list"></ul>
 
   </div>
-
+<div class="modal-overlay hidden" id="modal-resumen">
+  <div class="panel-resumen">
+    <div class="pr-head">
+      <div class="pr-badge">🏆 Finalizada</div>
+      <div class="pr-prize" id="pr-prize"></div>
+      <div class="pr-winner" id="pr-winner"></div>
+    </div>
+    <div class="pr-stats">
+      <div class="pr-stat">
+        <div class="pr-stat-label">Precio boleta</div>
+        <div class="pr-stat-value" id="pr-price"></div>
+      </div>
+      <div class="pr-stat">
+        <div class="pr-stat-label">Lotería</div>
+        <div class="pr-stat-value" id="pr-lottery"></div>
+      </div>
+      <div class="pr-stat">
+        <div class="pr-stat-label">Vendidos</div>
+        <div class="pr-stat-value gold" id="pr-sold"></div>
+      </div>
+      <div class="pr-stat">
+        <div class="pr-stat-label">Total posible</div>
+        <div class="pr-stat-value" id="pr-possible"></div>
+      </div>
+    </div>
+    <div class="pr-foot">
+      <div class="pr-recaudado-label">Total recaudado</div>
+      <div class="pr-recaudado-value" id="pr-total"></div>
+    </div>
+    <button class="btn" id="pr-close" style="margin:0 20px 20px;width:calc(100% - 40px);padding:13px;border-radius:12px;background:#2a2a2a;color:#fff;font-family:inherit;font-size:15px;font-weight:700;border:none;cursor:pointer;">Cerrar</button>
+  </div>
+</div>
   <script src="js/finalizadas.js"></script>
 </body>
 </html>

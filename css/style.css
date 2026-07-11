@@ -598,3 +598,93 @@ align-items: flex-start;
 }
 
 .drawer-item:hover { background: #fff; }
+/* ─── PANEL RESUMEN ─────────────────────────────────────── */
+.panel-resumen {
+  background: #1a1a1a;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  width: 100%;
+  max-width: 480px;
+  animation: slideUp .25s ease;
+}
+
+.pr-head {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.pr-badge {
+  display: inline-block;
+  background: #F5C842;
+  color: #1a1a1a;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 99px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pr-prize {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.pr-winner {
+  font-size: 13px;
+  color: #F5C842;
+  font-weight: 600;
+}
+
+.pr-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: #2a2a2a;
+}
+
+.pr-stat {
+  background: #1a1a1a;
+  padding: 14px 16px;
+}
+
+.pr-stat-label {
+  font-size: 10px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.pr-stat-value {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 2px;
+  line-height: 1;
+}
+
+.pr-stat-value.gold { color: #F5C842; }
+
+.pr-foot {
+  padding: 16px 20px;
+  border-top: 1px solid #2a2a2a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pr-recaudado-label {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.pr-recaudado-value {
+  font-size: 24px;
+  font-weight: 900;
+  color: #F5C842;
+}
