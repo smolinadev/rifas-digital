@@ -144,10 +144,13 @@ document.getElementById('drawer-overlay').addEventListener('click', e => {
     document.getElementById('drawer-overlay').classList.add('hidden');
   }
 });
+
 document.getElementById('drawer-templates').addEventListener('click', () => {
+  document.getElementById('drawer-templates').classList.add('active');
   window.location.href = 'plantillas.html';
 });
 
 document.getElementById('drawer-finished').addEventListener('click', () => {
+  document.getElementById('drawer-finished').classList.add('active');
   window.location.href = 'finalizadas.html';
 });
