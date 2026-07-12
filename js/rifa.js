@@ -195,7 +195,7 @@ function buildShareTicket() {
   nums.forEach(n => {
     const sold = rifa.nums[n].sold;
     const div = document.createElement('div');
-    div.style.cssText = `height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;${sold ? 'background:#F5C842;color:#0f2744;' : 'background:#1a3a5c;color:#4a7aaa;'}`;
+    div.style.cssText = `height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;${sold ? 'background:#F5C842;color:#0f2744;' : 'background:#1e4d7a;color:#6a9fc8;'}`;
     div.textContent = n;
     grid.appendChild(div);
   });
@@ -242,7 +242,7 @@ function buildShareTicketEsmeralda() {
   nums.forEach(n => {
     const sold = rifa.nums[n].sold;
     const div = document.createElement('div');
-    div.style.cssText = `height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;${sold ? 'background:#6ee7a8;color:#0d2b1f;' : 'background:#1e4a35;color:#4d8068;'}`;
+    div.style.cssText = `height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;${sold ? 'background:#6ee7a8;color:#0d2b1f;' : 'background:#1e5a40;color:#5fa876;'}`;
     div.textContent = n;
     grid.appendChild(div);
   });
