@@ -1,176 +1,840 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bungee&display=swap" rel="stylesheet">
-  <link rel="icon" href="/assets/icons/icon-32x32.png">
-  <title>Rifa</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/rifa.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bungee&display=swap"
+      rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400;1,900&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"/>
 
-  <div class="app">
+    <link rel="icon" href="/assets/icons/icon-32x32.png" />
+    <title>Rifa</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/rifa.css" />
+  </head>
+  
+  <body>
+    <div class="app">
+      <!-- HEADER -->
+      <header class="page-header">
+        <a href="index.html" class="back-btn">
+          <svg viewBox="0 0 20 20" width="15" height="15" class="back-arrow">
+            <path
+              d="M 14 10 L 5 10 M 5 10 L 9 6 M 5 10 L 9 14"
+              stroke="#1a1a1a"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+          </svg>
+          <span class="back-label">Volver</span>
+          <div class="back-line"></div>
+        </a>
+        <h1 class="page-title" id="rifa-title">Cargando...</h1>
+      </header>
 
-    <!-- HEADER -->
-    <header class="page-header">
-            <a href="index.html" class="back-btn">
-  <svg viewBox="0 0 20 20" width="15" height="15" class="back-arrow">
-    <path d="M 14 10 L 5 10 M 5 10 L 9 6 M 5 10 L 9 14"
-      stroke="#1a1a1a" stroke-width="1.8"
-      stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  </svg>
-  <span class="back-label">Volver</span>
-  <div class="back-line"></div>
-</a>
-      <h1 class="page-title" id="rifa-title">Cargando...</h1>
-    </header>
-
-    <!-- INFO CARD -->
-    <div class="info-card">
-      <div class="info-item">
-        <span class="info-item__label">Precio</span>
-        <span class="info-item__value" id="info-price">—</span>
+      <!-- INFO CARD -->
+      <div class="info-card">
+        <div class="info-item">
+          <span class="info-item__label">Precio</span>
+          <span class="info-item__value" id="info-price">—</span>
+        </div>
+        <div class="info-item">
+          <span class="info-item__label">Sorteo</span>
+          <span class="info-item__value" id="info-date">—</span>
+        </div>
+        <div class="info-item">
+          <span class="info-item__label">Lotería</span>
+          <span class="info-item__value" id="info-lottery">—</span>
+        </div>
       </div>
-      <div class="info-item">
-        <span class="info-item__label">Sorteo</span>
-        <span class="info-item__value" id="info-date">—</span>
+
+      <!-- STATS BAR -->
+      <div class="stats-bar">
+        <div class="stats-bar__nums">
+          <div class="stats-bar__item">
+            <span class="stats-bar__num" id="stat-sold">0</span>
+            <span class="stats-bar__label">Vendidos</span>
+          </div>
+          <div class="stats-bar__item">
+            <span class="stats-bar__num" id="stat-free">0</span>
+            <span class="stats-bar__label">Libres</span>
+          </div>
+          <div class="stats-bar__item">
+            <span class="stats-bar__num" id="stat-total">0</span>
+            <span class="stats-bar__label">Total</span>
+          </div>
+        </div>
+        <div class="stats-bar__bar">
+          <div class="stats-bar__fill" id="stat-bar"></div>
+        </div>
+        <div class="stats-bar__pct" id="stat-pct">0% vendido</div>
       </div>
-      <div class="info-item">
-        <span class="info-item__label">Lotería</span>
-        <span class="info-item__value" id="info-lottery">—</span>
+      <!-- GRID -->
+      <div class="num-grid" id="num-grid"></div>
+
+      <!-- SHARE BTN -->
+      <button class="btn btn--primary btn--fab" id="btn-share">
+        Compartir
+      </button>
+    </div>
+
+    <!-- MODAL: registrar comprador -->
+    <div class="modal-overlay hidden" id="modal">
+      <div class="modal">
+        <p class="modal__num" id="modal-num">00</p>
+        <h3 class="modal__title" id="modal-title">
+          ¿Quién compró este número?
+        </h3>
+        <input
+          class="form-input"
+          id="modal-input"
+          type="text"
+          placeholder="Nombre del cliente"
+          maxlength="40"
+        />
+        <p class="modal__buyer" id="modal-buyer" style="display: none"></p>
+        <button class="btn btn--ghost" id="modal-edit" style="display: none">
+          Editar nombre
+        </button>
+        <div class="modal__actions">
+          <button class="btn btn--primary btn--full" id="modal-confirm">
+            Confirmar venta
+          </button>
+          <button class="btn btn--ghost" id="modal-cancel">Cancelar</button>
+        </div>
       </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="js/rifa.js"></script>
+    <!-- TICKET PARA COMPARTIR -->
 
-    <!-- STATS BAR -->
-    <div class="stats-bar">
-  <div class="stats-bar__nums">
-    <div class="stats-bar__item">
-      <span class="stats-bar__num" id="stat-sold">0</span>
-      <span class="stats-bar__label">Vendidos</span>
-    </div>
-    <div class="stats-bar__item">
-      <span class="stats-bar__num" id="stat-free">0</span>
-      <span class="stats-bar__label">Libres</span>
-    </div>
-    <div class="stats-bar__item">
-      <span class="stats-bar__num" id="stat-total">0</span>
-      <span class="stats-bar__label">Total</span>
-    </div>
-  </div>
-  <div class="stats-bar__bar">
-    <div class="stats-bar__fill" id="stat-bar"></div>
-  </div>
-  <div class="stats-bar__pct" id="stat-pct">0% vendido</div>
-</div>
-    <!-- GRID -->
-    <div class="num-grid" id="num-grid"></div>
+    <!-- TICKET AZUL (NUEVO LAYOUT) -->
+    <div
+      id="ticket-share"
+      style="
+        position: fixed;
+        left: -9999px;
+        top: 0;
+        width: 280px;
+        background: #0f2744;
+        border-radius: 16px;
+        padding: 20px 18px 16px;
+        font-family:
+          &quot;Nunito&quot;,
+          -apple-system,
+          sans-serif;
+      "
+    >
+      <!-- Badge -->
+      <div style="text-align: center; margin-bottom: 12px">
+        <div
+          style="
+            display: inline-block;
+            border: 1px solid #f5c842;
+            color: #f5c842;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+          "
+        >
+          Rifa Oficial
+        </div>
+      </div>
 
-    <!-- SHARE BTN -->
-    <button class="btn btn--primary btn--fab" id="btn-share"> Compartir</button>
+      <!-- Premio -->
+      <h2
+        id="ts-prize"
+        style="
+          color: #fff;
+          font-size: 20px;
+          font-weight: 900;
+          margin: 0 0 4px;
+          text-align: center;
+          line-height: 1.2;
+        "
+      ></h2>
 
-  </div>
+      <!-- Subtitulo -->
 
-  <!-- MODAL: registrar comprador -->
-  <div class="modal-overlay hidden" id="modal">
-    <div class="modal">
-      <p class="modal__num" id="modal-num">00</p>
-      <h3 class="modal__title" id="modal-title">¿Quién compró este número?</h3>
-      <input class="form-input" id="modal-input" type="text" placeholder="Nombre del cliente" maxlength="40" />
-      <p class="modal__buyer" id="modal-buyer" style="display:none"></p>
-<button class="btn btn--ghost" id="modal-edit" style="display:none">Editar nombre</button>
-      <div class="modal__actions">
-        <button class="btn btn--primary btn--full" id="modal-confirm">Confirmar venta</button>
-        <button class="btn btn--ghost" id="modal-cancel">Cancelar</button>
+      <p
+        style="
+          color: #f5c842;
+          font-size: 10px;
+          font-weight: 600;
+          margin: 0 0 10px;
+          text-align: center;
+        "
+      >
+        ¡Participa y gana!
+      </p>
+
+      <!-- Datos -->
+
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 8px;
+          padding-bottom: 6px;
+          border-bottom: 1px solid #21456f;
+        "
+      >
+        <div style="text-align: center; flex: 1">
+          <div
+            style="
+              font-size: 7px;
+              color: #4a7aaa;
+              text-transform: uppercase;
+              letter-spacing: 0.12em;
+            "
+          >
+            Precio
+          </div>
+
+          <div
+            id="ts-price"
+            style="
+              font-size: 9px;
+              color: #f5c842;
+              font-weight: 700;
+              margin-top: 2px;
+            "
+          ></div>
+        </div>
+
+        <div style="text-align: center; flex: 1">
+          <div
+            style="
+              font-size: 7px;
+              color: #4a7aaa;
+              text-transform: uppercase;
+              letter-spacing: 0.12em;
+            "
+          >
+            Sorteo
+          </div>
+
+          <div
+            id="ts-date"
+            style="
+              font-size: 9px;
+              color: #f5c842;
+              font-weight: 700;
+              margin-top: 2px;
+            "
+          ></div>
+        </div>
+
+        <div style="text-align: center; flex: 1">
+          <div
+            style="
+              font-size: 7px;
+              color: #4a7aaa;
+              text-transform: uppercase;
+              letter-spacing: 0.12em;
+            "
+          >
+            Lotería
+          </div>
+
+          <div
+            id="ts-lottery"
+            style="
+              font-size: 9px;
+              color: #f5c842;
+              font-weight: 700;
+              margin-top: 2px;
+            "
+          ></div>
+        </div>
+      </div>
+
+      <!-- GRID -->
+
+      <div
+        id="ts-grid"
+        style="
+          display: grid;
+          grid-template-columns: repeat(10, 1fr);
+          gap: 0;
+          background: #0b2038;
+          padding: 8px 6px;
+          border-radius: 10px;
+        "
+      ></div>
+
+      <!-- Footer -->
+
+      <div
+        style="
+          margin-top: 8px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div>
+          <div
+            style="
+              font-size: 7px;
+              color: #4a7aaa;
+              text-transform: uppercase;
+              letter-spacing: 0.14em;
+            "
+          >
+            Contacto
+          </div>
+
+          <div
+            id="ts-whatsapp"
+            style="
+              margin-top: 2px;
+              font-size: 9px;
+              color: #f5c842;
+              font-weight: 700;
+            "
+          ></div>
+        </div>
+
+        <div style="text-align: right">
+          <div
+            style="
+              font-size: 7px;
+              color: #4a7aaa;
+              text-transform: uppercase;
+              letter-spacing: 0.14em;
+            "
+          >
+            Vendidos
+          </div>
+
+          <div
+            id="ts-count"
+            style="
+              margin-top: 2px;
+              font-size: 9px;
+              color: #f5c842;
+              font-weight: 700;
+            "
+          ></div>
+        </div>
       </div>
     </div>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="js/rifa.js"></script>
-<!-- TICKET PARA COMPARTIR -->
+    <!-- TICKET RETRO ROSA -->
+    <div
+      id="ticket-share-retro"
+      style="
+        position: fixed;
+        left: -9999px;
+        top: 0;
+        width: 280px;
+        background: linear-gradient(160deg, #f9e4e7, #f3d4da);
+        border-radius: 16px;
+        padding: 20px 18px 16px;
+        font-family:
+          &quot;Space Grotesk&quot;,
+          -apple-system,
+          sans-serif;
+        position: relative;
+      "
+    >
+      <!-- Estrellas arriba -->
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+        "
+      >
+        <div style="display: flex; gap: 3px">
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+        </div>
+        <div style="display: flex; gap: 3px">
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+        </div>
+      </div>
 
-<!-- TICKET AZUL -->
-<div id="ticket-share" style="position:fixed;left:-9999px;top:0;width:420px;background:#0f2744;border-radius:20px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+      <!-- Título -->
+      <h2
+        id="tsr-prize"
+        style="
+          font-family: &quot;Playfair Display&quot;, Georgia, serif;
+          font-size: 20px;
+          font-weight: 900;
+          font-style: italic;
+          color: #3a2525;
+          margin: 0 0 4px;
+          line-height: 1.2;
+          text-align: center;
+        "
+      ></h2>
 
-  <div style="background:#0f2744;padding:28px 24px 20px;text-align:center;border-bottom:1px solid #1a3a5c;">
-    <div style="display:inline-block;border:1px solid #F5C842;color:#F5C842;font-size:10px;font-weight:700;padding:4px 14px;border-radius:99px;letter-spacing:1.5px;margin-bottom:14px;text-transform:uppercase;">Rifa Oficial</div>
-    <h2 id="ts-prize" style="color:#fff;font-size:26px;font-weight:900;margin:0 0 6px;letter-spacing:-0.5px;line-height:1.15;"></h2>
-  </div>
+      <!-- Subtítulo -->
+      <p
+        style="
+          font-family: &quot;Playfair Display&quot;, Georgia, serif;
+          font-size: 10px;
+          font-weight: 400;
+          font-style: italic;
+          color: #3a2525;
+          opacity: 0.7;
+          margin: 0 0 10px;
+          text-align: center;
+        "
+      >
+        ¡Participa y gana!
+      </p>
 
-  <div style="display:flex;border-bottom:1px solid #1a3a5c;border-top:1px solid #1a3a5c;">
-    <div style="flex:1;padding:10px 8px;text-align:center;border-right:1px solid #1a3a5c;">
-      <span style="display:block;font-size:9px;color:#4a7aaa;text-transform:uppercase;letter-spacing:0.8px;">Precio</span>
-      <strong id="ts-price" style="display:block;font-size:16px;color:#F5C842;font-weight:900;margin-top:3px;"></strong>
-    </div>
-    <div style="flex:1;padding:10px 8px;text-align:center;border-right:1px solid #1a3a5c;">
-      <span style="display:block;font-size:9px;color:#4a7aaa;text-transform:uppercase;letter-spacing:0.8px;">Sorteo</span>
-      <strong id="ts-date" style="display:block;font-size:14px;color:#F5C842;font-weight:700;margin-top:3px;"></strong>
-    </div>
-    <div style="flex:1;padding:10px 8px;text-align:center;">
-      <span style="display:block;font-size:9px;color:#4a7aaa;text-transform:uppercase;letter-spacing:0.8px;">Lotería</span>
-      <strong id="ts-lottery" style="display:block;font-size:14px;color:#F5C842;font-weight:700;margin-top:3px;"></strong>
-    </div>
-  </div>
+      <!-- Info precio · sorteo · lotería -->
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 8px;
+          padding-bottom: 6px;
+          border-bottom: 1px solid rgba(58, 37, 37, 0.15);
+        "
+      >
+        <div style="text-align: center">
+          <div
+            style="
+              font-size: 7px;
+              font-weight: 500;
+              letter-spacing: 0.12em;
+              text-transform: uppercase;
+              color: #3a2525;
+              opacity: 0.5;
+            "
+          >
+            Precio
+          </div>
+          <div
+            id="tsr-price"
+            style="
+              font-size: 9px;
+              font-weight: 700;
+              color: #3a2525;
+              margin-top: 2px;
+            "
+          ></div>
+        </div>
+        <div style="text-align: center">
+          <div
+            style="
+              font-size: 7px;
+              font-weight: 500;
+              letter-spacing: 0.12em;
+              text-transform: uppercase;
+              color: #3a2525;
+              opacity: 0.5;
+            "
+          >
+            Sorteo
+          </div>
+          <div
+            id="tsr-date"
+            style="
+              font-size: 9px;
+              font-weight: 700;
+              color: #3a2525;
+              margin-top: 2px;
+            "
+          ></div>
+        </div>
+        <div style="text-align: center">
+          <div
+            style="
+              font-size: 7px;
+              font-weight: 500;
+              letter-spacing: 0.12em;
+              text-transform: uppercase;
+              color: #3a2525;
+              opacity: 0.5;
+            "
+          >
+            Lotería
+          </div>
+          <div
+            id="tsr-lottery"
+            style="
+              font-size: 9px;
+              font-weight: 700;
+              color: #3a2525;
+              margin-top: 2px;
+            "
+          ></div>
+        </div>
+      </div>
 
-  <div id="ts-grid" style="padding:14px 12px;display:grid;gap:4px;"></div>
+      <!-- Grid números -->
+      <div
+        id="tsr-grid"
+        style="
+          display: grid;
+          grid-template-columns: repeat(10, 1fr);
+          gap: 0;
+          background: rgba(255, 255, 255, 0.4);
+          padding: 8px 6px;
+          border-radius: 10px;
+        "
+      ></div>
 
-  <div style="background:#0a1e36;padding:14px 20px;border-top:1px solid #1a3a5c;display:flex;justify-content:space-between;align-items:center;">
-    <div>
-      <span style="display:block;font-size:9px;color:#4a7aaa;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;">Contacto</span>
-      <span id="ts-whatsapp" style="font-size:12px;color:#F5C842;font-weight:700;"></span>
-    </div>
-    <div style="text-align:right;">
-      <span style="display:block;font-size:9px;color:#4a7aaa;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;">Vendidos</span>
-      <span id="ts-count" style="font-size:13px;color:#F5C842;font-weight:700;"></span>
-    </div>
-  </div>
+      <!-- Footer -->
+      <div
+        style="
+          margin-top: 8px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div
+          style="
+            font-size: 7px;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #3a2525;
+            opacity: 0.4;
+          "
+        >
+          Rifa App
+        </div>
+        <p
+          id="tsr-footer"
+          style="
+            font-size: 7px;
+            font-weight: 500;
+            color: #3a2525;
+            opacity: 0.5;
+            margin: 0;
+          "
+        ></p>
+      </div>
 
-</div>
-<!-- TICKET RETRO ROSA -->
-<div id="ticket-share-retro" style="position:fixed;left:-9999px;top:0;width:420px;background:linear-gradient(160deg,#f9e4e7,#f3d4da);border-radius:20px;padding:32px 24px;text-align:center;font-family:'Nunito',-apple-system,sans-serif;">
-  <div style="font-size:28px;color:#5a4a4f;margin-bottom:8px;">☀</div>
-  <h2 id="tsr-prize" style="font-family:'Bungee',sans-serif;font-size:30px;color:#4a3d42;margin:0;line-height:1.15;"></h2>
-  <p style="font-size:13px;font-style:italic;color:#6b5a5f;margin:14px 0 4px;font-weight:600;">¡Participa y gana!</p>
-  <p id="tsr-info" style="font-size:13px;font-weight:700;color:#4a3d42;margin:0 0 18px;"></p>
-  <div id="tsr-grid" style="display:grid;gap:6px;background:rgba(255,255,255,0.4);padding:14px;border-radius:14px;"></div>
-  <p id="tsr-footer" style="font-size:11px;color:#8a7a7f;margin-top:18px;letter-spacing:0.5px;"></p>
-</div>
-<!-- TICKET VERDE ESMERALDA -->
-<div id="ticket-share-esmeralda" style="position:fixed;left:-9999px;top:0;width:420px;background:#0d2b1f;border-radius:20px;overflow:hidden;font-family:'Nunito',-apple-system,sans-serif;">
-  <div style="padding:28px 24px 20px;text-align:center;border-bottom:1px solid #1e4a35;">
-    <div style="display:inline-block;border:1px solid #6ee7a8;color:#6ee7a8;font-size:10px;font-weight:700;padding:4px 14px;border-radius:99px;letter-spacing:1.5px;margin-bottom:14px;text-transform:uppercase;">Rifa Oficial</div>
-    <h2 id="tse-prize" style="color:#fff;font-size:26px;font-weight:900;margin:0 0 6px;letter-spacing:-0.5px;line-height:1.15;"></h2>
-    <p style="color:#6ee7a8;font-size:11px;font-weight:600;margin:0;letter-spacing:0.5px;">¡Participa y gana!</p>
-  </div>
-  <div style="display:flex;border-bottom:1px solid #1e4a35;">
-    <div style="flex:1;padding:10px 8px;text-align:center;border-right:1px solid #1e4a35;">
-      <span style="display:block;font-size:9px;color:#4d8068;text-transform:uppercase;letter-spacing:0.8px;">Precio</span>
-      <strong id="tse-price" style="display:block;font-size:16px;color:#6ee7a8;font-weight:900;margin-top:3px;"></strong>
+      <!-- Estrellas abajo -->
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 8px;
+        "
+      >
+        <div style="display: flex; gap: 3px">
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+        </div>
+        <div style="display: flex; gap: 3px">
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+          <svg width="8" height="8" viewBox="0 0 18 18">
+            <polygon
+              points="9,0 10.8,7.2 18,9 10.8,10.8 9,18 7.2,10.8 0,9 7.2,7.2"
+              fill="#3a2525"
+              opacity="0.22"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
-    <div style="flex:1;padding:10px 8px;text-align:center;border-right:1px solid #1e4a35;">
-      <span style="display:block;font-size:9px;color:#4d8068;text-transform:uppercase;letter-spacing:0.8px;">Sorteo</span>
-      <strong id="tse-date" style="display:block;font-size:14px;color:#6ee7a8;font-weight:700;margin-top:3px;"></strong>
-    </div>
-    <div style="flex:1;padding:10px 8px;text-align:center;">
-      <span style="display:block;font-size:9px;color:#4d8068;text-transform:uppercase;letter-spacing:0.8px;">Lotería</span>
-      <strong id="tse-lottery" style="display:block;font-size:14px;color:#6ee7a8;font-weight:700;margin-top:3px;"></strong>
-    </div>
-  </div>
-  <div id="tse-grid" style="padding:14px 12px;display:grid;gap:4px;"></div>
-  <div style="background:#06190f;padding:14px 20px;border-top:1px solid #1e4a35;display:flex;justify-content:space-between;align-items:center;">
-    <div>
-      <span style="display:block;font-size:9px;color:#4d8068;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;">Contacto</span>
-      <span id="tse-whatsapp" style="font-size:12px;color:#6ee7a8;font-weight:700;"></span>
-    </div>
-    <div style="text-align:right;">
-      <span style="display:block;font-size:9px;color:#4d8068;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;">Vendidos</span>
-      <span id="tse-count" style="font-size:13px;color:#6ee7a8;font-weight:700;"></span>
-    </div>
-  </div>
-</div>
+    <!-- TICKET VERDE ESMERALDA -->
+    <div
+      id="ticket-share-esmeralda"
+      style="
+        position: fixed;
+        left: -9999px;
+        top: 0;
+        width: 280px;
+        background: #0d2b1f;
+        border-radius: 16px;
+        padding: 20px 18px 16px;
+        font-family:
+          &quot;Nunito&quot;,
+          -apple-system,
+          sans-serif;
+      "
+    >
+      <!-- Badge -->
+      <div style="text-align: center; margin-bottom: 12px">
+        <div
+          style="
+            display: inline-block;
+            border: 1px solid #6ee7a8;
+            color: #6ee7a8;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+          "
+        >
+          Rifa Oficial
+        </div>
+      </div>
 
-</div>
-</body>
+      <!-- Premio -->
+      <h2
+        id="tse-prize"
+        style="
+          color: #fff;
+          font-size: 20px;
+          font-weight: 900;
+          margin: 0 0 4px;
+          text-align: center;
+          line-height: 1.2;
+          letter-spacing: -0.3px;
+        "
+      ></h2>
+
+      <!-- Subtitulo -->
+      <p
+        style="
+          color: #6ee7a8;
+          font-size: 10px;
+          font-weight: 600;
+          margin: 0 0 10px;
+          text-align: center;
+        "
+      >
+        ¡Participa y gana!
+      </p>
+
+      <!-- Información -->
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 8px;
+          padding-bottom: 6px;
+          border-bottom: 1px solid #1e4a35;
+        "
+      >
+        <div style="flex: 1; text-align: center">
+          <div
+            style="
+              font-size: 7px;
+              color: #4d8068;
+              text-transform: uppercase;
+              letter-spacing: 0.12em;
+            "
+          >
+            Precio
+          </div>
+
+          <div
+            id="tse-price"
+            style="
+              margin-top: 2px;
+              font-size: 9px;
+              font-weight: 700;
+              color: #6ee7a8;
+            "
+          ></div>
+        </div>
+
+        <div style="flex: 1; text-align: center">
+          <div
+            style="
+              font-size: 7px;
+              color: #4d8068;
+              text-transform: uppercase;
+              letter-spacing: 0.12em;
+            "
+          >
+            Sorteo
+          </div>
+
+          <div
+            id="tse-date"
+            style="
+              margin-top: 2px;
+              font-size: 9px;
+              font-weight: 700;
+              color: #6ee7a8;
+            "
+          ></div>
+        </div>
+
+        <div style="flex: 1; text-align: center">
+          <div
+            style="
+              font-size: 7px;
+              color: #4d8068;
+              text-transform: uppercase;
+              letter-spacing: 0.12em;
+            "
+          >
+            Lotería
+          </div>
+
+          <div
+            id="tse-lottery"
+            style="
+              margin-top: 2px;
+              font-size: 9px;
+              font-weight: 700;
+              color: #6ee7a8;
+            "
+          ></div>
+        </div>
+      </div>
+
+      <!-- GRID -->
+      <div
+        id="tse-grid"
+        style="
+          display: grid;
+          grid-template-columns: repeat(10, 1fr);
+          gap: 0;
+          background: #06190f;
+          padding: 8px 6px;
+          border-radius: 10px;
+        "
+      ></div>
+
+      <!-- Footer -->
+      <div
+        style="
+          margin-top: 8px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div>
+          <div
+            style="
+              font-size: 7px;
+              color: #4d8068;
+              text-transform: uppercase;
+              letter-spacing: 0.14em;
+            "
+          >
+            Contacto
+          </div>
+
+          <div
+            id="tse-whatsapp"
+            style="
+              margin-top: 2px;
+              font-size: 9px;
+              color: #6ee7a8;
+              font-weight: 700;
+            "
+          ></div>
+        </div>
+
+        <div style="text-align: right">
+          <div
+            style="
+              font-size: 7px;
+              color: #4d8068;
+              text-transform: uppercase;
+              letter-spacing: 0.14em;
+            "
+          >
+            Vendidos
+          </div>
+
+          <div
+            id="tse-count"
+            style="
+              margin-top: 2px;
+              font-size: 9px;
+              color: #6ee7a8;
+              font-weight: 700;
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

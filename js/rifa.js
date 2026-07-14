@@ -175,6 +175,33 @@ document.getElementById('btn-share').addEventListener('click', async () => {
   }, 'image/png');
 });
 
+
+//----Funcion sello Rifa App---//
+function createSoldStamp(size = 13) {
+  const stamp = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+  stamp.setAttribute('viewBox', '0 0 16 16');
+  stamp.setAttribute('width', size);
+  stamp.setAttribute('height', size);
+
+  stamp.style.cssText = `
+    grid-area: 1/1;
+    display: block;
+    pointer-events: none;
+    z-index: 2;
+  `;
+
+  stamp.innerHTML = `
+    <circle cx="8" cy="8" r="7.2" fill="#0f2744"/>
+    <circle cx="8" cy="8" r="7.2" fill="none" stroke="white" stroke-width="0.9"/>
+    <circle cx="8" cy="8" r="5.6" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="1.2 1.1"/>
+    <path d="M 3.8 3.2 L 3.8 12.8 L 6.1 12.8 L 6.1 9.4 Q 12.8 9.4 12.8 6.1 Q 12.8 3.2 6.1 3.2 Z" fill="#F5C842"/>
+    <path d="M 6.1 5 Q 10.6 5 10.6 6.1 Q 10.6 7.3 6.1 7.3 Z" fill="#0f2744"/>
+    <line x1="6.3" y1="9.6" x2="12.2" y2="12.2" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+  `;
+
+  return stamp;
+}
 // ─── PLANTILLA: Azul Marino ───────────────────────────────
 function buildShareTicket() {
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
@@ -193,22 +220,50 @@ function buildShareTicket() {
   grid.innerHTML = '';
 
   nums.forEach(n => {
-    const sold = rifa.nums[n].sold;
-    const div = document.createElement('div');
-    div.style.cssText = `height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;${sold ? 'background:#F5C842;color:#0f2744;' : 'background:#1e4d7a;color:#6a9fc8;'}`;
-    div.textContent = n;
-    grid.appendChild(div);
-  });
+  const sold = rifa.nums[n].sold;
+  const div = document.createElement('div');
+
+  div.style.cssText = `
+    display: grid;
+    place-items: center;
+    overflow: visible;
+    min-height: 16.5px;
+  `;
+
+  const span = document.createElement('span');
+  span.textContent = n;
+
+  span.style.cssText = `
+    grid-area: 1/1;
+    font-size: 8.5px;
+    font-weight: 500;
+    line-height: 1;
+    min-height: 16.5px;
+    padding: 2.5px 0;
+    color: ${sold ? 'rgba(74,122,170,0.35)' : '#6a9fc8'};
+    z-index: 1;
+  `;
+
+  div.appendChild(span);
+
+  if (sold) {
+    div.appendChild(createSoldStamp(14));
+  }
+
+
+  grid.appendChild(div);
+});
 }
 
 // ─── PLANTILLA: Retro Rosa ────────────────────────────────
 function buildShareTicketRetro() {
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
   const cols = rifa.count <= 10 ? 5 : 10;
-
-  document.getElementById('tsr-prize').textContent  = rifa.prize;
-  document.getElementById('tsr-info').textContent   = `${rifa.price} · ${formatDate(rifa.date)}`;
-  document.getElementById('tsr-footer').textContent = `RIFA APP${rifa.whatsapp ? ' · WS: ' + rifa.whatsapp : ''}`;
+document.getElementById('tsr-price').textContent   = rifa.price;
+document.getElementById('tsr-date').textContent    = formatDate(rifa.date);
+document.getElementById('tsr-lottery').textContent = rifa.lottery;
+document.getElementById('tsr-footer').textContent  = rifa.whatsapp ? `WhatsApp: ${rifa.whatsapp}` : '';
+document.getElementById('tsr-prize').textContent = rifa.prize;
 
   const grid = document.getElementById('tsr-grid');
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
@@ -217,7 +272,7 @@ function buildShareTicketRetro() {
   nums.forEach(n => {
     const sold = rifa.nums[n].sold;
     const div = document.createElement('div');
-    div.style.cssText = `font-size:11px;font-weight:700;color:${sold ? '#c08a93' : '#4a3d42'};${sold ? 'text-decoration:line-through;' : ''}`;
+    div.style.cssText = `font-size:8.5px;font-weight:400;color:${sold ? '#c08a93' : '#4a3d42'};${sold ? 'text-decoration:line-through;' : ''}text-align:center;padding:2.5px 0;`;
     div.textContent = n;
     grid.appendChild(div);
   });
@@ -239,13 +294,36 @@ function buildShareTicketEsmeralda() {
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   grid.innerHTML = '';
 
-  nums.forEach(n => {
-    const sold = rifa.nums[n].sold;
-    const div = document.createElement('div');
-    div.style.cssText = `height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;${sold ? 'background:#6ee7a8;color:#0d2b1f;' : 'background:#1e5a40;color:#5fa876;'}`;
-    div.textContent = n;
-    grid.appendChild(div);
-  });
+nums.forEach(n => {
+  const sold = rifa.nums[n].sold;
+  const div = document.createElement('div');
+
+  div.style.cssText = `
+    display: grid;
+    place-items: center;
+    overflow: visible;
+  `;
+
+  const span = document.createElement('span');
+  span.textContent = n;
+  span.style.cssText = `
+    grid-area: 1/1;
+    font-size: 8.5px;
+    font-weight: 500;
+    line-height: 1;
+    min-height: 16.5px;
+    padding: 2.5px 0;
+    color: ${sold ? 'rgba(77,128,104,0.35)' : '#6ee7a8'};
+    z-index: 1;
+  `;
+  div.appendChild(span);
+
+  if (sold) {
+    div.appendChild(createSoldStamp(14));
+  }
+
+  grid.appendChild(div);
+});
 }
 
 init();
