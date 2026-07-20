@@ -154,3 +154,10 @@ document.getElementById('drawer-finished').addEventListener('click', () => {
   document.getElementById('drawer-finished').classList.add('active');
   window.location.href = 'finalizadas.html';
 });
+document.getElementById('drawer-about').addEventListener('click', () => {
+  window.location.href = 'about.html';
+});
+
+document.getElementById('drawer-privacy').addEventListener('click', () => {
+  window.location.href = 'privacy.html';
+});
