@@ -24,14 +24,22 @@ function renderFinalizadas() {
 
   rifas.forEach(rifa => {
     const li = document.createElement('li');
-    li.className = 'rifa-card';
-    li.innerHTML = `
-      <div class="rifa-card__info">
-        <div class="rifa-card__name">${rifa.prize}</div>
-        <div class="rifa-card__meta">${rifa.price} · ${formatDate(rifa.date)} · ${rifa.lottery}</div>
-        ${rifa.winner ? `<div style="margin-top:6px;font-size:13px;font-weight:700;color:#1a1a1a;">🏆 ${rifa.winner.buyer} — Número ${rifa.winner.num}</div>` : ''}
+    li.className = 'rifa-card rifa-card--done';
+li.innerHTML = `
+  <div class="rifa-card__info">
+    <div class="rifa-card__name">${rifa.prize}</div>
+    <div class="rifa-card__meta">${rifa.price} · ${formatDate(rifa.date)} · ${rifa.lottery}</div>
+    ${rifa.winner ? `<div class="rifa-card__winner">🏆 ${rifa.winner.buyer}</div>` : ''}
+  </div>
+  ${rifa.winner ? `
+    <div class="rifa-card__right">
+      <div class="rifa-card__numwinner">
+        <span class="rifa-card__numlabel">Nº</span>
+        <span class="rifa-card__numvalue">${rifa.winner.num}</span>
       </div>
-    `;
+    </div>
+  ` : ''}
+`;
     li.addEventListener('click', () => openResumen(rifa));
     list.appendChild(li);
   });

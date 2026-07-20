@@ -124,7 +124,7 @@ body {
 }
 .list-empty__sub { font-size: 13px; color: #bbb; }
 
-/* ─── RIFA CARDS ────────────────────────────────────────── */
+/* ─── LISTA DE RIFAS ────────────────────────────────────── */
 .rifa-list {
   list-style: none;
   display: flex;
@@ -132,6 +132,7 @@ body {
   gap: 10px;
 }
 
+/* ─── CARD BASE (home y finalizadas) ────────────────────── */
 .rifa-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -146,6 +147,8 @@ body {
   transition: box-shadow .15s, transform .12s;
   position: relative;
 }
+
+/* Puntas tipo ticket */
 .rifa-card::before,
 .rifa-card::after {
   content: '';
@@ -161,10 +164,13 @@ body {
 }
 .rifa-card::before { left: -11px; }
 .rifa-card::after  { right: -11px; }
+
 .rifa-card:hover {
   box-shadow: 0 4px 14px rgba(0,0,0,0.1);
   transform: translateY(-1px);
 }
+
+/* Contenido izquierdo */
 .rifa-card__info { flex: 1; min-width: 0; }
 
 .rifa-card__name {
@@ -181,6 +187,7 @@ body {
   margin-top: 3px;
 }
 
+/* Contenido derecho (contador + botón) */
 .rifa-card__right {
   display: flex;
   align-items: center;
@@ -195,6 +202,8 @@ body {
   min-width: 36px;
   text-align: right;
 }
+
+/* ─── CARD: DÍA DEL SORTEO (dorada) ────────────────────── */
 .rifa-card.sorteo-hoy {
   background: #1a1a1a;
   border: 2px solid #F5C842;
@@ -204,14 +213,54 @@ body {
 .rifa-card.sorteo-hoy .rifa-card__name { color: #fff; }
 .rifa-card.sorteo-hoy .rifa-card__meta { color: rgba(255,255,255,0.4); }
 .rifa-card.sorteo-hoy .rifa-card__fill { background: #F5C842; }
-.rifa-card.sorteo-hoy .rifa-card__bar { background: rgba(255,255,255,0.1); }
-.rifa-card.sorteo-hoy .rifa-card__pct { color: #F5C842; }
+.rifa-card.sorteo-hoy .rifa-card__bar  { background: rgba(255,255,255,0.1); }
+.rifa-card.sorteo-hoy .rifa-card__pct  { color: #F5C842; }
 .rifa-card.sorteo-hoy::before,
 .rifa-card.sorteo-hoy::after { border-color: #F5C842; }
 
 @keyframes glow {
   0%, 100% { box-shadow: 0 0 8px rgba(245,200,66,0.4); }
   50%       { box-shadow: 0 0 20px rgba(245,200,66,0.7); }
+}
+
+/* ─── CARD: FINALIZADA (página rifas finalizadas) ───────── */
+.rifa-card--done {
+  border-left: 3px solid #4d8068;
+  opacity: 0.75;
+}
+
+.rifa-card--done .rifa-card__name { color: #888; }
+
+/* Nombre del ganador */
+.rifa-card__winner {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4d8068;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0,0,0,0.1);
+}
+
+/* Número ganador (columna derecha) */
+.rifa-card__numwinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+
+.rifa-card__numlabel {
+  font-size: 9px;
+  font-weight: 800;
+  color: #4d8068;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rifa-card__numvalue {
+  font-size: 26px;
+  font-weight: 900;
+  color: #1a1a2e;
 }
 /* ─── RESPONSIVE ────────────────────────────────────────── */
 @media (max-width: 480px) {
