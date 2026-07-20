@@ -18,6 +18,7 @@ function initPlantillas() {
     if (value === actual) {
       input.checked = true;
       card.classList.add('selected');
+      card.querySelector('.check-btn').classList.add('is-checked');
     }
 
 card.addEventListener('click', () => {
