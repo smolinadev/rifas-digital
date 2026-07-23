@@ -102,7 +102,7 @@ function refreshItemStyles(scrollEl, selectedIdx) {
 // ── drum state ────────────────────────────────────────────────────────────────
 let dayScroll, monthScroll, yearScroll;
 const currentYear = new Date().getFullYear();
-const years = range(currentYear - 80, currentYear + 10);
+const years = range(2020, 2030);
 
 function rebuildDayColumn() {
   const total = daysInMonth(selectedDate.getMonth(), selectedDate.getFullYear());
@@ -138,7 +138,13 @@ function initDrum() {
     refreshItemStyles(yearScroll, i);
   });
 }
-
+function isPast(day, month, year) {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+  const picked = new Date(year, month, day);
+  return picked < tomorrow;
+}
 // ── calendar ──────────────────────────────────────────────────────────────────
 function renderCalendar() {
   // update nav buttons
@@ -264,19 +270,19 @@ document.getElementById("dp-year-btn").addEventListener("click", () => {
 
 // ── confirm ───────────────────────────────────────────────────────────────────
 document.getElementById("dp-confirm").addEventListener("click", () => {
-  alert("Fecha confirmada: " + selectedDate.toLocaleDateString("es-MX", {
-    weekday:"long", day:"numeric", month:"long", year:"numeric"
-  }));
-  // aquí enganchas tu lógica: enviar al servidor, actualizar un input, etc.
+  const y = selectedDate.getFullYear();
+  const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
+  const d = String(selectedDate.getDate()).padStart(2, '0');
+  document.getElementById('f-date').value = `${y}-${m}-${d}`;
+  document.getElementById('dp-modal').classList.remove('show');
+  document.getElementById('btn-date-text').textContent = 
+    selectedDate.toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' });
 });
 
-const btnDate = document.getElementById("btn-date");
-const modal = document.getElementById("dp-modal");
-
-btnDate.addEventListener("click", () => {
-
-    modal.classList.add("show");
-
+// ── abrir modal ───────────────────────────────────────────────────────────────
+document.getElementById("btn-date").addEventListener("click", () => {
+  document.getElementById('dp-modal').classList.add('show');
+  initDrum();
 });
 // ── init ──────────────────────────────────────────────────────────────────────
 updateDisplay();
