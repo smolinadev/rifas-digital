@@ -8,6 +8,7 @@
   <title>Nueva Rifa</title>
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/nueva-rifa.css" />
+  <link rel="stylesheet" href="/css/datepicker.css">
 </head>
 <body>
 
@@ -63,10 +64,22 @@
       </div>
 
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label" for="f-date">Fecha del sorteo</label>
-          <input class="form-input" id="f-date" type="date" />
-        </div>
+       <div class="form-group">
+  <label class="form-label">Fecha del sorteo</label>
+
+  <button
+    type="button"
+    class="form-input"
+    id="btn-date"
+    style="text-align:left;cursor:pointer;">
+
+    <span id="btn-date-text">Seleccionar fecha</span>
+
+  </button>
+
+  <!-- Aquí seguiremos guardando la fecha -->
+  <input type="hidden" id="f-date">
+</div>
         <div class="form-group">
           <label class="form-label" for="f-lottery">Lotería</label>
           <select class="form-input" id="f-lottery">
@@ -94,7 +107,57 @@
 
     </div>
   </div>
+<div class="dp-page" id="dp-modal">
+  <div class="dp-wrapper">
+    <div class="dp-card">
+
+      <!-- Header -->
+      <div class="dp-header">
+        <p class="dp-label">Fecha seleccionada</p>
+        <p class="dp-weekday" id="dp-weekday">Miércoles,</p>
+        <p class="dp-date-accent" id="dp-date-accent">23 de julio de 2025</p>
+      </div>
+
+      <!-- Drum picker (móvil) -->
+      <div class="dp-drum-wrap" id="dp-drum">
+        <p class="dp-hint">Desliza para elegir</p>
+        <div class="dp-drum-row">
+          <div class="dp-column" id="col-day" style="width:64px"></div>
+          <div class="dp-column" id="col-month" style="width:144px"></div>
+          <div class="dp-column" id="col-year" style="width:96px"></div>
+        </div>
+      </div>
+
+      <!-- Calendario (desktop) -->
+      <div class="dp-calendar-wrap" id="dp-calendar">
+        <div class="dp-cal-header">
+          <button class="dp-arrow" id="dp-prev">‹</button>
+          <div class="dp-cal-nav">
+            <button class="dp-nav-btn" id="dp-month-btn"></button>
+            <button class="dp-nav-btn" id="dp-year-btn"></button>
+          </div>
+          <button class="dp-arrow" id="dp-next">›</button>
+        </div>
+        <div class="dp-days-header">
+          <span>Do</span><span>Lu</span><span>Ma</span>
+          <span>Mi</span><span>Ju</span><span>Vi</span><span>Sá</span>
+        </div>
+        <div class="dp-days-grid" id="dp-days-grid"></div>
+        <div class="dp-overlay dp-months-grid" id="dp-months-overlay"></div>
+        <div class="dp-overlay dp-years-grid" id="dp-years-overlay"></div>
+      </div>
+
+      <!-- Un solo botón, al final, fuera de ambas secciones -->
+      <button class="dp-confirm" id="dp-confirm">Confirmar fecha</button>
+
+    </div>
+  </div>
+</div>
+
+
+
 
   <script src="js/nueva-rifa.js"></script>
+  <script src="/js/datepicker.js"></script>
 </body>
 </html>
