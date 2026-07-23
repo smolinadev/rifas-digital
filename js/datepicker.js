@@ -284,6 +284,7 @@ document.getElementById("btn-date").addEventListener("click", () => {
   document.getElementById('dp-modal').classList.add('show');
   initDrum();
 });
+selectedDate = new Date();
 // ── init ──────────────────────────────────────────────────────────────────────
 updateDisplay();
 initDrum();
