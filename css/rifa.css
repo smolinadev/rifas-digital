@@ -128,12 +128,11 @@
 }
 
 .num-btn.sold {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-fg);
+  background: #1a6b3a;
+  border-color: #1a6b3a;
+  color: #fff;
   cursor: default;
   transform: none;
-  position: relative;
 }
 
 .num-btn.sold:hover {
@@ -149,6 +148,19 @@
   top: 3px;
   right: 4px;
   opacity: 0.4;
+}
+
+/* ─── NÚMERO RESERVADO (azul) ───────────────────────────────── */
+.num-btn.reserved {
+  background: #1a4a7a;
+  border-color: #1a4a7a;
+  color: #fff;
+  cursor: default;
+}
+
+.num-btn.reserved:hover {
+  transform: none;
+  background: #1a4a7a;
 }
 
 /* ─── BTN FULL ──────────────────────────────────────────── */
@@ -270,3 +282,29 @@
 .info-card   { animation: fadeUp .3s ease both; }
 .stats-bar   { animation: fadeUp .4s .05s ease both; }
 .num-grid    { animation: fadeUp .4s .1s ease both; }
+/* ─── LEYENDA DE ESTADOS (vendido / reservado / disponible) ── */
+.grid-legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.legend-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+
+.legend-dot.sold     { background: #1a6b3a; }
+.legend-dot.reserved { background: #1a4a7a; }
+.legend-dot.free     { background: var(--border); border: 1px solid #ccc; }

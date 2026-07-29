@@ -63,7 +63,7 @@ function renderGrid() {
     if (info.sold) sold++;
 
     const btn = document.createElement('button');
-    btn.className = `num-btn${info.sold ? ' sold' : ''}`;
+    btn.className = `num-btn${info.sold ? ' sold' : info.reserved ? ' reserved' : ''}`;
     btn.textContent = n;
     btn.title = info.sold ? `${n} — ${info.buyer}` : n;
     btn.style.height   = btnSize;
@@ -71,6 +71,7 @@ function renderGrid() {
 
     btn.addEventListener('click', () => {
       if (info.sold) openModalSold(n, info.buyer);
+      else if (info.reserved) openModalReserved(n, info.buyer);
       else openModalBuy(n);
     });
 
@@ -94,15 +95,15 @@ function openModalBuy(num) {
   document.getElementById('modal-num').textContent = `Número ${num}`;
   document.getElementById('modal-title').textContent = '¿Quién compró este número?';
   document.getElementById('modal-input').value = '';
-  document.getElementById('modal-input').style.display  = 'block';
+  document.getElementById('modal-input').style.display = 'block';
   document.getElementById('modal-confirm').style.display = 'block';
-  document.getElementById('modal-buyer').style.display  = 'none';
+  document.getElementById('modal-reserve').style.display = 'block';
   document.getElementById('modal-edit').style.display = 'none';
+  document.getElementById('modal-buyer').style.display = 'none';
   document.getElementById('modal').classList.remove('hidden');
   setTimeout(() => document.getElementById('modal-input').focus(), 100);
 }
 
-// ─── MODAL YA VENDIDO ─────────────────────────────────────
 function openModalSold(num, buyer) {
   selectedNum = num;
   document.getElementById('modal-num').textContent = `Número ${num}`;
@@ -110,11 +111,25 @@ function openModalSold(num, buyer) {
   document.getElementById('modal-buyer').textContent = `👤 ${buyer}`;
   document.getElementById('modal-buyer').style.display = 'block';
   document.getElementById('modal-edit').style.display = 'block';
-  document.getElementById('modal-input').style.display = 'none';
   document.getElementById('modal-confirm').style.display = 'none';
+  document.getElementById('modal-reserve').style.display = 'none';
+  document.getElementById('modal-input').style.display = 'none';
   document.getElementById('modal').classList.remove('hidden');
 }
 
+function openModalReserved(num, buyer) {
+  selectedNum = num;
+  document.getElementById('modal-num').textContent = `Número ${num}`;
+  document.getElementById('modal-title').textContent = `Reservado por ${buyer}`;
+  document.getElementById('modal-buyer').style.display = 'none';
+  document.getElementById('modal-edit').style.display = 'none';
+  document.getElementById('modal-input').value = '';
+  document.getElementById('modal-input').style.display = 'none';
+  document.getElementById('modal-confirm').textContent = 'Confirmar venta';
+  document.getElementById('modal-confirm').style.display = 'block';
+  document.getElementById('modal-reserve').style.display = 'none';
+  document.getElementById('modal').classList.remove('hidden');
+}
 document.getElementById('modal-edit').addEventListener('click', () => {
   const buyer = rifa.nums[selectedNum].buyer;
   document.getElementById('modal-input').value = buyer;
@@ -139,6 +154,19 @@ document.getElementById('modal-confirm').addEventListener('click', () => {
   closeModal();
   renderGrid();
 });
+document.getElementById('modal-reserve').addEventListener('click', () => {
+  const buyer = document.getElementById('modal-input').value.trim();
+  if (!buyer) {
+    document.getElementById('modal-input').style.borderColor = '#c0392b';
+    document.getElementById('modal-input').focus();
+    return;
+  }
+  rifa.nums[selectedNum] = { sold: false, reserved: true, buyer };
+  saveRifas(getRifas().map(r => r.id === rifa.id ? rifa : r));
+  closeModal();
+  renderGrid();
+});
+
 document.getElementById('modal-cancel').addEventListener('click', closeModal);
 document.getElementById('modal').addEventListener('click', e => {
   if (e.target === document.getElementById('modal')) closeModal();

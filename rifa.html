@@ -77,6 +77,12 @@
         </div>
         <div class="stats-bar__pct" id="stat-pct">0% vendido</div>
       </div>
+       <!-- ESTADOS ARRIBA DEL GRID XD  -->
+      <div class="grid-legend">
+        <span class="legend-item"><span class="legend-dot sold"></span>Vendido</span>
+        <span class="legend-item"><span class="legend-dot reserved"></span>Reservado</span>
+        <span class="legend-item"><span class="legend-dot free"></span>Disponible</span>
+      </div>
       <!-- GRID -->
       <div class="num-grid" id="num-grid"></div>
 
@@ -105,11 +111,11 @@
           Editar nombre
         </button>
         <div class="modal__actions">
-          <button class="btn btn--primary btn--full" id="modal-confirm">
-            Confirmar venta
-          </button>
-          <button class="btn btn--ghost" id="modal-cancel">Cancelar</button>
-        </div>
+        <button class="btn btn--primary btn--full" id="modal-confirm" style="display:none;">Confirmar venta</button>
+        <button class="btn btn--ghost btn--full" id="modal-reserve" style="display:none;">Reservar número</button>
+        <button class="btn btn--ghost btn--full" id="modal-edit" style="display:none;">✏️ Editar nombre</button>
+        <button class="btn btn--ghost" id="modal-cancel">Cancelar</button>
+      </div>
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
