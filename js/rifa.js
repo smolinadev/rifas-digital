@@ -56,30 +56,38 @@ function renderGrid() {
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   grid.innerHTML = '';
 
-  let sold = 0;
+  // Contador de números vendidos y reservados
 
-  nums.forEach(n => {
-    const info = rifa.nums[n];
-    if (info.sold) sold++;
+let sold = 0;
+let reserved = 0;
 
-    const btn = document.createElement('button');
-    btn.className = `num-btn${info.sold ? ' sold' : info.reserved ? ' reserved' : ''}`;
-    btn.textContent = n;
-    btn.title = info.sold ? `${n} — ${info.buyer}` : n;
-    btn.style.height   = btnSize;
-    btn.style.fontSize = fontSize;
+nums.forEach(n => {
+  const info = rifa.nums[n];
 
-    btn.addEventListener('click', () => {
-      if (info.sold) openModalSold(n, info.buyer);
-      else if (info.reserved) openModalReserved(n, info.buyer);
-      else openModalBuy(n);
-    });
+  if (info.sold) {
+    sold++;
+  } else if (info.reserved) {
+    reserved++;
+  }
 
-    grid.appendChild(btn);
+  const btn = document.createElement('button');
+  btn.className = `num-btn${info.sold ? ' sold' : info.reserved ? ' reserved' : ''}`;
+  btn.textContent = n;
+  btn.title = info.sold ? `${n} — ${info.buyer}` : n;
+  btn.style.height = btnSize;
+  btn.style.fontSize = fontSize;
+
+  btn.addEventListener('click', () => {
+    if (info.sold) openModalSold(n, info.buyer);
+    else if (info.reserved) openModalReserved(n, info.buyer);
+    else openModalBuy(n);
   });
 
+  grid.appendChild(btn);
+});
   // Actualizar stats y barra de progreso
   document.getElementById('stat-sold').textContent  = sold;
+  document.getElementById('stat-reserved').textContent=reserved;
   document.getElementById('stat-free').textContent  = nums.length - sold;
   document.getElementById('stat-total').textContent = nums.length;
   const pct = Math.round(sold / nums.length * 100);
