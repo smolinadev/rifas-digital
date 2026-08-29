@@ -157,7 +157,7 @@ function closeModal() {
 // Confirmar venta — si el nombre queda vacío, libera el número
 document.getElementById('modal-confirm').addEventListener('click', () => {
   const buyer = document.getElementById('modal-input').value.trim();
-  rifa.nums[selectedNum] = buyer ? { sold: true, buyer } : { sold: false, buyer: '' };
+  rifa.nums[selectedNum] = buyer ? { sold: true, buyer, fecha: new Date().toISOString() } : { sold: false, buyer: '' };
   saveRifas(getRifas().map(r => r.id === rifa.id ? rifa : r));
   closeModal();
   renderGrid();
@@ -169,7 +169,7 @@ document.getElementById('modal-reserve').addEventListener('click', () => {
     document.getElementById('modal-input').focus();
     return;
   }
-  rifa.nums[selectedNum] = { sold: false, reserved: true, buyer };
+  rifa.nums[selectedNum] = { sold: false, reserved: true, buyer, fecha: new Date().toISOString() };
   saveRifas(getRifas().map(r => r.id === rifa.id ? rifa : r));
   closeModal();
   renderGrid();
