@@ -13,20 +13,14 @@
 
 <div class="page">
 
-<div class="menu-row">
-  <a href="index.html" class="back-btn">
-    <svg viewBox="0 0 20 20" width="15" height="15" class="back-arrow">
-      <path d="M 14 10 L 5 10 M 5 10 L 9 6 M 5 10 L 9 14"
-        stroke="#1a1a1a" stroke-width="1.8"
-        stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    </svg>
-    <span class="back-label">Volver</span>
-    <div class="back-line"></div>
-  </a>
-  <p class="page-label">Menú</p>
+<div class="top-bar">
+  <div class="top-bar-left" onclick="window.location.href='index.html'">
+    <button class="back-arrow" aria-label="Volver">‹</button>
+    <h1 class="top-bar-title">Mis estadísticas</h1>
+  </div>
+  <span class="menu-link">Menú</span>
 </div>
-
-<h1 class="page-title">Mis estadísticas</h1>
+<div class="page">
   <div class="rifa-list" id="rifa-list"></div>
 </div>
 
