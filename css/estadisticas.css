@@ -453,6 +453,15 @@ body {
   margin: 0 auto;
   padding: 16px;
 }
+
+.bars-wrap {
+  flex: 1;
+  min-width: 0;
+}
+g
+.bars {
+  min-width: 0;
+}
 @media (max-width: 600px) {
   .charts-row {
     flex-direction: row;     /* dona y barras en la misma fila */

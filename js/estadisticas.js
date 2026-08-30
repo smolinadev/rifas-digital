@@ -137,7 +137,7 @@ function buildBars(rifa) {
 
 
 const chartWrap = document.createElement('div');
-chartWrap.style.cssText = 'position:relative;height:130px;width:100%;';
+chartWrap.style.cssText = 'position:relative;height:160px;width:100%;';
 
 const canvas = document.createElement('canvas');
 canvas.addEventListener('mouseleave', () => {
@@ -178,7 +178,8 @@ datasets: [
 
   borderSkipped: false,
   stack: 'a',
-  barPercentage: 0.5,
+  barPercentage: 0.45,
+categoryPercentage: 0.75,
 },
 
 {
@@ -202,7 +203,8 @@ datasets: [
 
   borderSkipped: false,
   stack: 'a',
-  barPercentage: 0.5,
+  barPercentage: 0.45,
+categoryPercentage: 0.75,
 },
   {
     label: '',
@@ -212,7 +214,8 @@ datasets: [
     borderRadius: 6,
     borderSkipped: false,
     stack: 'a',
-    barPercentage: 0.5,
+    barPercentage: 0.45,
+categoryPercentage: 0.75,
   }
 ],
       },
