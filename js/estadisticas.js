@@ -63,74 +63,222 @@ function getEmoji(prize) {
   return "🎁"; // fallback genérico
 }
 
-// ── donut SVG ─────────────────────────────────────────────────────────────────
-function buildDonut(p) {
-  const r    = 42;
+function buildDonut(pct) {
+  const r = 32, cx = 40, cy = 40;
   const circ = 2 * Math.PI * r;
-  const dash = (p / 100) * circ;
-  const ns   = "http://www.w3.org/2000/svg";
 
-  const svg = document.createElementNS(ns, "svg");
-  svg.setAttribute("width", 96);
-  svg.setAttribute("height", 96);
-  svg.setAttribute("viewBox", "0 0 100 100");
+  const wrap = document.createElement('div');
+  wrap.className = 'donut-wrap';
 
-  const track = document.createElementNS(ns, "circle");
-  track.setAttribute("cx", 50); track.setAttribute("cy", 50); track.setAttribute("r", r);
-  track.setAttribute("fill", "none");
-  track.setAttribute("stroke", "#E0DDD8");
-  track.setAttribute("stroke-width", 12);
+  wrap.innerHTML = `
+    <svg viewBox="0 0 80 80" width="80" height="80">
+      <circle cx="${cx}" cy="${cy}" r="${r}"
+        fill="none" stroke="#ECEAE5" stroke-width="8"/>
+      <circle class="donut-arc" cx="${cx}" cy="${cy}" r="${r}"
+        fill="none" stroke="#C4714A" stroke-width="8"
+        stroke-dasharray="0 ${circ}"
+        stroke-dashoffset="${circ * 0.25}"
+        stroke-linecap="round"
+        style="transition: stroke-dasharray 0.8s cubic-bezier(.4,0,.2,1)"/>
+    </svg>
+    <span class="donut-pct">${Math.round(pct)}%</span>
+  `;
 
-  const arc = document.createElementNS(ns, "circle");
-  arc.setAttribute("cx", 50); arc.setAttribute("cy", 50); arc.setAttribute("r", r);
-  arc.setAttribute("fill", "none");
-  arc.setAttribute("stroke", "#C4714A");
-  arc.setAttribute("stroke-width", 12);
-  arc.setAttribute("stroke-dasharray", `${dash} ${circ}`);
-  arc.setAttribute("stroke-linecap", "round");
-  arc.setAttribute("stroke-dashoffset", circ * 0.25);
+  setTimeout(() => {
+    const filled = (pct / 100) * circ;
+    const arc = wrap.querySelector('.donut-arc');
+    if (arc) arc.setAttribute('stroke-dasharray', `${filled} ${circ - filled}`);
+  }, 30);
 
-  const txt = document.createElementNS(ns, "text");
-  txt.setAttribute("x", 50); txt.setAttribute("y", 54);
-  txt.setAttribute("text-anchor", "middle");
-  txt.setAttribute("font-size", 18);
-  txt.setAttribute("font-weight", 700);
-  txt.setAttribute("fill", "#1a1a1a");
-  txt.setAttribute("font-family", "DM Sans, sans-serif");
-  txt.textContent = Math.round(p) + "%";
-
-  svg.appendChild(track);
-  svg.appendChild(arc);
-  svg.appendChild(txt);
-  return svg;
-}
-
-// ── barras semanales ──────────────────────────────────────────────────────────
-function buildBars(vendidos) {
-  const vals = [0.12, 0.22, 0.18, 0.28, 0.20].map(f => Math.floor(vendidos * f));
-  const max  = Math.max(...vals, 1);
-  const wrap = document.createElement("div");
-  wrap.className = "bars";
-
-  vals.forEach((v, i) => {
-    const col = document.createElement("div");
-    col.className = "bar-col";
-
-    const bar = document.createElement("div");
-    bar.className = "bar " + (i === vals.length - 1 ? "active" : "inactive");
-    bar.style.height = `${(v / max) * 52}px`;
-
-    const lbl = document.createElement("span");
-    lbl.className = "bar-label";
-    lbl.textContent = "S" + (i + 1);
-
-    col.appendChild(bar);
-    col.appendChild(lbl);
-    wrap.appendChild(col);
-  });
   return wrap;
 }
 
+/*barras semanales mejor estructuradas*/
+let activeChart = null;
+
+function buildBars(rifa) {
+  // Últimas 5 semanas (lunes como inicio)
+  const hoy = new Date();
+  const semanas = [];
+  for (let i = 4; i >= 0; i--) {
+    const d = new Date(hoy);
+    d.setDate(hoy.getDate() - hoy.getDay() + 1 - i * 7); // lunes de esa semana
+    semanas.push(d.toISOString().slice(0, 10));
+  }
+
+  // Contar vendidos y reservados por semana
+  const sold     = semanas.map(() => 0);
+  const reserved = semanas.map(() => 0);
+
+  Object.values(rifa.nums).forEach(n => {
+    if ((!n.sold && !n.reserved) || !n.fecha) return;
+    const d = new Date(n.fecha);
+    if (isNaN(d)) return;
+
+    const day = d.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    const monday = new Date(d);
+    monday.setDate(d.getDate() + diff);
+    const key = monday.toISOString().slice(0, 10);
+
+    const idx = semanas.indexOf(key);
+    if (idx === -1) return;
+    if (n.sold)     sold[idx]++;
+    if (n.reserved) reserved[idx]++;
+  });
+
+  const labels = semanas.map((_, i) => 'S' + (i + 1));
+  const maxVal = Math.max(...sold.map((s, i) => s + reserved[i]), 1);
+
+  const wrap   = document.createElement('div');
+  wrap.className = 'bars';
+  wrap.style.height = 'auto';
+
+  const legend = document.createElement('div');
+legend.style.cssText = 'display:flex;gap:14px;margin-bottom:8px;';
+legend.innerHTML = `
+  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:DM Sans,sans-serif">
+    <span style="width:10px;height:10px;border-radius:3px;background:#3DAB7A;display:inline-block"></span>
+    Vendidos
+  </span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:DM Sans,sans-serif">
+    <span style="width:10px;height:10px;border-radius:3px;background:#5B8DEF;display:inline-block"></span>
+    Reservados
+  </span>
+`;
+wrap.appendChild(legend);
+
+const chartWrap = document.createElement('div');
+chartWrap.style.cssText = 'position:relative;height:130px;width:100%;';
+
+const canvas = document.createElement('canvas');
+canvas.addEventListener('mouseleave', () => {
+  if (activeChart) {
+    activeChart.tooltip.setActiveElements([], { x: 0, y: 0 });
+    activeChart.update();
+  }
+});
+chartWrap.appendChild(canvas);
+wrap.appendChild(chartWrap);
+  setTimeout(() => {
+    if (activeChart) { activeChart.destroy(); activeChart = null; }
+
+    activeChart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels,
+datasets: [
+  {
+    
+  label: 'Vendidos',
+  data: sold,
+
+  backgroundColor: sold.map((_, i) =>
+    i === semanas.length - 1
+      ? '#3DAB7A'
+      : 'rgba(61,171,122,0.55)'
+  ),
+
+  hoverBackgroundColor: '#3DAB7A',
+
+  borderRadius: {
+    topLeft: 0,
+    topRight: 0,
+    bottomLeft: 6,
+    bottomRight: 6
+  },
+
+  borderSkipped: false,
+  stack: 'a',
+  barPercentage: 0.5,
+},
+
+{
+  label: 'Reservados',
+  data: reserved,
+
+  backgroundColor: reserved.map((_, i) =>
+    i === semanas.length - 1
+      ? '#5B8DEF'
+      : 'rgba(91,141,239,0.55)'
+  ),
+
+  hoverBackgroundColor: '#5B8DEF',
+
+  borderRadius: {
+    topLeft: 6,
+    topRight: 6,
+    bottomLeft: 0,
+    bottomRight: 0
+  },
+
+  borderSkipped: false,
+  stack: 'a',
+  barPercentage: 0.5,
+},
+  {
+    label: '',
+    data: sold.map((s, i) => (s + reserved[i] === 0) ? maxVal : 0),
+    backgroundColor: 'rgba(0,0,0,0.06)',
+    hoverBackgroundColor: 'rgba(0,0,0,0.06)',
+    borderRadius: 6,
+    borderSkipped: false,
+    stack: 'a',
+    barPercentage: 0.5,
+  }
+],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 700, easing: 'easeOutQuart' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            enabled: false
+          },
+        },
+        scales: {
+          x: {
+            stacked: true,
+            grid: { display: false },
+            border: { display: false },
+            ticks: { font: { family: 'DM Sans', size: 11 }, color: '#888' }
+          },
+          y: {
+            stacked: true,
+            display: false,
+            beginAtZero: true,
+            max: maxVal + Math.ceil(maxVal * 0.25),
+          }
+        },
+        layout: { padding: { top: 20 } },
+      },
+      plugins: [{
+        id: 'topLabels',
+        afterDatasetsDraw(chart) {
+          const { ctx } = chart;
+          const meta0 = chart.getDatasetMeta(0);
+          const meta1 = chart.getDatasetMeta(1);
+
+          meta0.data.forEach((bar, i) => {
+            const total = sold[i] + reserved[i];
+            if (!total) return;
+            const topBar = reserved[i] ? meta1.data[i] : bar;
+            ctx.save();
+            ctx.font = '600 11px DM Sans, sans-serif';
+            ctx.fillStyle = '#1a1a1a';
+            ctx.textAlign = 'center';
+            ctx.fillText(total, topBar.x, topBar.y - 6);
+            ctx.restore();
+          });
+        }
+      }]
+    });
+  }, 0);
+
+  return wrap;
+}
 // ── chip ──────────────────────────────────────────────────────────────────────
 function buildChip(label, value, accent) {
   const chip = document.createElement("div");
@@ -214,7 +362,7 @@ function renderPanel(rifa) {
   barsTitle.className = "bars-title";
   barsTitle.textContent = "Ventas por semana";
   barsWrap.appendChild(barsTitle);
-  barsWrap.appendChild(buildBars(vendidos));
+  barsWrap.appendChild(buildBars(rifa)); 
   chartsRow.appendChild(barsWrap);
 
   s2.appendChild(chartsRow);

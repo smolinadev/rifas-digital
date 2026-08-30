@@ -347,7 +347,7 @@ body {
   display: flex;
   align-items: flex-end;
   gap: 6px;
-  height: 60px;
+  height: 160px;
 }
 
 .bar-col {
