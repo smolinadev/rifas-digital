@@ -71,11 +71,11 @@ function buildDonut(pct) {
   wrap.className = 'donut-wrap';
 
   wrap.innerHTML = `
-    <svg viewBox="0 0 80 80" width="80" height="80">
+    <svg viewBox="0 0 80 80" width="100" height="100">
       <circle cx="${cx}" cy="${cy}" r="${r}"
         fill="none" stroke="#ECEAE5" stroke-width="8"/>
       <circle class="donut-arc" cx="${cx}" cy="${cy}" r="${r}"
-        fill="none" stroke="#C4714A" stroke-width="8"
+        fill="none" stroke="#3DAB7A" stroke-width="8"
         stroke-dasharray="0 ${circ}"
         stroke-dashoffset="${circ * 0.25}"
         stroke-linecap="round"
@@ -134,19 +134,7 @@ function buildBars(rifa) {
   wrap.className = 'bars';
   wrap.style.height = 'auto';
 
-  const legend = document.createElement('div');
-legend.style.cssText = 'display:flex;gap:14px;margin-bottom:8px;';
-legend.innerHTML = `
-  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:DM Sans,sans-serif">
-    <span style="width:10px;height:10px;border-radius:3px;background:#3DAB7A;display:inline-block"></span>
-    Vendidos
-  </span>
-  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:DM Sans,sans-serif">
-    <span style="width:10px;height:10px;border-radius:3px;background:#5B8DEF;display:inline-block"></span>
-    Reservados
-  </span>
-`;
-wrap.appendChild(legend);
+
 
 const chartWrap = document.createElement('div');
 chartWrap.style.cssText = 'position:relative;height:130px;width:100%;';
@@ -364,6 +352,21 @@ function renderPanel(rifa) {
   barsWrap.appendChild(barsTitle);
   barsWrap.appendChild(buildBars(rifa)); 
   chartsRow.appendChild(barsWrap);
+
+  const legend = document.createElement('div');
+legend.style.cssText = 'display:flex;flex-direction:column;gap:5px;margin-bottom:10px;';
+legend.innerHTML = `
+  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:DM Sans,sans-serif">
+    <span style="width:9px;height:9px;border-radius:2px;background:#3DAB7A;display:inline-block;flex-shrink:0"></span>
+    Vendidos
+  </span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:DM Sans,sans-serif">
+    <span style="width:9px;height:9px;border-radius:2px;background:#5B8DEF;display:inline-block;flex-shrink:0"></span>
+    Reservados
+  </span>
+`;
+s2.appendChild(legend);
+s2.appendChild(chartsRow);
 
   s2.appendChild(chartsRow);
   body.appendChild(s2);

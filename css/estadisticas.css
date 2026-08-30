@@ -453,3 +453,26 @@ body {
   margin: 0 auto;
   padding: 16px;
 }
+@media (max-width: 600px) {
+  .charts-row {
+    flex-direction: row;     /* dona y barras en la misma fila */
+    align-items: flex-end;   /* alineadas abajo */
+    gap: 10px;
+  }
+
+  .bars-wrap {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .bars {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .bars > div:last-child {
+    width: 100% !important;
+    min-width: 0;
+  }
+}
