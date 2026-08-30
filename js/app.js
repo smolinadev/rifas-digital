@@ -161,3 +161,10 @@ document.getElementById('drawer-about').addEventListener('click', () => {
 document.getElementById('drawer-privacy').addEventListener('click', () => {
   window.location.href = 'privacy.html';
 });
+
+/*Evento para el drawer de mis estadisticas*/
+ document.getElementById('drawer-stats').addEventListener('click', () => {
+  window.location.href = 'estadisticas.html';
+  document.getElementById('drawer-overlay').classList.add('hidden');
+  document.getElementById('btn-menu').classList.remove('open');
+});
