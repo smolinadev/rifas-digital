@@ -80,7 +80,7 @@
 }
 .dp-drum-wrap,
 .dp-calendar-wrap {
-  padding-bottom: 0.25rem;
+  padding-bottom: 0;
 }
 /* ── drum hint ── */
 .dp-hint {
@@ -143,8 +143,8 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   height: calc(var(--dp-item-h) * var(--dp-visible));
-  padding-top: calc(var(--dp-item-h) * 1.5);
-  padding-bottom: calc(var(--dp-item-h) * 1.5);
+  padding-top: 0;
+  padding-bottom: 0;
   cursor: grab;
   scroll-snap-type: y mandatory;
 }
