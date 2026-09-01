@@ -25,7 +25,7 @@ function updateDisplay() {
 }
 
 // ── drum columns ──────────────────────────────────────────────────────────────
-function buildColumn(el, items, selectedIdx, onSelect) {
+function buildColumn(el, items, selectedIdx, onSelect, isDisabled = () => false) {
   el.innerHTML = "";
 
   const fadeTop = document.createElement("div");
@@ -39,19 +39,36 @@ function buildColumn(el, items, selectedIdx, onSelect) {
 
   const scroll = document.createElement("div");
   scroll.className = "dp-column__scroll";
-  const VISIBLE = 5; // items visibles
-const PAD = Math.floor(VISIBLE / 2) * ITEM_H;
-scroll.style.paddingTop = PAD + 'px';
-scroll.style.paddingBottom = PAD + 'px';
+
+  const VISIBLE = 5;
+  const PAD = Math.floor(VISIBLE / 2) * ITEM_H;
+
+  scroll.style.paddingTop = PAD + "px";
+  scroll.style.paddingBottom = PAD + "px";
 
   items.forEach((item, i) => {
     const div = document.createElement("div");
+
     div.className = "dp-item";
     div.textContent = typeof item === "number" ? pad(item) : item;
+
+    // ¿Está bloqueado?
+    if (isDisabled(item, i)) {
+      div.classList.add("past");
+    }
+
     updateItemStyle(div, i, selectedIdx);
+
     div.addEventListener("click", () => {
-      scroll.scrollTo({ top: i * ITEM_H, behavior: "smooth" });
+      // Si está bloqueado, no hacemos absolutamente nada
+      if (isDisabled(item, i)) return;
+
+      scroll.scrollTo({
+        top: i * ITEM_H,
+        behavior: "smooth"
+      });
     });
+
     scroll.appendChild(div);
   });
 
@@ -73,14 +90,24 @@ scroll.style.paddingBottom = PAD + 'px';
     if (clamped !== currentIdx) {
       currentIdx = clamped;
       refreshItemStyles(scroll, clamped);
-      onSelect(clamped);
+
+      // IMPORTANTE:
+      // No dejamos que el carrusel seleccione un elemento bloqueado
+      if (!isDisabled(items[clamped], clamped)) {
+        onSelect(clamped);
+      }
     }
 
     clearTimeout(snapTimer);
+
     snapTimer = setTimeout(() => {
       const expected = clamped * ITEM_H;
+
       if (Math.abs(scroll.scrollTop - expected) > 1) {
-        scroll.scrollTo({ top: expected, behavior: "smooth" });
+        scroll.scrollTo({
+          top: expected,
+          behavior: "smooth"
+        });
       }
     }, 150);
   });
@@ -98,35 +125,92 @@ function refreshItemStyles(scrollEl, selectedIdx) {
     updateItemStyle(item, i, selectedIdx);
   });
 }
+function refreshMonthDisabledState() {
+  if (!monthScroll) return;
 
+  const now = new Date();
+  const selectedYear = selectedDate.getFullYear();
+
+  Array.from(monthScroll.children).forEach((item, i) => {
+    const disabled =
+      selectedYear < now.getFullYear() ||
+      (selectedYear === now.getFullYear() && i < now.getMonth());
+
+    item.classList.toggle("past", disabled);
+  });
+}
 // ── drum state ────────────────────────────────────────────────────────────────
 let dayScroll, monthScroll, yearScroll;
 const currentYear = new Date().getFullYear();
 const years = range(2020, 2030);
 
 function rebuildDayColumn() {
-  const total = daysInMonth(selectedDate.getMonth(), selectedDate.getFullYear());
+  const total = daysInMonth(
+    selectedDate.getMonth(),
+    selectedDate.getFullYear()
+  );
+
   const days = range(1, total);
   const colEl = document.getElementById("col-day");
-  dayScroll = buildColumn(colEl, days, selectedDate.getDate() - 1, (i) => {
-    selectedDate.setDate(i + 1);
-    updateDisplay();
-    refreshItemStyles(dayScroll, i);
-  });
-}
 
+  dayScroll = buildColumn(
+    colEl,
+    days,
+    selectedDate.getDate() - 1,
+
+    (i) => {
+      selectedDate.setDate(i + 1);
+      updateDisplay();
+      refreshItemStyles(dayScroll, i);
+    },
+
+    (day) => {
+      return isPast(
+        day,
+        selectedDate.getMonth(),
+        selectedDate.getFullYear()
+      );
+    }
+  );
+}
 function initDrum() {
   rebuildDayColumn();
 
   const colMonth = document.getElementById("col-month");
-  monthScroll = buildColumn(colMonth, MONTHS, selectedDate.getMonth(), (i) => {
+monthScroll = buildColumn(
+  colMonth,
+  MONTHS,
+  selectedDate.getMonth(),
+  (i) => {
     selectedDate.setMonth(i);
+
     const max = daysInMonth(i, selectedDate.getFullYear());
-    if (selectedDate.getDate() > max) selectedDate.setDate(max);
+    if (selectedDate.getDate() > max) {
+      selectedDate.setDate(max);
+    }
+
     updateDisplay();
     rebuildDayColumn();
     refreshItemStyles(monthScroll, i);
-  });
+  },
+  (month, i) => {
+    const now = new Date();
+    const selectedYear = selectedDate.getFullYear();
+
+    // Año anterior → todos los meses bloqueados
+    if (selectedYear < now.getFullYear()) {
+      return true;
+    }
+
+    // Año futuro → ningún mes bloqueado
+    if (selectedYear > now.getFullYear()) {
+      return false;
+    }
+
+    // Mismo año → meses anteriores al actual bloqueados
+    return i < now.getMonth();
+  }
+);
 
   const colYear = document.getElementById("col-year");
   yearScroll = buildColumn(colYear, years, years.indexOf(selectedDate.getFullYear()), (i) => {
@@ -136,14 +220,15 @@ function initDrum() {
     updateDisplay();
     rebuildDayColumn();
     refreshItemStyles(yearScroll, i);
+    refreshMonthDisabledState();
   });
 }
 function isPast(day, month, year) {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  tomorrow.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const picked = new Date(year, month, day);
-  return picked < tomorrow;
+  return picked < today;
 }
 // ── calendar ──────────────────────────────────────────────────────────────────
 function renderCalendar() {
@@ -206,14 +291,28 @@ function renderDays() {
         today.getMonth() === viewMonth &&
         today.getFullYear() === viewYear;
 
-      if (isSelected) btn.classList.add("selected");
-      else if (isTod) btn.classList.add("today");
 
-      btn.addEventListener("click", () => {
-        selectedDate = new Date(viewYear, viewMonth, day);
-        updateDisplay();
-        renderCalendar();
-      });
+const past = isPast(day, viewMonth, viewYear);
+
+if (isSelected) {
+  btn.classList.add("selected");
+} else if (isTod) {
+  btn.classList.add("today");
+} else if (past) {
+  btn.classList.add("past");
+}
+
+if (past) {
+  btn.classList.add("past");
+} else {
+btn.addEventListener("click", () => {
+  if (past) return;
+
+  selectedDate = new Date(viewYear, viewMonth, day);
+  updateDisplay();
+  renderCalendar();
+});
+}
     }
 
     grid.appendChild(btn);
@@ -223,13 +322,33 @@ function renderDays() {
 function renderMonthChips() {
   const ovl = document.getElementById("dp-months-overlay");
   ovl.innerHTML = "";
+
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+
   MONTHS.forEach((m, i) => {
+    const isPastMonth =
+      viewYear < currentYear ||
+      (viewYear === currentYear && i < currentMonth);
+
     const btn = document.createElement("button");
-    btn.className = "dp-chip" + (i === viewMonth ? " active" : "");
+
+    btn.className =
+      "dp-chip" +
+      (i === viewMonth ? " active" : "") +
+      (isPastMonth ? " past" : "");
+
     btn.textContent = m.slice(0, 3);
-    btn.addEventListener("click", () => {
-      viewMonth = i; calMode = "days"; renderCalendar();
-    });
+
+    if (!isPastMonth) {
+      btn.addEventListener("click", () => {
+        viewMonth = i;
+        calMode = "days";
+        renderCalendar();
+      });
+    }
+
     ovl.appendChild(btn);
   });
 }
@@ -237,16 +356,32 @@ function renderMonthChips() {
 function renderYearChips() {
   const ovl = document.getElementById("dp-years-overlay");
   ovl.innerHTML = "";
-  const yrs = range(currentYear - 40, currentYear + 20);
+
+  const yrs = range(2020, 2036);
+
   yrs.forEach(y => {
     const btn = document.createElement("button");
-    btn.className = "dp-chip" + (y === viewYear ? " active" : "");
+
+    const isPastYear = y < currentYear;
+
+    btn.className =
+      "dp-chip" +
+      (y === viewYear ? " active" : "") +
+      (isPastYear ? " past" : "");
+
     btn.textContent = y;
-    btn.addEventListener("click", () => {
-      viewYear = y; calMode = "days"; renderCalendar();
-    });
+
+    if (!isPastYear) {
+      btn.addEventListener("click", () => {
+        viewYear = y;
+        calMode = "days";
+        renderCalendar();
+      });
+    }
+
     ovl.appendChild(btn);
   });
+
   // scroll selected into view
   const active = ovl.querySelector(".active");
   if (active) active.scrollIntoView({ block: "center" });

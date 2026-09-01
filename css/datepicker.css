@@ -371,3 +371,20 @@
 #dp-modal.show{
     display:flex;
 }
+.dp-item.past {
+  color: #ccc;
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.dp-chip.past {
+  color: #ccc;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dp-day.past {
+  color: #ccc;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
