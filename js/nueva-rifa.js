@@ -39,7 +39,11 @@ const lottery = lotterySelect === 'Otra'
 
   window.location.href = `rifa.html?id=${rifa.id}`;
 });
-
+  //cada 3 cifras se agg un punto automaticamente al crear la rifa 
+document.getElementById('f-price').addEventListener('input', function() {
+  let val = this.value.replace(/\D/g, '');
+  this.value = val.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+});
 function shake(fieldId) {
   const el = document.getElementById(fieldId);
   el.style.borderColor = '#c0392b';

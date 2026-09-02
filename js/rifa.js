@@ -250,6 +250,7 @@ function buildShareTicket() {
   document.getElementById('ts-lottery').textContent  = rifa.lottery;
   document.getElementById('ts-count').textContent    = `${soldCount} / ${nums.length}`;
   document.getElementById('ts-whatsapp').textContent = rifa.whatsapp ? `WS: ${rifa.whatsapp}` : 'Rifa App';
+  document.getElementById('ts-price').textContent = '$' + rifa.price;
 
   const grid = document.getElementById('ts-grid');
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
@@ -300,6 +301,7 @@ document.getElementById('tsr-date').textContent    = formatDate(rifa.date);
 document.getElementById('tsr-lottery').textContent = rifa.lottery;
 document.getElementById('tsr-footer').textContent  = rifa.whatsapp ? `WhatsApp: ${rifa.whatsapp}` : '';
 document.getElementById('tsr-prize').textContent = rifa.prize;
+document.getElementById('ts-price').textContent = '$' + rifa.price;
 
   const grid = document.getElementById('tsr-grid');
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
@@ -325,6 +327,7 @@ function buildShareTicketEsmeralda() {
   document.getElementById('tse-lottery').textContent  = rifa.lottery;
   document.getElementById('tse-count').textContent    = `${nums.filter(n => rifa.nums[n].sold).length} / ${nums.length}`;
   document.getElementById('tse-whatsapp').textContent = rifa.whatsapp ? `WS: ${rifa.whatsapp}` : 'Rifa App';
+  document.getElementById('ts-price').textContent = '$' + rifa.price;
 
   const grid = document.getElementById('tse-grid');
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
