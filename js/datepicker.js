@@ -175,53 +175,80 @@ function rebuildDayColumn() {
 }
 function initDrum() {
   rebuildDayColumn();
+  rebuildMonthColumn();
 
-  const colMonth = document.getElementById("col-month");
-monthScroll = buildColumn(
-  colMonth,
-  MONTHS,
-  selectedDate.getMonth(),
+
+  const colYear = document.getElementById("col-year");
+yearScroll = buildColumn(
+  colYear,
+  years,
+  years.indexOf(selectedDate.getFullYear()),
   (i) => {
-    selectedDate.setMonth(i);
+    selectedDate.setFullYear(years[i]);
 
-    const max = daysInMonth(i, selectedDate.getFullYear());
+    const max = daysInMonth(
+      selectedDate.getMonth(),
+      years[i]
+    );
+
     if (selectedDate.getDate() > max) {
       selectedDate.setDate(max);
     }
 
     updateDisplay();
     rebuildDayColumn();
-    refreshItemStyles(monthScroll, i);
+    rebuildMonthColumn();
+    refreshItemStyles(yearScroll, i);
   },
-  (month, i) => {
+  (year) => {
     const now = new Date();
-    const selectedYear = selectedDate.getFullYear();
 
-    // Año anterior → todos los meses bloqueados
-    if (selectedYear < now.getFullYear()) {
-      return true;
-    }
-
-    // Año futuro → ningún mes bloqueado
-    if (selectedYear > now.getFullYear()) {
-      return false;
-    }
-
-    // Mismo año → meses anteriores al actual bloqueados
-    return i < now.getMonth();
+    return year < now.getFullYear();
   }
 );
+}
 
-  const colYear = document.getElementById("col-year");
-  yearScroll = buildColumn(colYear, years, years.indexOf(selectedDate.getFullYear()), (i) => {
-    selectedDate.setFullYear(years[i]);
-    const max = daysInMonth(selectedDate.getMonth(), years[i]);
-    if (selectedDate.getDate() > max) selectedDate.setDate(max);
-    updateDisplay();
-    rebuildDayColumn();
-    refreshItemStyles(yearScroll, i);
-    refreshMonthDisabledState();
-  });
+function rebuildMonthColumn() {
+  const colMonth = document.getElementById("col-month");
+
+  monthScroll = buildColumn(
+    colMonth,
+    MONTHS,
+    selectedDate.getMonth(),
+    (i) => {
+      selectedDate.setMonth(i);
+
+      const max = daysInMonth(
+        i,
+        selectedDate.getFullYear()
+      );
+
+      if (selectedDate.getDate() > max) {
+        selectedDate.setDate(max);
+      }
+
+      updateDisplay();
+      rebuildDayColumn();
+      refreshItemStyles(monthScroll, i);
+    },
+    (month, i) => {
+      const now = new Date();
+      const selectedYear = selectedDate.getFullYear();
+
+      // Año pasado → todos los meses bloqueados
+      if (selectedYear < now.getFullYear()) {
+        return true;
+      }
+
+      // Año futuro → TODOS los meses desbloqueados
+      if (selectedYear > now.getFullYear()) {
+        return false;
+      }
+
+      // Año actual → solo meses anteriores bloqueados
+      return i < now.getMonth();
+    }
+  );
 }
 function isPast(day, month, year) {
   const today = new Date();
