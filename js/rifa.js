@@ -112,6 +112,7 @@ function openModalBuy(num) {
   document.getElementById('modal').classList.remove('hidden');
   isReserved = false;
   setTimeout(() => document.getElementById('modal-input').focus(), 100);
+  document.getElementById('modal-free').style.display = 'none';
 }
 
 function openModalSold(num, buyer) {
@@ -125,6 +126,7 @@ function openModalSold(num, buyer) {
   document.getElementById('modal-reserve').style.display = 'none';
   document.getElementById('modal-input').style.display = 'none';
   document.getElementById('modal').classList.remove('hidden');
+  document.getElementById('modal-free').style.display = 'none';
 }
 
 function openModalReserved(num, buyer) {
@@ -140,6 +142,7 @@ function openModalReserved(num, buyer) {
   document.getElementById('modal-reserve').style.display = 'none';
   isReserved= true;
   document.getElementById('modal').classList.remove('hidden');
+  document.getElementById('modal-free').style.display = 'block';
 }
 document.getElementById('modal-edit').addEventListener('click', () => {
   const buyer = rifa.nums[selectedNum].buyer;
@@ -151,7 +154,12 @@ document.getElementById('modal-edit').addEventListener('click', () => {
   document.getElementById('modal-edit').style.display = 'none';
   setTimeout(() => document.getElementById('modal-input').focus(), 100);
 });
-
+document.getElementById('modal-free').addEventListener('click', () => {
+  rifa.nums[selectedNum] = { sold: false, reserved: false, buyer: '' };
+  saveRifas(getRifas().map(r => r.id === rifa.id ? rifa : r));
+  closeModal();
+  renderGrid();
+});
 function closeModal() {
   document.getElementById('modal').classList.add('hidden');
   selectedNum = null;
