@@ -97,6 +97,7 @@ nums.forEach(n => {
 
 // ─── MODAL COMPRA ──────────────────────────────────────────
 let selectedNum = null;
+let isReserved = false;
 
 function openModalBuy(num) {
   selectedNum = num;
@@ -109,6 +110,7 @@ function openModalBuy(num) {
   document.getElementById('modal-edit').style.display = 'none';
   document.getElementById('modal-buyer').style.display = 'none';
   document.getElementById('modal').classList.remove('hidden');
+  isReserved = false;
   setTimeout(() => document.getElementById('modal-input').focus(), 100);
 }
 
@@ -136,6 +138,7 @@ function openModalReserved(num, buyer) {
   document.getElementById('modal-confirm').textContent = 'Confirmar venta';
   document.getElementById('modal-confirm').style.display = 'block';
   document.getElementById('modal-reserve').style.display = 'none';
+  isReserved= true;
   document.getElementById('modal').classList.remove('hidden');
 }
 document.getElementById('modal-edit').addEventListener('click', () => {
@@ -154,10 +157,18 @@ function closeModal() {
   selectedNum = null;
 }
 
-// Confirmar venta — si el nombre queda vacío, libera el número
 document.getElementById('modal-confirm').addEventListener('click', () => {
   const buyer = document.getElementById('modal-input').value.trim();
-  rifa.nums[selectedNum] = buyer ? { sold: true, buyer, fecha: new Date().toISOString() } : { sold: false, buyer: '' };
+  
+  if (isReserved) {
+    console.log('antes:', rifa.nums[selectedNum]);
+    rifa.nums[selectedNum] = { sold: true, buyer: rifa.nums[selectedNum].buyer, fecha: new Date().toISOString() };
+    console.log('después:', rifa.nums[selectedNum]);
+  } else {
+    rifa.nums[selectedNum] = buyer ? { sold: true, buyer, fecha: new Date().toISOString() } : { sold: false, buyer: '' };
+  }
+  
+  isReserved = false;
   saveRifas(getRifas().map(r => r.id === rifa.id ? rifa : r));
   closeModal();
   renderGrid();
