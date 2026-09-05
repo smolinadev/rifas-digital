@@ -168,3 +168,6 @@ document.getElementById('drawer-privacy').addEventListener('click', () => {
   document.getElementById('drawer-overlay').classList.add('hidden');
   document.getElementById('btn-menu').classList.remove('open');
 });
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
+}
