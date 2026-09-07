@@ -4,8 +4,8 @@
   "description": "Gestiona tus rifas de forma 100% digital",
   "start_url": "/",
   "display": "standalone",
+  "theme_color": "#ECEAE5",
   "background_color": "#ECEAE5",
-  "theme_color": "#1a1a1a",
   "orientation": "portrait",
   "icons": [
     {
