@@ -1,4 +1,4 @@
-const CACHE = 'rifa-app-v1';
+const CACHE = 'rifa-app-v2';
 const FILES = [
   '/',
   '/index.html',
@@ -20,6 +20,7 @@ const FILES = [
   '/js/finalizadas.js',
   '/js/estadisticas.js',
   '/js/datepicker.js',
+  '/css/estadisticas.css',
 ];
 
 self.addEventListener('install', e => {
