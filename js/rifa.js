@@ -26,7 +26,7 @@ function init() {
   if (!rifa) { alert('Rifa no encontrada.'); window.location.href = 'index.html'; return; }
 
   document.getElementById('rifa-title').textContent   = rifa.prize;
-  document.getElementById('info-price').textContent   = rifa.price;
+ document.getElementById('info-price').textContent = formatMoney(rifa.price);
   document.getElementById('info-date').textContent    = formatDate(rifa.date);
   document.getElementById('info-lottery').textContent = rifa.lottery;
 
