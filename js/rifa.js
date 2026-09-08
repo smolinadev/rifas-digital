@@ -16,7 +16,10 @@ function formatDate(d) {
 function getIdFromURL() {
   return parseInt(new URLSearchParams(window.location.search).get('id'));
 }
-
+function formatMoney(price) {
+  const num = parseInt(String(price).replace(/[^0-9]/g, ''), 10);
+  return isNaN(num) ? price : '$' + num.toLocaleString('es-CO');
+}
 let rifa = null;
 
 // ─── INIT: carga la rifa desde la URL ─────────────────────
