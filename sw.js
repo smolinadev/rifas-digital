@@ -1,4 +1,4 @@
-const CACHE = 'rifa-app-v3';
+const CACHE = 'rifa-app-v4';
 const FILES = [
   '/',
   '/index.html',

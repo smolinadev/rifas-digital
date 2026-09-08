@@ -14,24 +14,25 @@
 </head>
 <body>
 
-  <button class="menu-btn" id="btn-menu">
-  <svg class="menu-icon" viewBox="0 0 48 48" width="44" height="44">
-    <path class="stub stub-top"
-      d="M 12 9.6  L 40 9.6  Q 43.5 9.6  43.5 13  Q 43.5 16.4 40 16.4  L 12 16.4 L 7.5 13  Z"/>
-    <path class="stub stub-mid"
-      d="M 12 20.6 L 40 20.6 Q 43.5 20.6 43.5 24  Q 43.5 27.4 40 27.4  L 12 27.4 L 7.5 24  Z"/>
-    <path class="stub stub-bot"
-      d="M 12 31.6 L 40 31.6 Q 43.5 31.6 43.5 35  Q 43.5 38.4 40 38.4  L 12 38.4 L 7.5 35  Z"/>
-  </svg>
-</button>
-  <div class="app">
+  <div class="app app--home">
+
+  <header class="app-header">
+    <span class="hero__badge">✦ Rifa App</span>
+    <button class="menu-btn" id="btn-menu">
+      <svg class="menu-icon" viewBox="0 0 48 48" width="44" height="44">
+        <path class="stub stub-top"
+          d="M 12 9.6  L 40 9.6  Q 43.5 9.6  43.5 13  Q 43.5 16.4 40 16.4  L 12 16.4 L 7.5 13  Z"/>
+        <path class="stub stub-mid"
+          d="M 12 20.6 L 40 20.6 Q 43.5 20.6 43.5 24  Q 43.5 27.4 40 27.4  L 12 27.4 L 7.5 24  Z"/>
+        <path class="stub stub-bot"
+          d="M 12 31.6 L 40 31.6 Q 43.5 31.6 43.5 35  Q 43.5 38.4 40 38.4  L 12 38.4 L 7.5 35  Z"/>
+      </svg>
+    </button>
+  </header>
 
   <section class="hero">
-  <span class="hero__badge">✦ Rifa App</span>
-  <h1 class="hero__title">Gestiona tus rifas<br>en segundos.</h1>
-  <p class="hero__sub">Sin papeles, sin fotos editadas.<br>Todo desde tu celular.</p>
-  <button class="btn btn--primary" id="btn-nueva">+ Nueva rifa</button>
-  
+  <h1 class="hero__title">Gestiona tus rifas en segundos.</h1>
+  <p class="hero__sub">Sin papeles, sin fotos editadas. Todo desde tu celular.</p>
 </section>
 
     <!-- MIS RIFAS -->
@@ -57,10 +58,14 @@
     </div>
   </div>
   <p class="empty-title">¡Crea tu primera rifa!</p>
-  <p class="empty-sub">Gestiona tus números y comparte<br>el ticket actualizado al instante.</p>
+  <p class="empty-sub">Gestiona tus números y comparte el ticket actualizado al instante.</p>
 </div>
       <ul class="rifa-list" id="rifa-list"></ul>
     </section>
+
+  <div class="fab-bar">
+    <button class="btn btn--primary btn--fab" id="btn-nueva">+ Nueva rifa</button>
+  </div>
   </div>
 <div class="modal-overlay modal-overlay--winner hidden" id="modal-winner">
   <div class="modal modal--winner">
@@ -135,7 +140,4 @@
 </div>
   <script src="js/app.js"></script>
 </body>
-<footer class="footer">
-  <p>Rifa App v1.0 · Hecho con ❤️ en Colombia</p>
-</footer>
 </html>

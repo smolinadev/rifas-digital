@@ -21,6 +21,17 @@ body {
   min-height: 100vh;
 }
 
+/* Solo la home (.app--home) usa el layout de alto fijo + scroll interno.
+   Si esto se aplicara a html/body sin acotar, rompería el scroll normal
+   de las demás páginas (rifa.html, nueva-rifa.html, etc.), que usan
+   .app con min-height: 100vh y scroll de página completo. */
+html:has(.app--home),
+body:has(.app--home) {
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .app {
   max-width: 480px;
   margin: 0 auto;
@@ -30,10 +41,27 @@ body {
   flex-direction: column;
 }
 
+.app--home {
+  height: 100vh;    /* fallback navegadores viejos */
+  height: 100svh;   /* small viewport height: el alto con la barra de URL visible.
+                        dvh también es "correcto" pero cambia de valor al hacer scroll
+                        (la barra se esconde) y hace saltar el layout — svh es estable. */
+  overflow: hidden; /* el scroll vive en .rifa-list (paso 5) */
+  padding: 24px 20px 0;   /* era 40px 20px 80px, un solo padding lateral */
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+}
+
 /* ─── HERO ──────────────────────────────────────────────── */
 .hero {
-  padding: 40px 0 36px;
-  margin-bottom: 32px;
+  padding: 14px 0 0;
+  margin-bottom: 0;
+  flex: none;
 }
 
 .hero__badge {
@@ -44,26 +72,27 @@ body {
   font-weight: 700;
   padding: 4px 14px;
   border-radius: 99px;
-  margin-bottom: 16px;
+  margin-bottom: 0;
   letter-spacing: 0.5px;
 }
 
 .hero__title {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.8px;
   color: var(--text);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   line-height: 1.2;
-  text-align: center;
+  text-align: left;
 }
 
 .hero__sub {
   font-size: 14px;
   color: var(--text-muted);
-  line-height: 1.7;
-  margin-bottom: 28px;
-  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 0;
+  text-align: left;
+  max-width: 300px;
 }
 
 /* ─── BUTTON ────────────────────────────────────────────── */
@@ -122,6 +151,15 @@ body {
   font-size: 14px;
   line-height: 2;
 }
+
+.list-section .list-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 16px;
+}
 .list-empty__sub { font-size: 13px; color: #bbb; }
 
 /* ─── LISTA DE RIFAS ────────────────────────────────────── */
@@ -130,6 +168,25 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.list-section {
+  flex: 1;
+  min-height: 0;
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-section .rifa-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 12px;   /* el FAB ya salió del flujo sticky, no hace falta reservarle alto */
+  padding-left: 12px;     /* espacio para las muescas ::before/::after (-11px) */
+  padding-right: 12px;
+  margin-left: -12px;
+  margin-right: -12px;
 }
 
 /* ─── CARD BASE (home y finalizadas) ────────────────────── */
@@ -265,7 +322,7 @@ body {
 /* ─── RESPONSIVE ────────────────────────────────────────── */
 @media (max-width: 480px) {
   .app { padding: 24px 14px 60px; }
-  .hero { padding: 36px 20px 28px; }
+  .app--home { padding: 24px 14px 0; }
 }
 @media (max-width: 480px) {
   .hero__title { font-size: 28px; }
@@ -371,11 +428,6 @@ align-items: flex-start;
   transition: width .3s;
 }
 /* ─── EMPTY STATE ───────────────────────────────────────── */
-.list-empty {
-  text-align: center;
-  padding: 48px 0 32px;
-}
-
 .empty-anim {
   position: relative;
   width: 160px;
@@ -475,17 +527,25 @@ align-items: flex-start;
   font-size: 13px;
   color: var(--text-muted);
   line-height: 1.6;
+  max-width: 250px;
 }
 .btn--fab {
-  position: sticky;
-  bottom: 20px;
+  position: static;   /* era: sticky; bottom: 20px */
   width: 100%;
   padding: 15px;
   font-size: 16px;
   border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  margin-top: 16px;
+  margin: 0;
+}
+
+.fab-bar {
+  position: sticky;
+  bottom: 0;
   z-index: 50;
+  margin: 16px -20px 0;
+  padding: 24px 20px calc(60px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 58%, transparent);
 }
 /* ─── ANIMACIONES DE ENTRADA ────────────────────────────── */
 @keyframes fadeUp {
@@ -580,13 +640,10 @@ align-items: flex-start;
   border-radius: 14px;
   border: none;
   cursor: pointer;
-  position: fixed;
-  top: 20px;
-  right: 20px;
+  position: static;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
   padding: 0;
 }
 

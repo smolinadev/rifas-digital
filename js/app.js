@@ -28,10 +28,12 @@ function renderHome() {
   list.innerHTML = '';
 
   if (rifas.length === 0) {
-    empty.style.display = 'block';
+    empty.style.display = 'flex';
+    list.style.display = 'none';
     return;
   }
   empty.style.display = 'none';
+  list.style.display = 'flex';
 
   rifas.forEach(rifa => {
     const nums  = Object.values(rifa.nums);
