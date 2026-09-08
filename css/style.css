@@ -182,7 +182,7 @@ body:has(.app--home) {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding-bottom: 12px;   /* el FAB ya salió del flujo sticky, no hace falta reservarle alto */
+ padding-bottom: 80px;
   padding-left: 12px;     /* espacio para las muescas ::before/::after (-11px) */
   padding-right: 12px;
   margin-left: -12px;
@@ -540,11 +540,14 @@ align-items: flex-start;
 }
 
 .fab-bar {
-  position: sticky;
+  position: fixed;
   bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 50;
-  margin: 16px -20px 0;
-  padding: 24px 20px calc(60px + env(safe-area-inset-bottom));
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px 20px calc(12px + env(safe-area-inset-bottom));
   background: linear-gradient(to top, var(--bg) 58%, transparent);
 }
 /* ─── ANIMACIONES DE ENTRADA ────────────────────────────── */
