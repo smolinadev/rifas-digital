@@ -535,15 +535,18 @@ align-items: flex-start;
   max-width: 250px;
 }
 .btn--fab {
-  position: static;   /* era: sticky; bottom: 20px */
-  width: 100%;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 440px;
   padding: 15px;
   font-size: 16px;
   border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  margin: 0;
+  z-index: 50;
 }
-
 .fab-bar {
   position: fixed;
   bottom: 0;
