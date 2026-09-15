@@ -106,9 +106,9 @@ body:has(.app--home) {
   font-family: inherit;
   font-weight: 700;
   cursor: pointer;
-  transition: opacity .15s, transform .1s;
+  transition: opacity .15s, transform .28s cubic-bezier(.34,1.56,.64,1);
 }
-.btn:active { transform: scale(0.97); }
+.btn:active { transform: scale(0.95); transition-duration: .08s; }
 
 .btn--primary {
   background: var(--accent);
@@ -547,6 +547,7 @@ align-items: flex-start;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   z-index: 50;
 }
+.btn--fab:active { transform: translateX(-50%) scale(0.95); }
 .fab-bar {
   position: fixed;
   bottom: 0;
