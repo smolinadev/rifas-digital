@@ -272,12 +272,23 @@
     if (!wheels) build();
     byId('dp-modal').classList.add('show');
     sync();
-    document.body.style.overflow = 'hidden';
+    lockScroll();
   }
 
   function close() {
     byId('dp-modal').classList.remove('show');
+    unlockScroll();
+  }
+
+  /* evita el salto horizontal del layout al desaparecer el scrollbar */
+  function lockScroll() {
+    var barWidth = window.innerWidth - document.documentElement.clientWidth;
+    if (barWidth > 0) document.body.style.paddingRight = barWidth + 'px';
+    document.body.style.overflow = 'hidden';
+  }
+  function unlockScroll() {
     document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
   }
 
   function confirm() {
