@@ -108,49 +108,29 @@
 
     </div>
   </div>
-<div class="dp-page" id="dp-modal">
-  <div class="dp-wrapper">
-    <div class="dp-card">
+<div id="dp-modal" aria-hidden="true">
+  <div class="dp-backdrop" data-dp-close></div>
 
-      <!-- Header -->
-      <div class="dp-header">
-        <p class="dp-label">Fecha seleccionada</p>
-        <p class="dp-weekday" id="dp-weekday">Miércoles,</p>
-        <p class="dp-date-accent" id="dp-date-accent">23 de julio de 2025</p>
-      </div>
+  <div class="dp-panel" role="dialog" aria-modal="true" aria-label="Fecha del sorteo">
+    <div class="dp-grab"></div>
 
-      <!-- Drum picker (móvil) -->
-      <div class="dp-drum-wrap" id="dp-drum">
-        <p class="dp-hint">Desliza para elegir</p>
-        <div class="dp-drum-row">
-          <div class="dp-column" id="col-day" style="width:64px"></div>
-          <div class="dp-column" id="col-month" style="width:144px"></div>
-          <div class="dp-column" id="col-year" style="width:96px"></div>
-        </div>
-      </div>
+    <div class="dp-top">
+      <span class="dp-eyebrow">Fecha del sorteo</span>
+      <strong class="dp-readout" id="dp-readout">—</strong>
+    </div>
 
-      <!-- Calendario (desktop) -->
-      <div class="dp-calendar-wrap" id="dp-calendar">
-        <div class="dp-cal-header">
-          <button class="dp-arrow" id="dp-prev">‹</button>
-          <div class="dp-cal-nav">
-            <button class="dp-nav-btn" id="dp-month-btn"></button>
-            <button class="dp-nav-btn" id="dp-year-btn"></button>
-          </div>
-          <button class="dp-arrow" id="dp-next">›</button>
-        </div>
-        <div class="dp-days-header">
-          <span>Do</span><span>Lu</span><span>Ma</span>
-          <span>Mi</span><span>Ju</span><span>Vi</span><span>Sá</span>
-        </div>
-        <div class="dp-days-grid" id="dp-days-grid"></div>
-        <div class="dp-overlay dp-months-grid" id="dp-months-overlay"></div>
-        <div class="dp-overlay dp-years-grid" id="dp-years-overlay"></div>
-      </div>
+    <div class="dp-wheel">
+      <div class="dp-band"></div>
+      <div class="dp-col" id="dp-col-day"></div>
+      <div class="dp-col dp-col--month" id="dp-col-month"></div>
+      <div class="dp-col" id="dp-col-year"></div>
+      <div class="dp-veil dp-veil--top"></div>
+      <div class="dp-veil dp-veil--bottom"></div>
+    </div>
 
-      <!-- Un solo botón, al final, fuera de ambas secciones -->
-      <button class="dp-confirm" id="dp-confirm">Confirmar fecha</button>
-
+    <div class="dp-actions">
+      <button type="button" class="dp-cancel" id="dp-cancel">Cancelar</button>
+      <button type="button" class="dp-confirm" id="dp-confirm">Confirmar fecha</button>
     </div>
   </div>
 </div>

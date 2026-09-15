@@ -1,453 +1,325 @@
-// ── config ────────────────────────────────────────────────────────────────────
-const MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
-                "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-const ITEM_H  = 44;
-const VISIBLE = 5;
+/* ─────────────────────────────────────────────────────────────────────────────
+   datepicker.js — Wheel picker (estilo iPhone) para la fecha del sorteo.
 
-let selectedDate = new Date();
-let viewMonth = selectedDate.getMonth();
-let viewYear  = selectedDate.getFullYear();
-let calMode   = "days"; // "days" | "months" | "years"
+   Integración externa (SIN CAMBIOS respecto a la versión anterior):
+     #btn-date        → botón que abre el selector
+     #btn-date-text   → texto del botón (muestra la fecha elegida)
+     #f-date          → input hidden que guarda "YYYY-MM-DD" (lo lee nueva-rifa.js)
+     #dp-modal        → contenedor del selector (clase .show para mostrar)
+     #dp-confirm      → botón confirmar
 
-// ── helpers ───────────────────────────────────────────────────────────────────
-function daysInMonth(m, y) { return new Date(y, m + 1, 0).getDate(); }
-function firstDay(m, y)    { return new Date(y, m, 1).getDay(); }
-function pad(n)            { return n < 10 ? "0" + n : String(n); }
-function range(a, b)       { return Array.from({length: b - a + 1}, (_, i) => a + i); }
+   Reglas: solo desde MAÑANA en adelante. Años 2024–2028.
+   ───────────────────────────────────────────────────────────────────────────── */
+(function (global) {
+  'use strict';
 
-function updateDisplay() {
-  const fmt = new Intl.DateTimeFormat("es-MX", {
-    weekday:"long", day:"numeric", month:"long", year:"numeric"
-  });
-  const parts = fmt.format(selectedDate).split(", ");
-  document.getElementById("dp-weekday").textContent     = parts[0] + ",";
-  document.getElementById("dp-date-accent").textContent = parts[1] || "";
-}
+  var MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-// ── drum columns ──────────────────────────────────────────────────────────────
-function buildColumn(el, items, selectedIdx, onSelect, isDisabled = () => false) {
-  el.innerHTML = "";
+  /* El alto de fila lo manda el CSS (--dp-item-h). Aquí solo se lee. */
+  var ITEM_H   = 36;
+  var VISIBLE  = 5;
+  var YEAR_MIN = 2024;
+  var YEAR_MAX = 2028;
 
-  const fadeTop = document.createElement("div");
-  fadeTop.className = "dp-column__fade-top";
+  function readItemH() {
+    var el = document.getElementById('dp-modal');
+    if (!el) return ITEM_H;
+    var v = parseFloat(getComputedStyle(el).getPropertyValue('--dp-item-h'));
+    return (v && v > 8) ? v : ITEM_H;
+  }
 
-  const hl = document.createElement("div");
-  hl.className = "dp-column__highlight";
+  function byId(id) { return document.getElementById(id); }
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+  function daysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
 
-  const fadeBot = document.createElement("div");
-  fadeBot.className = "dp-column__fade-bottom";
+  /* Primera fecha permitida: mañana */
+  function minAllowed() {
+    var d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + 1);
+    return d;
+  }
 
-  const scroll = document.createElement("div");
-  scroll.className = "dp-column__scroll";
+  function parseISO(v) {
+    if (!v || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return null;
+    var p = v.split('-');
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    d.setHours(0, 0, 0, 0);
+    return isNaN(d) ? null : d;
+  }
 
-  const VISIBLE = 5;
-  const PAD = Math.floor(VISIBLE / 2) * ITEM_H;
+  /* ── una rueda ──────────────────────────────────────────────────────────── */
+  function Wheel(col, onCommit) {
+    col.innerHTML = '';
+    var PAD = ((VISIBLE - 1) / 2) * ITEM_H;
+    var scroll = document.createElement('div');
+    scroll.className = 'dp-scroll';
+    scroll.style.paddingTop = PAD + 'px';
+    scroll.style.paddingBottom = PAD + 'px';
+    col.appendChild(scroll);
 
-  scroll.style.paddingTop = PAD + "px";
-  scroll.style.paddingBottom = PAD + "px";
+    var els = [], data = [], idx = 0, last = null;
+    var rafId = null, timer = null;
+    var dragging = false, moved = false, pid = null, startY = 0, startTop = 0;
 
-  items.forEach((item, i) => {
-    const div = document.createElement("div");
-
-    div.className = "dp-item";
-    div.textContent = typeof item === "number" ? pad(item) : item;
-
-    // ¿Está bloqueado?
-    if (isDisabled(item, i)) {
-      div.classList.add("past");
+    function paint() {
+      var c = scroll.scrollTop / ITEM_H;
+      for (var i = 0; i < els.length; i++) {
+        var d = i - c, ad = Math.abs(d), el = els[i];
+        if (ad > 3.4) {
+          if (el.style.opacity !== '0') { el.style.opacity = '0'; el.style.transform = 'none'; }
+          continue;
+        }
+        var k = Math.min(ad, 3);
+        el.style.opacity = '' + Math.max(0.12, 1 - k * 0.27);
+        el.style.transform = 'rotateX(' + (-d * 18) + 'deg) scale(' + (1 - k * 0.05) + ')';
+      }
     }
 
-    updateItemStyle(div, i, selectedIdx);
+    function schedulePaint() {
+      if (rafId == null) {
+        rafId = requestAnimationFrame(function () { rafId = null; paint(); });
+      }
+    }
 
-    div.addEventListener("click", () => {
-      // Si está bloqueado, no hacemos absolutamente nada
-      if (isDisabled(item, i)) return;
+    function clamp(i) { return Math.max(0, Math.min(i, data.length - 1)); }
 
-      scroll.scrollTo({
-        top: i * ITEM_H,
-        behavior: "smooth"
-      });
+    /* índice habilitado más cercano (prioriza hacia adelante) */
+    function nearestOn(i) {
+      if (!data.length) return 0;
+      i = clamp(i);
+      if (!data[i].off) return i;
+      for (var k = 1; k < data.length; k++) {
+        if (data[i + k] && !data[i + k].off) return i + k;
+        if (data[i - k] && !data[i - k].off) return i - k;
+      }
+      return i;
+    }
+
+    function indexOfValue(v) {
+      for (var i = 0; i < data.length; i++) if (data[i].value === v) return i;
+      return -1;
+    }
+
+    /* se llama solo cuando el scroll se detiene: nada de saltos a media inercia */
+    function settle() {
+      if (dragging) return;
+      var t = nearestOn(Math.round(scroll.scrollTop / ITEM_H));
+      idx = t;
+      if (Math.abs(scroll.scrollTop - t * ITEM_H) > 0.5) {
+        scroll.scrollTo({ top: t * ITEM_H, behavior: 'smooth' });
+      }
+      var v = data[t] ? data[t].value : null;
+      if (v !== last) { last = v; onCommit(v); }
+    }
+
+    scroll.addEventListener('scroll', function () {
+      schedulePaint();
+      clearTimeout(timer);
+      timer = setTimeout(settle, 90);
+    }, { passive: true });
+
+    /* arrastre con mouse/lápiz (en táctil manda el scroll nativo) */
+    scroll.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;
+      dragging = true; moved = false; pid = e.pointerId;
+      startY = e.clientY; startTop = scroll.scrollTop;
+      scroll.style.scrollSnapType = 'none';
+      try { scroll.setPointerCapture(pid); } catch (_) {}
+    });
+    scroll.addEventListener('pointermove', function (e) {
+      if (!dragging || e.pointerId !== pid) return;
+      var dy = e.clientY - startY;
+      if (Math.abs(dy) > 3) moved = true;
+      scroll.scrollTop = startTop - dy;
+      schedulePaint();
+    });
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      try { scroll.releasePointerCapture(pid); } catch (_) {}
+      scroll.style.scrollSnapType = 'y mandatory';
+      settle();
+      setTimeout(function () { moved = false; }, 0);
+    }
+    scroll.addEventListener('pointerup', endDrag);
+    scroll.addEventListener('pointercancel', endDrag);
+
+    function setItems(items, value) {
+      var sameLen = items.length === data.length;
+      if (!sameLen) {
+        scroll.innerHTML = '';
+        els = [];
+        for (var i = 0; i < items.length; i++) {
+          var el = document.createElement('div');
+          el.className = 'dp-item';
+          el.textContent = items[i].label;
+          el.addEventListener('click', (function (n) {
+            return function () {
+              if (moved || !data[n] || data[n].off) return;
+              scroll.scrollTo({ top: n * ITEM_H, behavior: 'smooth' });
+            };
+          })(i));
+          scroll.appendChild(el);
+          els.push(el);
+        }
+      } else {
+        for (var j = 0; j < items.length; j++) els[j].textContent = items[j].label;
+      }
+      data = items;
+      for (var k = 0; k < data.length; k++) {
+        els[k].classList.toggle('dp-item--off', !!data[k].off);
+      }
+      var ix = indexOfValue(value);
+      if (ix < 0) ix = nearestOn(0);
+      if (ix !== idx || !sameLen) {
+        idx = ix;
+        scroll.scrollTop = ix * ITEM_H;   /* posición exacta: sin snap peleando */
+      }
+      last = data[idx] ? data[idx].value : null;
+      paint();
+    }
+
+    return { setItems: setItems, repaint: paint };
+  }
+
+  /* ── estado ─────────────────────────────────────────────────────────────── */
+  var state = { y: 0, m: 0, d: 0 };
+  var wheels = null, MIN = null, inited = false;
+
+  function yearItems() {
+    var out = [];
+    for (var y = YEAR_MIN; y <= YEAR_MAX; y++) {
+      out.push({ value: y, label: '' + y, off: y < MIN.getFullYear() });
+    }
+    return out;
+  }
+  function monthItems(y) {
+    return MONTHS.map(function (name, i) {
+      return {
+        value: i,
+        label: name,
+        off: y < MIN.getFullYear() || (y === MIN.getFullYear() && i < MIN.getMonth())
+      };
+    });
+  }
+  function dayItems(y, m) {
+    var total = daysInMonth(y, m), out = [];
+    var sameMonth = (y === MIN.getFullYear() && m === MIN.getMonth());
+    for (var d = 1; d <= total; d++) {
+      out.push({ value: d, label: pad2(d), off: sameMonth && d < MIN.getDate() });
+    }
+    return out;
+  }
+
+  function readout() {
+    var dt = new Date(state.y, state.m, state.d);
+    var s = dt.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' });
+    byId('dp-readout').textContent = s.charAt(0).toUpperCase() + s.slice(1) + ' de ' + state.y;
+  }
+
+  /* re-sincroniza las tres ruedas; las que ya están en su sitio no se mueven */
+  function sync() {
+    wheels.year.setItems(yearItems(), state.y);
+
+    var mi = monthItems(state.y);
+    if (mi[state.m] && mi[state.m].off) {
+      for (var i = 0; i < mi.length; i++) { if (!mi[i].off) { state.m = i; break; } }
+    }
+    wheels.month.setItems(mi, state.m);
+
+    var di = dayItems(state.y, state.m);
+    if (state.d > di.length) state.d = di.length;
+    if (di[state.d - 1] && di[state.d - 1].off) {
+      for (var k = 0; k < di.length; k++) { if (!di[k].off) { state.d = di[k].value; break; } }
+    }
+    wheels.day.setItems(di, state.d);
+
+    readout();
+  }
+
+  function build() {
+    ITEM_H = readItemH();
+    wheels = {
+      day: Wheel(byId('dp-col-day'), function (v) {
+        if (v == null) return;
+        state.d = v; sync();
+      }),
+      month: Wheel(byId('dp-col-month'), function (v) {
+        if (v == null) return;
+        state.m = v; sync();
+      }),
+      year: Wheel(byId('dp-col-year'), function (v) {
+        if (v == null) return;
+        state.y = v; sync();
+      })
+    };
+  }
+
+  function labelFor(dt) {
+    return dt.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  function open() {
+    MIN = minAllowed();
+    var cur = parseISO(byId('f-date').value);
+    var base = (cur && cur >= MIN) ? cur : MIN;
+    state.y = Math.min(Math.max(base.getFullYear(), YEAR_MIN), YEAR_MAX);
+    state.m = base.getMonth();
+    state.d = base.getDate();
+
+    if (!wheels) build();
+    byId('dp-modal').classList.add('show');
+    sync();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    byId('dp-modal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  function confirm() {
+    var dt = new Date(state.y, state.m, state.d);
+    byId('f-date').value = state.y + '-' + pad2(state.m + 1) + '-' + pad2(state.d);
+    byId('btn-date-text').textContent = labelFor(dt);
+    byId('btn-date').classList.add('has-date');
+    close();
+  }
+
+  function init() {
+    if (inited) return true;
+    var modal = byId('dp-modal');
+    if (!modal || !byId('btn-date') || !byId('f-date')) return false;
+    inited = true;
+    MIN = minAllowed();
+
+    byId('btn-date').addEventListener('click', open);
+    byId('dp-confirm').addEventListener('click', confirm);
+
+    var cancel = byId('dp-cancel');
+    if (cancel) cancel.addEventListener('click', close);
+
+    modal.querySelectorAll('[data-dp-close]').forEach(function (el) {
+      el.addEventListener('click', close);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('show')) close();
     });
 
-    scroll.appendChild(div);
-  });
+    /* si el formulario ya traía fecha, reflejarla en el botón */
+    var cur = parseISO(byId('f-date').value);
+    if (cur) byId('btn-date-text').textContent = labelFor(cur);
 
-  el.appendChild(fadeTop);
-  el.appendChild(hl);
-  el.appendChild(fadeBot);
-  el.appendChild(scroll);
-
-  scroll.scrollTop = selectedIdx * ITEM_H;
-
-  let currentIdx = selectedIdx;
-  let snapTimer = null;
-
-  scroll.addEventListener("scroll", () => {
-    const raw = scroll.scrollTop / ITEM_H;
-    const nearest = Math.round(raw);
-    const clamped = Math.max(0, Math.min(nearest, items.length - 1));
-
-    if (clamped !== currentIdx) {
-      currentIdx = clamped;
-      refreshItemStyles(scroll, clamped);
-
-      // IMPORTANTE:
-      // No dejamos que el carrusel seleccione un elemento bloqueado
-      if (!isDisabled(items[clamped], clamped)) {
-        onSelect(clamped);
-      }
-    }
-
-    clearTimeout(snapTimer);
-
-    snapTimer = setTimeout(() => {
-      const expected = clamped * ITEM_H;
-
-      if (Math.abs(scroll.scrollTop - expected) > 1) {
-        scroll.scrollTo({
-          top: expected,
-          behavior: "smooth"
-        });
-      }
-    }, 150);
-  });
-
-  return scroll;
-}
-
-function updateItemStyle(el, i, selectedIdx) {
-  const dist = Math.min(Math.abs(i - selectedIdx), 2);
-  el.dataset.dist = dist;
-}
-
-function refreshItemStyles(scrollEl, selectedIdx) {
-  Array.from(scrollEl.children).forEach((item, i) => {
-    updateItemStyle(item, i, selectedIdx);
-  });
-}
-function refreshMonthDisabledState() {
-  if (!monthScroll) return;
-
-  const now = new Date();
-  const selectedYear = selectedDate.getFullYear();
-
-  Array.from(monthScroll.children).forEach((item, i) => {
-    const disabled =
-      selectedYear < now.getFullYear() ||
-      (selectedYear === now.getFullYear() && i < now.getMonth());
-
-    item.classList.toggle("past", disabled);
-  });
-}
-// ── drum state ────────────────────────────────────────────────────────────────
-let dayScroll, monthScroll, yearScroll;
-const currentYear = new Date().getFullYear();
-const years = range(2020, 2030);
-
-function rebuildDayColumn() {
-  const total = daysInMonth(
-    selectedDate.getMonth(),
-    selectedDate.getFullYear()
-  );
-
-  const days = range(1, total);
-  const colEl = document.getElementById("col-day");
-
-  dayScroll = buildColumn(
-    colEl,
-    days,
-    selectedDate.getDate() - 1,
-
-    (i) => {
-      selectedDate.setDate(i + 1);
-      updateDisplay();
-      refreshItemStyles(dayScroll, i);
-    },
-
-    (day) => {
-      return isPast(
-        day,
-        selectedDate.getMonth(),
-        selectedDate.getFullYear()
-      );
-    }
-  );
-}
-function initDrum() {
-  rebuildDayColumn();
-  rebuildMonthColumn();
-
-
-  const colYear = document.getElementById("col-year");
-yearScroll = buildColumn(
-  colYear,
-  years,
-  years.indexOf(selectedDate.getFullYear()),
-  (i) => {
-    selectedDate.setFullYear(years[i]);
-
-    const max = daysInMonth(
-      selectedDate.getMonth(),
-      years[i]
-    );
-
-    if (selectedDate.getDate() > max) {
-      selectedDate.setDate(max);
-    }
-
-    updateDisplay();
-    rebuildDayColumn();
-    rebuildMonthColumn();
-    refreshItemStyles(yearScroll, i);
-  },
-  (year) => {
-    const now = new Date();
-
-    return year < now.getFullYear();
+    return true;
   }
-);
-}
 
-function rebuildMonthColumn() {
-  const colMonth = document.getElementById("col-month");
+  global.RifaDatePicker = { init: init, open: open, close: close };
 
-  monthScroll = buildColumn(
-    colMonth,
-    MONTHS,
-    selectedDate.getMonth(),
-    (i) => {
-      selectedDate.setMonth(i);
-
-      const max = daysInMonth(
-        i,
-        selectedDate.getFullYear()
-      );
-
-      if (selectedDate.getDate() > max) {
-        selectedDate.setDate(max);
-      }
-
-      updateDisplay();
-      rebuildDayColumn();
-      refreshItemStyles(monthScroll, i);
-    },
-    (month, i) => {
-      const now = new Date();
-      const selectedYear = selectedDate.getFullYear();
-
-      // Año pasado → todos los meses bloqueados
-      if (selectedYear < now.getFullYear()) {
-        return true;
-      }
-
-      // Año futuro → TODOS los meses desbloqueados
-      if (selectedYear > now.getFullYear()) {
-        return false;
-      }
-
-      // Año actual → solo meses anteriores bloqueados
-      return i < now.getMonth();
-    }
-  );
-}
-function isPast(day, month, year) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const picked = new Date(year, month, day);
-  return picked < today;
-}
-// ── calendar ──────────────────────────────────────────────────────────────────
-function renderCalendar() {
-  // update nav buttons
-  document.getElementById("dp-month-btn").textContent = MONTHS[viewMonth];
-  document.getElementById("dp-year-btn").textContent  = viewYear;
-
-  // hide / show grid vs overlays
-  const grid      = document.getElementById("dp-days-grid");
-  const daysHdr   = document.querySelector(".dp-days-header");
-  const monthsOvl = document.getElementById("dp-months-overlay");
-  const yearsOvl  = document.getElementById("dp-years-overlay");
-
-  grid.style.display      = calMode === "days"   ? "grid" : "none";
-  daysHdr.style.display   = calMode === "days"   ? "grid" : "none";
-  monthsOvl.classList.toggle("active", calMode === "months");
-  yearsOvl.classList.toggle("active",  calMode === "years");
-
-  if (calMode === "days") renderDays();
-  if (calMode === "months") renderMonthChips();
-  if (calMode === "years") renderYearChips();
-}
-
-function renderDays() {
-  const grid = document.getElementById("dp-days-grid");
-  grid.innerHTML = "";
-
-  const total    = daysInMonth(viewMonth, viewYear);
-  const first    = firstDay(viewMonth, viewYear);
-  const prevM    = viewMonth === 0 ? 11 : viewMonth - 1;
-  const prevY    = viewMonth === 0 ? viewYear - 1 : viewYear;
-  const prevTotal = daysInMonth(prevM, prevY);
-  const today    = new Date();
-
-  const cells = [];
-  for (let i = first - 1; i >= 0; i--) cells.push({ day: prevTotal - i, type: "prev" });
-  for (let i = 1; i <= total; i++)     cells.push({ day: i, type: "current" });
-  let n = 1;
-  while (cells.length % 7 !== 0 || cells.length < 35) cells.push({ day: n++, type: "next" });
-
-  cells.forEach(({ day, type }) => {
-    const btn = document.createElement("button");
-    btn.className = "dp-day";
-    btn.textContent = day;
-
-    if (type !== "current") {
-      btn.classList.add("other-month");
-      btn.addEventListener("click", () => {
-        if (type === "prev") { viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } }
-        else                 { viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } }
-        renderCalendar();
-      });
-    } else {
-      const isSelected =
-        selectedDate.getDate() === day &&
-        selectedDate.getMonth() === viewMonth &&
-        selectedDate.getFullYear() === viewYear;
-      const isTod =
-        today.getDate() === day &&
-        today.getMonth() === viewMonth &&
-        today.getFullYear() === viewYear;
-
-
-const past = isPast(day, viewMonth, viewYear);
-
-if (isSelected) {
-  btn.classList.add("selected");
-} else if (isTod) {
-  btn.classList.add("today");
-} else if (past) {
-  btn.classList.add("past");
-}
-
-if (past) {
-  btn.classList.add("past");
-} else {
-btn.addEventListener("click", () => {
-  if (past) return;
-
-  selectedDate = new Date(viewYear, viewMonth, day);
-  updateDisplay();
-  renderCalendar();
-});
-}
-    }
-
-    grid.appendChild(btn);
-  });
-}
-
-function renderMonthChips() {
-  const ovl = document.getElementById("dp-months-overlay");
-  ovl.innerHTML = "";
-
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth();
-
-  MONTHS.forEach((m, i) => {
-    const isPastMonth =
-      viewYear < currentYear ||
-      (viewYear === currentYear && i < currentMonth);
-
-    const btn = document.createElement("button");
-
-    btn.className =
-      "dp-chip" +
-      (i === viewMonth ? " active" : "") +
-      (isPastMonth ? " past" : "");
-
-    btn.textContent = m.slice(0, 3);
-
-    if (!isPastMonth) {
-      btn.addEventListener("click", () => {
-        viewMonth = i;
-        calMode = "days";
-        renderCalendar();
-      });
-    }
-
-    ovl.appendChild(btn);
-  });
-}
-
-function renderYearChips() {
-  const ovl = document.getElementById("dp-years-overlay");
-  ovl.innerHTML = "";
-
-  const yrs = range(2020, 2036);
-
-  yrs.forEach(y => {
-    const btn = document.createElement("button");
-
-    const isPastYear = y < currentYear;
-
-    btn.className =
-      "dp-chip" +
-      (y === viewYear ? " active" : "") +
-      (isPastYear ? " past" : "");
-
-    btn.textContent = y;
-
-    if (!isPastYear) {
-      btn.addEventListener("click", () => {
-        viewYear = y;
-        calMode = "days";
-        renderCalendar();
-      });
-    }
-
-    ovl.appendChild(btn);
-  });
-
-  // scroll selected into view
-  const active = ovl.querySelector(".active");
-  if (active) active.scrollIntoView({ block: "center" });
-}
-
-// ── nav arrows ────────────────────────────────────────────────────────────────
-document.getElementById("dp-prev").addEventListener("click", () => {
-  viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; }
-  renderCalendar();
-});
-document.getElementById("dp-next").addEventListener("click", () => {
-  viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; }
-  renderCalendar();
-});
-document.getElementById("dp-month-btn").addEventListener("click", () => {
-  calMode = calMode === "months" ? "days" : "months"; renderCalendar();
-});
-document.getElementById("dp-year-btn").addEventListener("click", () => {
-  calMode = calMode === "years" ? "days" : "years"; renderCalendar();
-});
-
-// ── confirm ───────────────────────────────────────────────────────────────────
-document.getElementById("dp-confirm").addEventListener("click", () => {
-  const y = selectedDate.getFullYear();
-  const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
-  const d = String(selectedDate.getDate()).padStart(2, '0');
-  document.getElementById('f-date').value = `${y}-${m}-${d}`;
-  document.getElementById('dp-modal').classList.remove('show');
-  document.getElementById('btn-date-text').textContent = 
-    selectedDate.toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' });
-});
-
-// ── abrir modal ───────────────────────────────────────────────────────────────
-document.getElementById("btn-date").addEventListener("click", () => {
-  document.getElementById('dp-modal').classList.add('show');
-  initDrum();
-});
-selectedDate = new Date();
-// ── init ──────────────────────────────────────────────────────────────────────
-updateDisplay();
-initDrum();
-renderCalendar();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})(window);
