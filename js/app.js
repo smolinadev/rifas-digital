@@ -230,6 +230,47 @@ document.getElementById('backup-sheet').addEventListener('click', e => {
 });
 updateBackupDot();
 
+function marcarRespaldo() {
+  localStorage.setItem('ultimo_respaldo', String(Date.now()));
+  updateBackupDot();
+  updateBackupLast();
+}
+
+document.getElementById('backup-export').addEventListener('click', async () => {
+  const btn = document.getElementById('backup-export');
+  if (btn.disabled) return;
+  btn.disabled = true;
+
+  const data = {
+    app: 'rifa-app',
+    version: 1,
+    fecha: new Date().toISOString(),
+    rifas: getRifas(),
+    plantilla: localStorage.getItem('plantilla_seleccionada')
+  };
+  const hoy = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const nombre = `rifas-${hoy.getFullYear()}-${pad(hoy.getMonth() + 1)}-${pad(hoy.getDate())}.json`;
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const file = new File([blob], nombre, { type: 'application/json' });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: 'Respaldo Rifa App' });
+      marcarRespaldo();
+      showBackupMsg('Respaldo listo');
+    } catch (e) {}
+  } else {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = nombre; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    marcarRespaldo();
+    showBackupMsg('Respaldo descargado');
+  }
+  btn.disabled = false;
+});
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js');
 }
