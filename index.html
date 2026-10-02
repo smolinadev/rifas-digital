@@ -120,6 +120,11 @@
         Rifas finalizadas
       </button>
 
+      <button class="drawer-item" id="drawer-backup">
+        Exportar / importar
+        <span class="backup-dot" id="backup-dot" hidden></span>
+      </button>
+
     </div>
 
     <div class="drawer-group">
@@ -140,6 +145,36 @@
       Rifa App v1.0
     </div>
 
+  </div>
+</div>
+
+<!-- HOJA DE RESPALDO -->
+<div class="backup-sheet hidden" id="backup-sheet">
+  <div class="backup-panel">
+    <div class="backup-grab"></div>
+    <h3 class="backup-title">Respaldo</h3>
+    <p class="backup-sub">Último respaldo: <span id="backup-last">Nunca</span></p>
+
+    <button class="backup-option" id="backup-export">
+      <span class="backup-icon">↓</span>
+      <span class="backup-option__text">
+        <span class="backup-option__title">Descargar respaldo</span>
+        <span class="backup-option__desc">Guarda tus rifas en un archivo</span>
+      </span>
+    </button>
+
+    <button class="backup-option" id="backup-import">
+      <span class="backup-icon">↑</span>
+      <span class="backup-option__text">
+        <span class="backup-option__title">Restaurar respaldo</span>
+        <span class="backup-option__desc">Agrega las rifas de un archivo sin borrar las tuyas</span>
+      </span>
+    </button>
+    <input type="file" id="backup-file" accept=".json,application/json" hidden />
+
+    <p class="backup-msg" id="backup-msg" hidden></p>
+
+    <button class="backup-close" id="backup-close">Cerrar</button>
   </div>
 </div>
   <script src="js/app.js"></script>

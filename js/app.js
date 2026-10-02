@@ -175,6 +175,61 @@ document.getElementById('drawer-privacy').addEventListener('click', () => {
   document.getElementById('drawer-overlay').classList.add('hidden');
   document.getElementById('btn-menu').classList.remove('open');
 });
+
+// ─── RESPALDO ──────────────────────────────────────────────
+const DIA_MS = 24 * 60 * 60 * 1000;
+
+function getUltimoRespaldo() {
+  const t = parseInt(localStorage.getItem('ultimo_respaldo'), 10);
+  return Number.isFinite(t) ? t : null;
+}
+
+function updateBackupDot() {
+  const t = getUltimoRespaldo();
+  document.getElementById('backup-dot').hidden = t !== null && Date.now() - t <= 7 * DIA_MS;
+}
+
+function updateBackupLast() {
+  const el = document.getElementById('backup-last');
+  const t = getUltimoRespaldo();
+  if (t === null) {
+    el.textContent = 'Nunca';
+    el.classList.add('is-never');
+    return;
+  }
+  const dias = Math.floor((Date.now() - t) / DIA_MS);
+  el.textContent = dias === 0 ? 'hoy' : `hace ${dias} ${dias === 1 ? 'día' : 'días'}`;
+  el.classList.remove('is-never');
+}
+
+function showBackupMsg(text, isError = false) {
+  const msg = document.getElementById('backup-msg');
+  msg.textContent = text;
+  msg.classList.toggle('is-error', isError);
+  msg.hidden = false;
+}
+
+function openBackupSheet() {
+  updateBackupLast();
+  document.getElementById('backup-msg').hidden = true;
+  document.getElementById('backup-sheet').classList.remove('hidden');
+}
+
+function closeBackupSheet() {
+  document.getElementById('backup-sheet').classList.add('hidden');
+}
+
+document.getElementById('drawer-backup').addEventListener('click', () => {
+  document.getElementById('drawer-overlay').classList.add('hidden');
+  document.getElementById('btn-menu').classList.remove('open');
+  openBackupSheet();
+});
+document.getElementById('backup-close').addEventListener('click', closeBackupSheet);
+document.getElementById('backup-sheet').addEventListener('click', e => {
+  if (e.target === document.getElementById('backup-sheet')) closeBackupSheet();
+});
+updateBackupDot();
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js');
 }
