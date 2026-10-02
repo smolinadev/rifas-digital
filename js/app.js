@@ -271,6 +271,53 @@ document.getElementById('backup-export').addEventListener('click', async () => {
   btn.disabled = false;
 });
 
+function contarMarcados(rifa) {
+  return Object.values(rifa.nums || {}).filter(n => n && (n.sold || n.reserved)).length;
+}
+
+document.getElementById('backup-import').addEventListener('click', () => {
+  document.getElementById('backup-file').click();
+});
+
+document.getElementById('backup-file').addEventListener('change', async e => {
+  const input = e.target;
+  const archivo = input.files[0];
+  input.value = '';
+  if (!archivo) return;
+
+  let data;
+  try {
+    data = JSON.parse(await archivo.text());
+  } catch (err) {
+    data = null;
+  }
+  if (!data || data.app !== 'rifa-app' || !Array.isArray(data.rifas)) {
+    showBackupMsg('Ese archivo no es un respaldo de Rifa App', true);
+    return;
+  }
+
+  // Mezclar, nunca borrar: las nuevas se agregan y, si el id ya existe,
+  // gana la que tenga más números vendidos o reservados.
+  const rifas = getRifas();
+  let agregadas = 0;
+  let actualizadas = 0;
+  data.rifas.forEach(nueva => {
+    if (!nueva || nueva.id === undefined || nueva.id === null) return;
+    const i = rifas.findIndex(r => r.id === nueva.id);
+    if (i === -1) {
+      rifas.push(nueva);
+      agregadas++;
+    } else if (contarMarcados(nueva) > contarMarcados(rifas[i])) {
+      rifas[i] = nueva;
+      actualizadas++;
+    }
+  });
+
+  saveRifas(rifas);
+  renderHome();
+  showBackupMsg(`Se agregaron ${agregadas} ${agregadas === 1 ? 'rifa' : 'rifas'} · ${actualizadas} ${actualizadas === 1 ? 'actualizada' : 'actualizadas'}`);
+});
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js');
 }
