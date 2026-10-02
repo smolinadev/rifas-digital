@@ -20,6 +20,11 @@ function isToday(dateStr) {
     today.getDate() === parseInt(d)
   );
 }
+function sorteoPasado(dateStr) {
+  if (!dateStr) return false;
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d) <= new Date();
+}
 function renderHome() {
   const rifas = getRifas().filter(r => !r.done);
   const list  = document.getElementById('rifa-list');
@@ -47,20 +52,20 @@ function renderHome() {
   <div class="rifa-card__info">
     <div class="rifa-card__name">${rifa.prize}</div>
 ${isToday(rifa.date) ? '<span class="badge-sorteo">Hoy es el sorteo</span>' : ''}
-    <div class="rifa-card__meta">${rifa.price} · ${formatDate(rifa.date)} · ${rifa.lottery}</div>
+    <div class="rifa-card__meta">$${rifa.price} · ${formatDate(rifa.date)} · ${rifa.lottery}</div>
     <div class="rifa-card__bar">
       <div class="rifa-card__fill" style="width:${pct}%"></div>
     </div>
   </div>
   <div class="rifa-card__right">
     <span class="rifa-card__pct">${sold}/${total}</span>
-    ${isToday(rifa.date) ? `<button class="btn-ganador" data-id="${rifa.id}">¿Quién ganó?</button>` : `<button class="btn btn--danger" data-id="${rifa.id}">✕</button>`}
+    ${sorteoPasado(rifa.date) ? `<button class="btn-ganador" data-id="${rifa.id}">¿Quién ganó?</button>` : `<button class="btn btn--danger" data-id="${rifa.id}">✕</button>`}
   </div>
 `;
     li.querySelector('.rifa-card__info').addEventListener('click', () => {
   window.location.href = `rifa.html?id=${rifa.id}`;
     });
-if (isToday(rifa.date)) {
+if (sorteoPasado(rifa.date)) {
   li.querySelector('.btn-ganador').addEventListener('click', e => {
     e.stopPropagation();
     openWinnerModal(rifa);

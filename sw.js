@@ -1,4 +1,4 @@
-const CACHE = 'rifa-app v12'
+const CACHE = 'rifa-app v13'
 const FILES = [
   '/',
   '/index.html',
@@ -27,7 +27,8 @@ const FILES = [
 '/assets/icons/icon-32x32.png',
 '/assets/icons/icon-192x192.png',
 '/assets/icons/icon-512x512.png',
-  
+  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
 ];
 
 self.addEventListener('install', e => {

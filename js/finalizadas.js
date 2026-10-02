@@ -28,7 +28,7 @@ function renderFinalizadas() {
 li.innerHTML = `
   <div class="rifa-card__info">
     <div class="rifa-card__name">${rifa.prize}</div>
-    <div class="rifa-card__meta">${rifa.price} · ${formatDate(rifa.date)} · ${rifa.lottery}</div>
+    <div class="rifa-card__meta">$${rifa.price} · ${formatDate(rifa.date)} · ${rifa.lottery}</div>
     ${rifa.winner ? `<div class="rifa-card__winner">🏆 ${rifa.winner.buyer}</div>` : ''}
   </div>
   ${rifa.winner ? `

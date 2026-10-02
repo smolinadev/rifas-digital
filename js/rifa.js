@@ -174,9 +174,7 @@ document.getElementById('modal-confirm').addEventListener('click', () => {
   const buyer = document.getElementById('modal-input').value.trim();
   
   if (isReserved) {
-    console.log('antes:', rifa.nums[selectedNum]);
     rifa.nums[selectedNum] = { sold: true, buyer: rifa.nums[selectedNum].buyer, fecha: new Date().toISOString() };
-    console.log('después:', rifa.nums[selectedNum]);
   } else {
     rifa.nums[selectedNum] = buyer ? { sold: true, buyer, fecha: new Date().toISOString() } : { sold: false, buyer: '' };
   }
@@ -207,6 +205,11 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 
 // ─── COMPARTIR: detecta plantilla y genera imagen ─────────
 document.getElementById('btn-share').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-share');
+  if (btn.disabled) return;
+  btn.disabled = true; btn.textContent = 'Generando...';
+  const resetBtn = () => { btn.disabled = false; btn.textContent = 'Compartir'; };
+
   const plantilla = localStorage.getItem('plantilla_seleccionada') || 'azul';
   const targetId = plantilla === 'retro' ? 'ticket-share-retro'
                  : plantilla === 'esmeralda' ? 'ticket-share-esmeralda'
@@ -217,21 +220,28 @@ document.getElementById('btn-share').addEventListener('click', async () => {
   else if (plantilla === 'esmeralda') buildShareTicketEsmeralda();
 
   await new Promise(r => setTimeout(r, 100));
-  const canvas = await html2canvas(document.getElementById(targetId), {
-    scale: 2,
-    useCORS: true,
-    backgroundColor: null
-  });
+  let canvas;
+  try {
+    canvas = await html2canvas(document.getElementById(targetId), {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: null
+    });
+  } catch (e) {
+    resetBtn();
+    return;
+  }
   canvas.toBlob(async blob => {
     const file = new File([blob], 'rifa.png', { type: 'image/png' });
-    if (navigator.share && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: rifa.prize });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: rifa.prize }); } catch (e) {}
     } else {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url; a.download = 'rifa.png'; a.click();
       URL.revokeObjectURL(url);
     }
+    resetBtn();
   }, 'image/png');
 });
 
