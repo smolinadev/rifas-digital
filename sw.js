@@ -1,4 +1,4 @@
-const CACHE = 'rifa-app v16'
+const CACHE = 'rifa-app v17'
 const FILES = [
   '/',
   '/index.html',
@@ -51,10 +51,33 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
+
+  // Archivos de afuera (CDN, fuentes): cache primero
+  if (url.origin !== location.origin) {
+    e.respondWith(
+      caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+        if (res.ok || res.type === 'opaque') {
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, copy));
+        }
+        return res;
+      }))
+    );
+    return;
+  }
+
+  // Archivos propios: red primero, cache si no hay internet
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: true }).then(r => {
-      if (r) return r;
-      return fetch(e.request).catch(() => caches.match('/index.html'));
-    })
+    fetch(e.request).then(res => {
+      if (res.ok) {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(url.pathname, copy));
+      }
+      return res;
+    }).catch(() =>
+      caches.match(e.request, { ignoreSearch: true })
+        .then(r => r || caches.match('/index.html'))
+    )
   );
 });
