@@ -91,7 +91,7 @@ nums.forEach(n => {
   // Actualizar stats y barra de progreso
   document.getElementById('stat-sold').textContent  = sold;
   document.getElementById('stat-reserved').textContent=reserved;
-  document.getElementById('stat-free').textContent  = nums.length - sold;
+  document.getElementById('stat-free').textContent  = nums.length - sold - reserved;
   document.getElementById('stat-total').textContent = nums.length;
   const pct = Math.round(sold / nums.length * 100);
   document.getElementById('stat-bar').style.width = pct + '%';
@@ -107,7 +107,9 @@ function openModalBuy(num) {
   document.getElementById('modal-num').textContent = `Número ${num}`;
   document.getElementById('modal-title').textContent = '¿Quién compró este número?';
   document.getElementById('modal-input').value = '';
+  document.getElementById('modal-input').style.borderColor = '';
   document.getElementById('modal-input').style.display = 'block';
+  document.getElementById('modal-confirm').textContent = 'Confirmar venta';
   document.getElementById('modal-confirm').style.display = 'block';
   document.getElementById('modal-reserve').style.display = 'block';
   document.getElementById('modal-edit').style.display = 'none';
@@ -318,12 +320,11 @@ function buildShareTicket() {
 function buildShareTicketRetro() {
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
   const cols = rifa.count <= 10 ? 5 : 10;
-document.getElementById('tsr-price').textContent   = rifa.price;
+document.getElementById('tsr-price').textContent   = '$' + rifa.price;
 document.getElementById('tsr-date').textContent    = formatDate(rifa.date);
 document.getElementById('tsr-lottery').textContent = rifa.lottery;
 document.getElementById('tsr-footer').textContent  = rifa.whatsapp ? `WhatsApp: ${rifa.whatsapp}` : '';
 document.getElementById('tsr-prize').textContent = rifa.prize;
-document.getElementById('ts-price').textContent = '$' + rifa.price;
 
   const grid = document.getElementById('tsr-grid');
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
@@ -344,12 +345,11 @@ function buildShareTicketEsmeralda() {
   const cols = rifa.count <= 10 ? 5 : 10;
 
   document.getElementById('tse-prize').textContent    = rifa.prize;
-  document.getElementById('tse-price').textContent    = rifa.price;
+  document.getElementById('tse-price').textContent    = '$' + rifa.price;
   document.getElementById('tse-date').textContent     = formatDate(rifa.date);
   document.getElementById('tse-lottery').textContent  = rifa.lottery;
   document.getElementById('tse-count').textContent    = `${nums.filter(n => rifa.nums[n].sold).length} / ${nums.length}`;
   document.getElementById('tse-whatsapp').textContent = rifa.whatsapp ? `WS: ${rifa.whatsapp}` : 'Rifa App';
-  document.getElementById('ts-price').textContent = '$' + rifa.price;
 
   const grid = document.getElementById('tse-grid');
   grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
