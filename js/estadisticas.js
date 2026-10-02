@@ -234,7 +234,7 @@ categoryPercentage: 0.75,
             stacked: true,
             grid: { display: false },
             border: { display: false },
-            ticks: { font: { family: 'DM Sans', size: 11 }, color: '#888' }
+            ticks: { font: { family: 'Nunito', size: 11 }, color: '#888' }
           },
           y: {
             stacked: true,
@@ -257,7 +257,7 @@ categoryPercentage: 0.75,
             if (!total) return;
             const topBar = reserved[i] ? meta1.data[i] : bar;
             ctx.save();
-            ctx.font = '600 11px DM Sans, sans-serif';
+            ctx.font = '600 11px Nunito, sans-serif';
             ctx.fillStyle = '#1a1a1a';
             ctx.textAlign = 'center';
             ctx.fillText(total, topBar.x, topBar.y - 6);
@@ -359,11 +359,11 @@ function renderPanel(rifa) {
   const legend = document.createElement('div');
 legend.style.cssText = 'display:flex;flex-direction:column;gap:5px;margin-bottom:10px;';
 legend.innerHTML = `
-  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:DM Sans,sans-serif">
+  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:Nunito,sans-serif">
     <span style="width:9px;height:9px;border-radius:2px;background:#3DAB7A;display:inline-block;flex-shrink:0"></span>
     Vendidos
   </span>
-  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:DM Sans,sans-serif">
+  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:Nunito,sans-serif">
     <span style="width:9px;height:9px;border-radius:2px;background:#5B8DEF;display:inline-block;flex-shrink:0"></span>
     Reservados
   </span>
