@@ -247,7 +247,7 @@ document.getElementById('btn-share').addEventListener('click', async () => {
 
 
 //----Funcion sello Rifa App---//
-function createSoldStamp(size = 13) {
+function createSoldStamp(size = 13, bg = '#0f2744', accent = '#F5C842', ink = 'white') {
   const stamp = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
   stamp.setAttribute('viewBox', '0 0 16 16');
@@ -262,12 +262,12 @@ function createSoldStamp(size = 13) {
   `;
 
   stamp.innerHTML = `
-    <circle cx="8" cy="8" r="7.2" fill="#0f2744"/>
-    <circle cx="8" cy="8" r="7.2" fill="none" stroke="white" stroke-width="0.9"/>
-    <circle cx="8" cy="8" r="5.6" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="1.2 1.1"/>
-    <path d="M 3.8 3.2 L 3.8 12.8 L 6.1 12.8 L 6.1 9.4 Q 12.8 9.4 12.8 6.1 Q 12.8 3.2 6.1 3.2 Z" fill="#F5C842"/>
-    <path d="M 6.1 5 Q 10.6 5 10.6 6.1 Q 10.6 7.3 6.1 7.3 Z" fill="#0f2744"/>
-    <line x1="6.3" y1="9.6" x2="12.2" y2="12.2" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="8" cy="8" r="7.2" fill="${bg}"/>
+    <circle cx="8" cy="8" r="7.2" fill="none" stroke="${ink}" stroke-width="0.9"/>
+    <circle cx="8" cy="8" r="5.6" fill="none" stroke="${ink}" stroke-width="0.5" stroke-dasharray="1.2 1.1"/>
+    <path d="M 3.8 3.2 L 3.8 12.8 L 6.1 12.8 L 6.1 9.4 Q 12.8 9.4 12.8 6.1 Q 12.8 3.2 6.1 3.2 Z" fill="${accent}"/>
+    <path d="M 6.1 5 Q 10.6 5 10.6 6.1 Q 10.6 7.3 6.1 7.3 Z" fill="${bg}"/>
+    <line x1="6.3" y1="9.6" x2="12.2" y2="12.2" stroke="${ink}" stroke-width="2.2" stroke-linecap="round"/>
   `;
 
   return stamp;
@@ -276,7 +276,7 @@ function createSoldStamp(size = 13) {
 function buildShareTicket() {
   const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
   const cols = rifa.count <= 10 ? 5 : 10;
-  const soldCount = nums.filter(n => rifa.nums[n].sold).length;
+  const soldCount = nums.filter(n => rifa.nums[n].sold || rifa.nums[n].reserved).length;
 
   document.getElementById('ts-prize').textContent    = rifa.prize;
   document.getElementById('ts-price').textContent    = rifa.price;
@@ -291,7 +291,7 @@ function buildShareTicket() {
   grid.innerHTML = '';
 
   nums.forEach(n => {
-  const sold = rifa.nums[n].sold;
+  const sold = rifa.nums[n].sold || rifa.nums[n].reserved;
   const div = document.createElement('div');
 
   div.style.cssText = `
@@ -341,10 +341,16 @@ document.getElementById('tsr-prize').textContent = rifa.prize;
   grid.innerHTML = '';
 
   nums.forEach(n => {
-    const sold = rifa.nums[n].sold;
+    const ocupado = rifa.nums[n].sold || rifa.nums[n].reserved;
     const div = document.createElement('div');
-    div.style.cssText = `font-size:8.5px;font-weight:400;color:${sold ? '#c08a93' : '#4a3d42'};${sold ? 'text-decoration:line-through;' : ''}text-align:center;padding:2.5px 0;`;
-    div.textContent = n;
+    div.style.cssText = 'display:grid;place-items:center;overflow:visible;min-height:16.5px;';
+
+    const span = document.createElement('span');
+    span.textContent = n;
+    span.style.cssText = `grid-area:1/1;font-size:8.5px;font-weight:400;line-height:1;padding:2.5px 0;color:${ocupado ? 'rgba(192,138,147,0.35)' : '#4a3d42'};z-index:1;`;
+    div.appendChild(span);
+
+    if (ocupado) div.appendChild(createSoldStamp(14, '#f9e4e7', '#9b3d57', '#9b3d57'));
     grid.appendChild(div);
   });
 }
@@ -358,7 +364,7 @@ function buildShareTicketEsmeralda() {
   document.getElementById('tse-price').textContent    = '$' + rifa.price;
   document.getElementById('tse-date').textContent     = formatDate(rifa.date);
   document.getElementById('tse-lottery').textContent  = rifa.lottery;
-  document.getElementById('tse-count').textContent    = `${nums.filter(n => rifa.nums[n].sold).length} / ${nums.length}`;
+  document.getElementById('tse-count').textContent    = `${nums.filter(n => rifa.nums[n].sold || rifa.nums[n].reserved).length} / ${nums.length}`;
   document.getElementById('tse-whatsapp').textContent = rifa.whatsapp ? `WS: ${rifa.whatsapp}` : 'Rifa App';
 
   const grid = document.getElementById('tse-grid');
@@ -366,7 +372,7 @@ function buildShareTicketEsmeralda() {
   grid.innerHTML = '';
 
 nums.forEach(n => {
-  const sold = rifa.nums[n].sold;
+  const sold = rifa.nums[n].sold || rifa.nums[n].reserved;
   const div = document.createElement('div');
 
   div.style.cssText = `
@@ -390,7 +396,7 @@ nums.forEach(n => {
   div.appendChild(span);
 
   if (sold) {
-    div.appendChild(createSoldStamp(14));
+    div.appendChild(createSoldStamp(14, '#08201A', '#6ee7a8', 'white'));
   }
 
   grid.appendChild(div);
