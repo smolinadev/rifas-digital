@@ -123,6 +123,67 @@ select.form-input { cursor: pointer; }
   color: rgba(255,255,255,0.6);
 }
 
+/* ─── SELECTOR DE PLANTILLA ─────────────────────────────── */
+.tpl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tpl-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 2px solid #F5C842;
+  padding-bottom: 1px;
+}
+
+.tpl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+
+.tpl-card {
+  position: relative;
+  background: #fff;
+  border: 2px solid #E0DDD8;
+  border-radius: 14px;
+  padding: 8px 8px 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+
+.tpl-card input { display: none; }
+
+.tpl-card.selected { border-color: #1a1a1a; }
+
+.tpl-card .plantilla-preview {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+}
+
+.tpl-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.tpl-card .check-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+
+.tpl-card .check-circle { background: #fff; }
+
 /* ─── FULL BTN ──────────────────────────────────────────── */
 .btn--full {
   width: 100%;

@@ -7,6 +7,25 @@ document.getElementById('f-lottery').addEventListener('change', function() {
   const custom = document.getElementById('f-lottery-custom');
   custom.style.display = this.value === 'Otra' ? 'block' : 'none';
 });
+// Selector de plantilla: preselecciona la guardada o azul
+function initTplSelector() {
+  const actual = localStorage.getItem('plantilla_seleccionada') || 'azul';
+  const cards = document.querySelectorAll('.tpl-card');
+  const select = card => {
+    cards.forEach(c => {
+      c.classList.remove('selected');
+      c.querySelector('.check-btn').classList.remove('is-checked');
+    });
+    card.classList.add('selected');
+    card.querySelector('.check-btn').classList.add('is-checked');
+    card.querySelector('input').checked = true;
+  };
+  cards.forEach(card => {
+    if (card.dataset.template === actual) select(card);
+    card.addEventListener('click', () => select(card));
+  });
+}
+initTplSelector();
 document.getElementById('btn-crear').addEventListener('click', () => {
  const prize = document.getElementById('f-prize').value.trim().toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   const price   = document.getElementById('f-price').value.trim();
