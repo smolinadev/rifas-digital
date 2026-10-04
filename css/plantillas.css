@@ -128,7 +128,9 @@
 }
 .plantilla-preview--retro .pp-title-retro {
   font-family: 'Bungee', sans-serif;
-  font-size: 14px;
+  font-size: 10px;
+  line-height: 1.1;
+  text-align: center;
   color: #4a3d42;
   letter-spacing: 0.5px;
 }
