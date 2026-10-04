@@ -44,11 +44,11 @@
 }
 
 .form-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
 }
 
 .form-input {
@@ -166,8 +166,13 @@ select.form-input { cursor: pointer; }
 
 .tpl-card .plantilla-preview {
   width: 100%;
-  height: auto;
-  aspect-ratio: 3 / 4;
+  height: 88px;
+}
+
+.tpl-card .pp-title-retro {
+  font-size: 12px;
+  line-height: 1.1;
+  text-align: center;
 }
 
 .tpl-name {
