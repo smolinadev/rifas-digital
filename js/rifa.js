@@ -210,7 +210,7 @@ document.getElementById('btn-share').addEventListener('click', async () => {
   btn.disabled = true; btn.textContent = 'Generando...';
   const resetBtn = () => { btn.disabled = false; btn.textContent = 'Compartir'; };
 
-  const plantilla = localStorage.getItem('plantilla_seleccionada') || 'azul';
+  const plantilla = rifa.plantilla || localStorage.getItem('plantilla_seleccionada') || 'azul';
   const targetId = plantilla === 'retro' ? 'ticket-share-retro'
                  : plantilla === 'esmeralda' ? 'ticket-share-esmeralda'
                  : 'ticket-share';

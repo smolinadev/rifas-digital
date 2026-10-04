@@ -51,7 +51,9 @@ const lottery = lotterySelect === 'Otra'
     nums[key] = { sold: false, buyer: '' };
   }
 
-  const rifa = { id: Date.now(), prize, price, count, date, lottery, nums, done: false, whatsapp };
+  const plantilla = document.querySelector('input[name=plantilla]:checked')?.value || 'azul';
+
+  const rifa = { id: Date.now(), prize, price, count, date, lottery, nums, done: false, whatsapp, plantilla };
   const rifas = getRifas();
   rifas.push(rifa);
   saveRifas(rifas);
