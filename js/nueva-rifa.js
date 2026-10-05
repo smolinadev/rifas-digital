@@ -50,12 +50,12 @@ function addTplTemporada(value) {
     </label>`);
 }
 
-// Selector de plantilla: preselecciona la guardada o azul
+// Selector de plantilla: preselecciona la guardada o azul y la guarda al tocar
 function initTplSelector() {
   const actual = localStorage.getItem('plantilla_seleccionada') || 'azul';
   addTplTemporada(actual);
   const cards = document.querySelectorAll('.tpl-card');
-  const select = card => {
+  const mark = card => {
     cards.forEach(c => {
       c.classList.remove('selected');
       c.querySelector('.check-btn').classList.remove('is-checked');
@@ -65,8 +65,11 @@ function initTplSelector() {
     card.querySelector('input').checked = true;
   };
   cards.forEach(card => {
-    if (card.dataset.template === actual) select(card);
-    card.addEventListener('click', () => select(card));
+    if (card.dataset.template === actual) mark(card);
+    card.addEventListener('click', () => {
+      mark(card);
+      localStorage.setItem('plantilla_seleccionada', card.dataset.template);
+    });
   });
 }
 initTplSelector();
@@ -95,9 +98,7 @@ const lottery = lotterySelect === 'Otra'
     nums[key] = { sold: false, buyer: '' };
   }
 
-  const plantilla = document.querySelector('input[name=plantilla]:checked')?.value || 'azul';
-
-  const rifa = { id: Date.now(), prize, price, count, date, lottery, nums, done: false, whatsapp, plantilla };
+  const rifa = { id: Date.now(), prize, price, count, date, lottery, nums, done: false, whatsapp };
   const rifas = getRifas();
   rifas.push(rifa);
   saveRifas(rifas);
