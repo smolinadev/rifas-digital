@@ -155,3 +155,26 @@
   color: #fff;
   font-family: 'Nunito', sans-serif;
 }
+
+/* ─── TEMPORADA DE HALLOWEEN ────────────────────────────── */
+.plantillas-season {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 10px 0 0;
+}
+.plantilla-preview .pp-deco {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* ─── PREVIEW: CALABAZA ──────────────────────────────── */
+.plantilla-preview--calabaza {
+  background: #17120e;
+}
+.plantilla-preview--calabaza .pp-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', 'Nunito', sans-serif;
+}

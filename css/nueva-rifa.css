@@ -160,6 +160,8 @@ select.form-input { cursor: pointer; }
   transition: border-color .15s;
 }
 
+.tpl-grid--4 { grid-template-columns: repeat(4, 1fr); }
+
 .tpl-card input { display: none; }
 
 .tpl-card.selected { border-color: #1a1a1a; }

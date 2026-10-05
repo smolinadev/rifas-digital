@@ -213,11 +213,13 @@ document.getElementById('btn-share').addEventListener('click', async () => {
   const plantilla = rifa.plantilla || localStorage.getItem('plantilla_seleccionada') || 'azul';
   const targetId = plantilla === 'retro' ? 'ticket-share-retro'
                  : plantilla === 'esmeralda' ? 'ticket-share-esmeralda'
+                 : plantilla === 'calabaza' ? 'ticket-share-calabaza'
                  : 'ticket-share';
 
   if (plantilla === 'azul') buildShareTicket();
   else if (plantilla === 'retro') buildShareTicketRetro();
   else if (plantilla === 'esmeralda') buildShareTicketEsmeralda();
+  else if (plantilla === 'calabaza') buildShareTicketCalabaza();
 
   await new Promise(r => setTimeout(r, 100));
   let canvas;
@@ -401,6 +403,51 @@ nums.forEach(n => {
 
   grid.appendChild(div);
 });
+}
+
+// ─── PLANTILLAS HALLOWEEN (layout de HALLOWEEN-referencia.html) ─
+// Columnas y tamaños según la cantidad de números
+function halloweenSizes(count) {
+  if (count <= 50)  return { cols: 5,  font: 13, stamp: 20, minH: 24 };
+  if (count <= 100) return { cols: 10, font: 10, stamp: 15, minH: 19 };
+  return { cols: 10, font: 9, stamp: 13, minH: 16 };
+}
+
+function buildShareTicketHalloween(prefix, freeColor, takenColor, stampColors) {
+  const nums = Object.keys(rifa.nums).sort((a, b) => parseInt(a) - parseInt(b));
+  const size = halloweenSizes(rifa.count);
+
+  document.getElementById(`${prefix}-prize`).textContent   = rifa.prize;
+  document.getElementById(`${prefix}-price`).textContent   = '$' + rifa.price;
+  document.getElementById(`${prefix}-date`).textContent    = formatDate(rifa.date);
+  document.getElementById(`${prefix}-lottery`).textContent = rifa.lottery;
+
+  const whatsapp = document.getElementById(`${prefix}-whatsapp`);
+  whatsapp.textContent   = rifa.whatsapp ? `WhatsApp: ${rifa.whatsapp}` : '';
+  whatsapp.style.display = rifa.whatsapp ? '' : 'none';
+
+  const grid = document.getElementById(`${prefix}-grid`);
+  grid.style.gridTemplateColumns = `repeat(${size.cols}, 1fr)`;
+  grid.innerHTML = '';
+
+  nums.forEach(n => {
+    const ocupado = rifa.nums[n].sold || rifa.nums[n].reserved;
+    const div = document.createElement('div');
+    div.style.cssText = `display:grid;place-items:center;min-height:${size.minH}px`;
+
+    const span = document.createElement('span');
+    span.textContent = n;
+    span.style.cssText = `grid-area:1/1;font-family:'Nunito',sans-serif;font-size:${size.font}px;font-weight:600;line-height:1;color:${ocupado ? takenColor : freeColor}`;
+    div.appendChild(span);
+
+    if (ocupado) div.appendChild(createSoldStamp(size.stamp, ...stampColors));
+    grid.appendChild(div);
+  });
+}
+
+// ─── PLANTILLA: Calabaza ───────────────────────────────
+function buildShareTicketCalabaza() {
+  buildShareTicketHalloween('tsc', '#f6b26b', 'rgba(242,140,40,0.3)', ['#100c09', '#F28C28', 'white']);
 }
 
 init();
