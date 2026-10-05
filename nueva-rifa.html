@@ -111,65 +111,13 @@
 </div>
 <div class="form-group">
   <div class="tpl-head">
-    <span class="form-label">Diseño del ticket</span>
+    <span class="tpl-title">
+      <span class="form-label">Diseño del ticket</span>
+      <span class="tpl-season" id="tpl-season"></span>
+    </span>
     <a href="plantillas.html" class="tpl-link">Ver todas →</a>
   </div>
-  <div class="tpl-grid">
-    <label class="tpl-card" data-template="azul">
-      <input type="radio" name="plantilla" value="azul" />
-      <div class="plantilla-preview plantilla-preview--azul">
-        <div class="pp-badge">Rifa Oficial</div>
-        <div class="pp-title">Smart TV</div>
-      </div>
-      <div class="tpl-name">Azul</div>
-      <span class="check-btn" aria-hidden="true">
-        <span class="check-circle">
-          <svg viewBox="0 0 20 20" width="12" height="12" overflow="visible">
-            <path class="check-path" d="M 4.5 10 L 8.5 14 L 15.5 6"
-              fill="none" stroke="#F5C842" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round"
-              stroke-dasharray="20" stroke-dashoffset="20"/>
-          </svg>
-        </span>
-      </span>
-    </label>
-    <label class="tpl-card" data-template="esmeralda">
-      <input type="radio" name="plantilla" value="esmeralda" />
-      <div class="plantilla-preview plantilla-preview--esmeralda">
-        <div class="pp-badge-esm">Rifa Oficial</div>
-        <div class="pp-title">Smart TV</div>
-      </div>
-      <div class="tpl-name">Esmeralda</div>
-      <span class="check-btn" aria-hidden="true">
-        <span class="check-circle">
-          <svg viewBox="0 0 20 20" width="12" height="12" overflow="visible">
-            <path class="check-path" d="M 4.5 10 L 8.5 14 L 15.5 6"
-              fill="none" stroke="#F5C842" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round"
-              stroke-dasharray="20" stroke-dashoffset="20"/>
-          </svg>
-        </span>
-      </span>
-    </label>
-    <label class="tpl-card" data-template="retro">
-      <input type="radio" name="plantilla" value="retro" />
-      <div class="plantilla-preview plantilla-preview--retro">
-        <div class="pp-sun">☀</div>
-        <div class="pp-title-retro">Smart TV</div>
-      </div>
-      <div class="tpl-name">Retro</div>
-      <span class="check-btn" aria-hidden="true">
-        <span class="check-circle">
-          <svg viewBox="0 0 20 20" width="12" height="12" overflow="visible">
-            <path class="check-path" d="M 4.5 10 L 8.5 14 L 15.5 6"
-              fill="none" stroke="#F5C842" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round"
-              stroke-dasharray="20" stroke-dashoffset="20"/>
-          </svg>
-        </span>
-      </span>
-    </label>
-  </div>
+  <div class="tpl-grid"></div>
 </div>
       <button class="btn btn--primary btn--full" id="btn-crear">Generar rifa </button>
 
@@ -205,6 +153,7 @@
 
 
 
+  <script src="js/plantillas-config.js"></script>
   <script src="js/nueva-rifa.js"></script>
   <script src="/js/datepicker.js"></script>
 </body>

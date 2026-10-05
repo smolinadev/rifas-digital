@@ -131,6 +131,21 @@ select.form-input { cursor: pointer; }
   gap: 10px;
 }
 
+.tpl-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tpl-season {
+  font-size: 10px;
+  font-weight: 800;
+  color: #F28C28;
+  background: #fff3e6;
+  padding: 2px 7px;
+  border-radius: 99px;
+}
+
 .tpl-link {
   font-size: 12px;
   font-weight: 700;
@@ -159,8 +174,6 @@ select.form-input { cursor: pointer; }
   cursor: pointer;
   transition: border-color .15s;
 }
-
-.tpl-grid--4 { grid-template-columns: repeat(4, 1fr); }
 
 .tpl-card input { display: none; }
 
