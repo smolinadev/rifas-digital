@@ -17,6 +17,10 @@ const TPL_TEMPORADA = {
   noche: {
     name: 'Noche morada',
     deco: '<svg class="pp-deco" width="40" height="20" viewBox="0 0 80 40"><circle cx="40" cy="20" r="15" fill="#f4ecc8"/><circle cx="46" cy="16" r="15" fill="#1e1433"/><path d="M8 14 q4-4 8 0 q2-3 4 0 q2-3 4 0 q4-4 8 0 q-6 0-8 5 q-2-3-4-3 q-2 0-4 3 q-2-5-8-5z" fill="#b9a3e8"/><path d="M52 28 q3-3 6 0 q1.5-2 3 0 q1.5-2 3 0 q3-3 6 0 q-4.5 0-6 3.5 q-1.5-2-3-2 q-1.5 0-3 2 q-1.5-3.5-6-3.5z" fill="#b9a3e8"/></svg>'
+  },
+  fantasma: {
+    name: 'Fantasmita',
+    deco: '<svg class="pp-deco" width="22" height="22" viewBox="0 0 44 44"><path d="M8 40 V20 a14 14 0 0 1 28 0 V40 l-4.7-4 -4.7 4 -4.6-4 -4.7 4 -4.6-4z" fill="#ffffff" stroke="#7a5ea8" stroke-width="1.5"/><ellipse cx="17" cy="20" rx="2.3" ry="3" fill="#3b2f4f"/><ellipse cx="27" cy="20" rx="2.3" ry="3" fill="#3b2f4f"/><ellipse cx="13" cy="26" rx="2.5" ry="1.5" fill="#f4b6c8"/><ellipse cx="31" cy="26" rx="2.5" ry="1.5" fill="#f4b6c8"/><path d="M19.5 26 q2.5 2.5 5 0" stroke="#3b2f4f" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>'
   }
 };
 

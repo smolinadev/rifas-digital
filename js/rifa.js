@@ -215,6 +215,7 @@ document.getElementById('btn-share').addEventListener('click', async () => {
                  : plantilla === 'esmeralda' ? 'ticket-share-esmeralda'
                  : plantilla === 'calabaza' ? 'ticket-share-calabaza'
                  : plantilla === 'noche' ? 'ticket-share-noche'
+                 : plantilla === 'fantasma' ? 'ticket-share-fantasma'
                  : 'ticket-share';
 
   if (plantilla === 'azul') buildShareTicket();
@@ -222,6 +223,7 @@ document.getElementById('btn-share').addEventListener('click', async () => {
   else if (plantilla === 'esmeralda') buildShareTicketEsmeralda();
   else if (plantilla === 'calabaza') buildShareTicketCalabaza();
   else if (plantilla === 'noche') buildShareTicketNoche();
+  else if (plantilla === 'fantasma') buildShareTicketFantasma();
 
   await new Promise(r => setTimeout(r, 100));
   let canvas;
@@ -455,6 +457,11 @@ function buildShareTicketCalabaza() {
 // ─── PLANTILLA: Noche morada ───────────────────────────
 function buildShareTicketNoche() {
   buildShareTicketHalloween('tsn', '#b9a3e8', 'rgba(185,163,232,0.3)', ['#160e27', '#c7f25c', 'white']);
+}
+
+// ─── PLANTILLA: Fantasmita ─────────────────────────────
+function buildShareTicketFantasma() {
+  buildShareTicketHalloween('tsf', '#3b2f4f', 'rgba(122,94,168,0.28)', ['#e8e1f2', '#7a5ea8', '#7a5ea8']);
 }
 
 init();
