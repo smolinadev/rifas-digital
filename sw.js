@@ -1,4 +1,4 @@
-const CACHE = 'rifa-app v19'
+const CACHE = 'rifa-app v20'
 const FILES = [
   '/',
   '/index.html',
@@ -16,6 +16,7 @@ const FILES = [
   '/css/estadisticas.css',
   '/css/datepicker.css',
   '/css/about.css',
+  '/css/halloween.css',
   '/js/app.js',
   '/js/rifa.js',
   '/js/nueva-rifa.js',
