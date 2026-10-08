@@ -12,6 +12,16 @@
 @media all {
 
 /* ─── TOKENS ─────────────────────────────────────────────── */
+/* Gráficas de estadisticas.js (tarjeta oscura) */
+:root {
+  --chart-sold: #F28C28;
+  --chart-reserved: #b9a3e8;
+  --chart-track: #2b1f3f;
+  --chart-text: #f4ecc8;
+  --chart-empty: rgba(255,255,255,0.08);
+  --chart-axis: #b9a3e8;
+}
+
 :root {
   color-scheme: dark;
 
@@ -411,12 +421,12 @@ body::before {
 .btn-volver { white-space: nowrap; flex-shrink: 0; color: #f4ecc8; }
 .btn-volver:hover { background: #2a1d45; }
 
-/* Tarjeta de gráficas: fondo luna para que el texto oscuro de Chart.js se lea */
+/* Tarjeta de gráficas: oscura como las demás tarjetas */
 .stat-section:has(.charts-row) {
   position: relative;
-  background: #f4ecc8;
-  border-color: transparent;
-  box-shadow: 0 0 30px rgba(244,236,200,.12);
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
 }
 .stat-section:has(.charts-row)::after {
   content: '';
@@ -425,17 +435,17 @@ body::before {
   right: 18px;
   width: 22px;
   height: 10px;
-  background: var(--hw-bat-dark) center / contain no-repeat;
+  background: var(--hw-bat) center / contain no-repeat;
   opacity: .5;
 }
-.stat-section:has(.charts-row) .bars-title { color: #6e6459; }
+.stat-section:has(.charts-row) .bars-title { color: #a996d6; }
 .donut-wrap {
   position: relative;
   width: 100px;
   height: 100px;
   flex-shrink: 0;
 }
-.donut-wrap circle:first-child { stroke: #e4d9b3; }
+.donut-wrap circle:first-child { stroke: var(--chart-track); }
 .donut-pct {
   position: absolute;
   inset: 0;
@@ -444,7 +454,7 @@ body::before {
   justify-content: center;
   font-size: 18px;
   font-weight: 800;
-  color: #1a1a1a;
+  color: #f4ecc8;
 }
 
 /* ─── ACERCA DE / PRIVACIDAD ─────────────────────────────── */

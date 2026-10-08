@@ -1,3 +1,13 @@
+const css = getComputedStyle(document.documentElement);
+const C = {
+  sold:     css.getPropertyValue('--chart-sold').trim()     || '#3DAB7A',
+  reserved: css.getPropertyValue('--chart-reserved').trim() || '#5B8DEF',
+  track:    css.getPropertyValue('--chart-track').trim()    || '#ECEAE5',
+  text:     css.getPropertyValue('--chart-text').trim()     || '#1a1a1a',
+  empty:    css.getPropertyValue('--chart-empty').trim()    || 'rgba(0,0,0,0.06)',
+  axis:     css.getPropertyValue('--chart-axis').trim()     || '#888',
+};
+
 // ── datos desde localStorage ──────────────────────────────────────────────────
 function getRifas() {
   try {
@@ -73,9 +83,9 @@ function buildDonut(pct) {
   wrap.innerHTML = `
     <svg viewBox="0 0 80 80" width="100" height="100">
       <circle cx="${cx}" cy="${cy}" r="${r}"
-        fill="none" stroke="#ECEAE5" stroke-width="8"/>
+        fill="none" stroke="${C.track}" stroke-width="8"/>
       <circle class="donut-arc" cx="${cx}" cy="${cy}" r="${r}"
-        fill="none" stroke="#3DAB7A" stroke-width="8"
+        fill="none" stroke="${C.sold}" stroke-width="8"
         stroke-dasharray="0 ${circ}"
         stroke-dashoffset="${circ * 0.25}"
         stroke-linecap="round"
@@ -163,11 +173,11 @@ datasets: [
 
   backgroundColor: sold.map((_, i) =>
     i === semanas.length - 1
-      ? '#3DAB7A'
-      : 'rgba(61,171,122,0.55)'
+      ? C.sold
+      : C.sold + '8C'
   ),
 
-  hoverBackgroundColor: '#3DAB7A',
+  hoverBackgroundColor: C.sold,
 
   borderRadius: {
     topLeft: 0,
@@ -188,11 +198,11 @@ categoryPercentage: 0.75,
 
   backgroundColor: reserved.map((_, i) =>
     i === semanas.length - 1
-      ? '#5B8DEF'
-      : 'rgba(91,141,239,0.55)'
+      ? C.reserved
+      : C.reserved + '8C'
   ),
 
-  hoverBackgroundColor: '#5B8DEF',
+  hoverBackgroundColor: C.reserved,
 
   borderRadius: {
     topLeft: 6,
@@ -209,8 +219,8 @@ categoryPercentage: 0.75,
   {
     label: '',
     data: sold.map((s, i) => (s + reserved[i] === 0) ? maxVal : 0),
-    backgroundColor: 'rgba(0,0,0,0.06)',
-    hoverBackgroundColor: 'rgba(0,0,0,0.06)',
+    backgroundColor: C.empty,
+    hoverBackgroundColor: C.empty,
     borderRadius: 6,
     borderSkipped: false,
     stack: 'a',
@@ -234,7 +244,7 @@ categoryPercentage: 0.75,
             stacked: true,
             grid: { display: false },
             border: { display: false },
-            ticks: { font: { family: 'Nunito', size: 11 }, color: '#888' }
+            ticks: { font: { family: 'Nunito', size: 11 }, color: C.axis }
           },
           y: {
             stacked: true,
@@ -258,7 +268,7 @@ categoryPercentage: 0.75,
             const topBar = reserved[i] ? meta1.data[i] : bar;
             ctx.save();
             ctx.font = '600 11px Nunito, sans-serif';
-            ctx.fillStyle = '#1a1a1a';
+            ctx.fillStyle = C.text;
             ctx.textAlign = 'center';
             ctx.fillText(total, topBar.x, topBar.y - 6);
             ctx.restore();
@@ -359,12 +369,12 @@ function renderPanel(rifa) {
   const legend = document.createElement('div');
 legend.style.cssText = 'display:flex;flex-direction:column;gap:5px;margin-bottom:10px;';
 legend.innerHTML = `
-  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:Nunito,sans-serif">
-    <span style="width:9px;height:9px;border-radius:2px;background:#3DAB7A;display:inline-block;flex-shrink:0"></span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:${C.axis};font-family:Nunito,sans-serif">
+    <span style="width:9px;height:9px;border-radius:2px;background:${C.sold};display:inline-block;flex-shrink:0"></span>
     Vendidos
   </span>
-  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:#888;font-family:Nunito,sans-serif">
-    <span style="width:9px;height:9px;border-radius:2px;background:#5B8DEF;display:inline-block;flex-shrink:0"></span>
+  <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:${C.axis};font-family:Nunito,sans-serif">
+    <span style="width:9px;height:9px;border-radius:2px;background:${C.reserved};display:inline-block;flex-shrink:0"></span>
     Reservados
   </span>
 `;
